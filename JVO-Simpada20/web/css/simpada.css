@@ -4,6 +4,45 @@ root {
     display: block;
 }
 
+#ifPendaftaran iframe {
+    width: 980px;
+    height: 250%;
+    border: none;
+}
+
+#ifPendaftaran {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#ifPenetapan iframe {
+    width: 980px;
+    height: 250%;
+    border: none;
+}
+
+#ifPenetapan {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#ifAnggaran iframe {
+    width: 980px;
+    height: 150%;
+    border: none;
+}
+
+#ifAnggaran {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
 .header {
   background-color: #000000;
   font-family: monospace;

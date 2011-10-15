@@ -192,7 +192,7 @@ function right(e) {
     if (navigator.appName == 'Netscape' && (e.which == 3 || e.which == 2)) {
         return false;
     } else if (navigator.appName == 'Microsoft Internet Explorer' && (event.button == 2 || event.button == 3)) {
-        alert("Sorry, you do not have permission to right click.");
+        alert("Maaf, anda tidak bisa menggunakan menu Tombol Kanan Mouse!");
         return false;
     }
     return true;

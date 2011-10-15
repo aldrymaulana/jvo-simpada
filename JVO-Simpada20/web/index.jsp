@@ -17,6 +17,11 @@
     if (request.getSession().getAttribute("strSource") != null) {
         strSource = request.getSession().getAttribute("strSource").toString();
     }
+
+    String strIfFrame = "";
+    if (request.getSession().getAttribute("strIfFrame") != null) {
+        strIfFrame = request.getSession().getAttribute("strIfFrame").toString();
+    }
 %>
 <html>
     <head>
@@ -129,8 +134,17 @@
                         </tr>
                         <tr height="90%">
                             <td>
-                                <iframe src="<%= strSource %>" marginheight="0" marginwidth="0" name="ifrmBody" id="ifrmBody" height="100%" width="100%" frameborder="0" scrolling="auto">
-                                </iframe>
+                                <%
+                                    System.out.println("strIfFrame: " + strIfFrame);
+                                %>
+                                <div id="<%= strIfFrame %>">
+                                    <iframe src="<%= strSource %>"
+                                            marginheight="0" marginwidth="0"
+                                            name="ifrmBody" id="ifrmBody"
+                                            height="100%" width="100%"
+                                            frameborder="0" scrolling="no">
+                                    </iframe>
+                                </div>
                             </td>
                         </tr>
                         <tr valign="top">
