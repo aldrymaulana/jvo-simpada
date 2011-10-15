@@ -13,7 +13,7 @@
     int intWidth = Integer.parseInt(strWidth);
     int intHeight = Integer.parseInt(strHeight);
     
-    String strSource = "";
+    String strSource = "blank.jsp";
     if (request.getSession().getAttribute("strSource") != null) {
         strSource = request.getSession().getAttribute("strSource").toString();
     }

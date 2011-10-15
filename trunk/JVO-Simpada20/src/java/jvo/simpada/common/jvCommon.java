@@ -6,19 +6,114 @@ package jvo.simpada.common;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class jvCommon {
 
     public jvCommon() {
     }
 
-    public String fnDropCurrencySign(String strNumber) {
-        String strReturn = "0";
-        String strNumber2 = strNumber.replaceAll(",", "");
-        strReturn = strNumber2;
-        return strReturn;
+    private static String fnCut(String fStrSource, char cutChar) {
+        String fStrReturn = "";
+        for (int i = 0; i < fStrSource.length(); i++) {
+            if (fStrSource.charAt(i) != cutChar) {
+                fStrReturn = fStrReturn + fStrSource.charAt(i);
+            }
+        }
+        return fStrReturn;
+    }
+
+    public static String fnCutComma(String fStrSource) {
+        return fnCut(fStrSource, ',');
+    }
+
+    /**
+     * fnFormatNumber Indonesia
+     */
+    public static String fnFormatNumberInd(String fStrSource) {
+        String sign = "";
+        String passValue_value = "";
+
+        if (fStrSource != null && fStrSource.length() != 0 && !fStrSource.equals("")) {
+            fStrSource = fnCutComma(fStrSource);
+
+            int lIntRecCount = fStrSource.indexOf(".");
+            if (lIntRecCount != -1) {
+                fStrSource = fStrSource.substring(0, lIntRecCount);
+            }
+
+            if (fStrSource.substring(0, 1).equals("-")) {
+                sign = fStrSource.substring(0, 1);
+                fStrSource = fStrSource.substring(1);
+            }
+
+            for (int i = 0; i < ((fStrSource.length() - (1 + i)) / 3); i++) {
+                fStrSource = fStrSource.substring(0, fStrSource.length() - (4 * i + 3)) + "." + fStrSource.substring(fStrSource.length() - (4 * i + 3));
+            }
+
+            passValue_value = sign + fStrSource;
+        } else {
+            passValue_value = "0";
+        }
+
+        return passValue_value + ",00";
+    }
+
+    public String fnCurrencyFormat(String strInput) {
+        System.out.println("strInput: " + strInput);
+        String strOutput = "";
+        Locale targetLocale = new Locale("in", "ID");
+        try {
+            if (strInput.length() > 0) {
+                NumberFormat formatter = NumberFormat.getNumberInstance(targetLocale);
+                strOutput = formatter.format(Double.parseDouble(strInput));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        System.out.println("strOutput: " + strOutput);
+        return strOutput;
+    }
+
+//    public String fnDropCurrencySign(String strNumber) {
+//        String strReturn = "0";
+//        String strNumber2 = strNumber.replaceAll(",", "");
+//        strReturn = strNumber2;
+//        return strReturn;
+//    }
+
+    /**
+     * fnDropCurrencySign
+     * input: 1.200,00
+     * output: 1200
+     */
+    public static String fnDropCurrencySign(String strNumber) {
+            String strReturn = "0";
+            System.out.println("strNumber: " + strNumber);
+            String strNumber1 = strNumber.replaceAll(",00","");
+            System.out.println("strNumber1: " + strNumber1);
+            String strNumber2 = strNumber1.replaceAll("\\.","");
+            System.out.println("strNumber2: " + strNumber2);
+            strReturn = strNumber2;
+            return strReturn;
+    }
+
+    /**
+     * Menghilangkan tanda titik dan koma pada rupiah
+     * http://www.vogella.de/articles/JavaRegularExpressions/article.html
+     */
+    public static String fnDropCurrencySignWRegex(String strNumber) {
+        String REGEX = "/.|,00/g";
+        String REPLACE = "";
+        Pattern replace = Pattern.compile(REGEX);
+        Matcher matcher2 = replace.matcher(strNumber);
+        return matcher2.replaceAll(REPLACE);
     }
 
     public Date fnStr2Date(String strDate, String strDateFormat) {

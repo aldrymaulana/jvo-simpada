@@ -4,8 +4,9 @@
     Author     : Administrator
 --%>
 
+<%@page import="java.math.BigDecimal"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, jvo.simpada.common.*"%>
+<%@ page import="java.util.*, jvo.simpada.common.*, java.text.*"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -120,6 +121,8 @@
                 strNIPPejabat = request.getSession().getAttribute("strNIPPejabat").toString();
             }
 
+            int intAwThn = Integer.parseInt(jvc.fnGetProperty("AWAL_THN_ANGGARAN"));
+            int intAkThn = Integer.parseInt(jvc.fnGetProperty("AKHIR_THN_ANGGARAN"));
 %>
 
 <html>
@@ -258,7 +261,7 @@
                     <td colspan="3" align="center">Tahun Anggaran&nbsp;
                         <select onchange="fnChangeTahun()" name="slctTahun" id="slctTahun" onfocus="fnLastElement(this.name)">
                             <%
-                                        for (int a = 2000; a <= 2030; a++) {
+                                            for (int a = intAwThn; a <= intAkThn; a++) {
                             %>
                             <option value="<%= a%>" <%= (String.valueOf(a).equals(strThnAnggaran)) ? "SELECTED" : ""%>><%= a%>
                                 <%
@@ -280,16 +283,17 @@
                                 <td>
                                     <table width="100%" border="0" cellpadding="2" cellspacing="2">
                                         <tr class="JUDUL2">
-                                            <td width="50">No</td>
-                                            <td>Kode Rekening</td>
-                                            <td width="65%">Uraian Rincian Obyek</td>
-                                            <td>Jumlah</td>
+                                            <td width="50">NO</td>
+                                            <td>KODE REKENING</td>
+                                            <td width="65%">URAIAN RINCIAN OBYEK</td>
+                                            <td>JUMLAH (Rp)</td>
                                         </tr>
 
                                         <%
                                                     String strJumlah = "0";
                                                     Double dblTotal = 0.0;
                                                     String strInputStyle = "";
+                                                    String strFontWeight = "";
                                                     if (request.getSession().getAttribute("htRincian") != null) {
                                                         Hashtable htRincian = (Hashtable) request.getSession().getAttribute("htRincian");
                                                         int intHtRincian = htRincian.size();
@@ -298,9 +302,11 @@
                                                         for (int a = 1; a <= intHtRincian; a++) {
                                                             String[] strArray = (String[]) htRincian.get(String.valueOf(a));
                                                             if (strArray[0].trim().length() <= 5) {
-                                                                strInputStyle = "style=\"display: none;\"";
+                                                                strInputStyle = "style=\"visibility: hidden;\"";
+                                                                strFontWeight = "style=\"font-weight: bold;\"";
                                                             } else {
                                                                 strInputStyle = "style=\"text-align: right;\"";
+                                                                strFontWeight = "style=\"font-weight: normal;\"";
                                                             }
                                                             if (request.getSession().getAttribute("htRincianAnggaran") != null) {
                                                                 Hashtable htRincianAnggaran = (Hashtable) request.getSession().getAttribute("htRincianAnggaran");
@@ -326,10 +332,15 @@
                                         <tr class="<%= strNmClass%>">
                                             <td align="center"><%= a%></td>
                                             <td align="left"><%= strArray[0]%></td>
-                                            <td align="left"><%= strArray[1]%></td>
+                                            <td align="left" <%= strFontWeight%>><%= strArray[1]%></td>
                                             <td align="right">
                                                 <input type="hidden" name="txtKodeRek_<%= a%>" id="txtKodeRek_<%= a%>" value="<%= strArray[0]%>"/>
-                                                <input <%= strInputStyle%> type="text" name="txtAnggaran_<%= a%>" id="txtAnggaran_<%= a%>" value="<%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strJumlah))%>"/>
+                                                <input <%= strInputStyle %> type="text" name="txtAnggaran_<%= a%>" id="txtAnggaran_<%= a%>"
+                                                                            onfocus="delContent('txtAnggaran_<%= a %>', this.value);"
+                                                                            onkeypress="return filterInput(1, event)"
+                                                                            onkeyup="this.value = formatAngka(this);"
+                                                                            onBlur="this.value = fnFormatNum(this.value);"
+                                                                            value="<%= jvc.fnFormatNumberInd(strJumlah) %>"/>
                                             </td>
                                         </tr>
 
@@ -341,9 +352,13 @@
                                                         }
                                                     }
                                         %>
-                                        <tr class="JUDUL3">
-                                            <td colspan="3">JUMLAH</td>
-                                            <td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(dblTotal)%></td>
+                                        <tr class="JUDUL2">
+                                            <td colspan="3">J U M L A H</td>
+                                            <td align="right">
+                                                <input type="text" id="txtTotal" name="txtTotal"
+                                                       style="text-align: right"
+                                                       readonly value="<%= jvc.fnFormatNumberInd(BigDecimal.valueOf(dblTotal).toPlainString()) %>"/>
+                                            </td>
                                         </tr>
 
                                     </table>

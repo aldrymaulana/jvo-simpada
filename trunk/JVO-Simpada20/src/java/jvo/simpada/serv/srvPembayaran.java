@@ -51,8 +51,11 @@ public class srvPembayaran extends HttpServlet
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String strMode = "0";
-        if(request.getParameter("mode") != null)
+        if(request.getParameter("mode") != null) {
             strMode = request.getParameter("mode").toString();
+        }
+        String strIfFrame = "ifPembayaran";
+        request.getSession().setAttribute("strIfFrame", strIfFrame);
         String strWidth = request.getParameter("hidWidth").toString();
         request.getSession().setAttribute("strWidth", strWidth);
         String strHeight = request.getParameter("hidHeight").toString();

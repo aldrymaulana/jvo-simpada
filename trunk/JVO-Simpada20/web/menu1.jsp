@@ -46,28 +46,28 @@
         
 <style type="text/css" media="screen">
 body{ behavior:url("csshover2.htc"); }
-.pd_menu_01 {float:left; padding:0; margin:0; color: #000000; background: #9999ff; width:100%; border:solid 0px #9999ff; clear:both;} /*Color navigation bar normal mode*/
+.pd_menu_01 {float:left; padding:0; margin:0; color: #000000; background: #b8bff8; width:100%; border:solid 0px #b8bff8; clear:both;} /*Color navigation bar normal mode*/
 .pd_menu_01  a, .pd_menu_01 a:visited {
 font-family:Courier New, Courier, monospace;
 font-style:normal;
 font-weight:normal;
 font-size:12px;
 color: #000000;
-background-color: #9999ff;
+background-color: #b8bff8;
 text-decoration: none;
 }
 .pd_menu_01 ul {list-style-type:none;padding:0; margin:0;}
-.pd_menu_01 ul li {float:left; position:relative; z-index:auto !important ; z-index:1000 ; border-right:solid 1px #9999ff; border-left:solid 1px #9999ff;}
-.pd_menu_01 ul li a {color: #000000;background: #9999ff;float:none !important ; float:left ; display:block; height:30px; line-height:30px; padding:0 10px 0 10px; text-decoration:none; }
-.pd_menu_01 ul li ul {display:none; border:none;color: #000000;background: #9999ff; width:1px}
-.pd_menu_01 ul li:hover a {background-color:#9999ff; text-decoration:none; color:#FFFF00;} /*Color main cells hovering mode*/
+.pd_menu_01 ul li {float:left; position:relative; z-index:auto !important ; z-index:1000 ; border-right:solid 1px #b8bff8; border-left:solid 1px #b8bff8;}
+.pd_menu_01 ul li a {color: #000000;background: #b8bff8;float:none !important ; float:left ; display:block; height:30px; line-height:30px; padding:0 10px 0 10px; text-decoration:none; }
+.pd_menu_01 ul li ul {display:none; border:none;color: #000000;background: #b8bff8; width:1px}
+.pd_menu_01 ul li:hover a {background-color:#CA0000; text-decoration:none; color:#FFFF00;} /*Color main cells hovering mode*/
 .pd_menu_01 ul li:hover ul {display:block;  position:absolute; z-index:999; top:29px; margin-top:1px; left:0;}
-.pd_menu_01 ul li:hover ul li a {display:block; width:12em; height:auto; line-height:1.3em; margin-left:-1px; padding:5px 10px 5px 10px; border-left:solid 1px #9999ff; border-bottom: solid 1px #9999ff; background-color:#9999ff;  color:#000000;} /*Color subcells normal mode*/
+.pd_menu_01 ul li:hover ul li a {display:block; width:9em; height:auto; line-height:1.3em; margin-left:-1px; padding:5px 10px 5px 10px; border-left:solid 1px #b8bff8; border-bottom: solid 1px #b8bff8; background-color:#b8bff8;  color:#000000;} /*Color subcells normal mode*/
 .pd_menu_01 ul li:hover ul li a:hover {background-color:#CA0000; text-decoration:none;color:#FFFF00;} /*Color subcells hovering mode*/
-.pd_menu_01 ul li a:hover {background-color:#9999ff; text-decoration:none;color:#FFFF00;} /*Color main cells hovering mode*/
-.pd_menu_01 ul li a:hover ul {display:block; width:12em; position:absolute; z-index:999; top:29px; left:0; }
-.pd_menu_01 ul li ul li a:visited { background-color:#9999ff;  color:#000000;} /*Color subcells normal mode*/
-.pd_menu_01 ul li a:hover ul li a {display:block; width:12em; height:1px; line-height:1.3em; padding:4px 16px 4px 16px; border-left:solid 1px #9999ff; border-bottom: solid 1px #9999ff; background-color:#9999ff;  color:#000000;} 
+.pd_menu_01 ul li a:hover {background-color:#CA0000; text-decoration:none;color:#FFFF00;} /*Color main cells hovering mode*/
+.pd_menu_01 ul li a:hover ul {display:block; width:9em; position:absolute; z-index:999; top:29px; left:0; }
+.pd_menu_01 ul li ul li a:visited { background-color:#b8bff8;  color:#000000;} /*Color subcells normal mode*/
+.pd_menu_01 ul li a:hover ul li a {display:block; width:9em; height:1px; line-height:1.3em; padding:4px 16px 4px 16px; border-left:solid 1px #b8bff8; border-bottom: solid 1px #b8bff8; background-color:#b8bff8;  color:#000000;}
 .pd_menu_01 ul li a:hover ul li a:hover {background-color:#CA0000; text-decoration:none;color:#FFFF00;} /*Color subcells hovering mode*/
 </style>
 

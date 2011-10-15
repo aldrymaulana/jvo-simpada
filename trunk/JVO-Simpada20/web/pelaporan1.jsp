@@ -230,78 +230,78 @@
                                 <td colspan="3" valign="top" align="center">
                                     <table border="0" cellpadding="0" cellspacing="0">
                                     	<tr>
-				                            <td align="right">Jenis Laporan</td>
-				                            <td>&nbsp;:&nbsp;</td>
-				                            <td align="left">
-				                            	<select name="slctJnsLaporan" id="slctJnsLaporan" onchange="fnPilihLaporan()">
-				                            		<option>
-				                            		<option>Buku Rekapitulasi Penerimaan Harian</option>
-				                            		<option>Buku Kas Pembantu</option>
-				                            		<option>Buku Kas Umum</option>
-				                            		<option>SPJ Pendapatan - Fungsional</option>
-				                            		<option>Daftar Rekapitulasi Penetapan Pajak</option>
-				                            		<option>Daftar Perusahaan</option>
-				                            	</select>
-				                            </td>
-				                        </tr>
+                                            <td align="right">Jenis Laporan</td>
+                                            <td>&nbsp;:&nbsp;</td>
+                                            <td align="left">
+                                                <select name="slctJnsLaporan" id="slctJnsLaporan" onchange="fnPilihLaporan()">
+                                                        <option>
+                                                        <option>Buku Rekapitulasi Penerimaan Harian</option>
+                                                        <option>Buku Kas Pembantu</option>
+                                                        <option>Buku Kas Umum</option>
+                                                        <option>SPJ Pendapatan - Fungsional</option>
+                                                        <option>Daftar Rekapitulasi Penetapan Pajak</option>
+                                                        <option>Daftar Perusahaan</option>
+                                                </select>
+                                            </td>
+                                        </tr>
                                         <tr id="rowTglAwal" class="clHidden">
-				                            <td align="right"><label id="lblTglAwal">Tgl Awal</label></td>
-				                            <td><label id="lblTglAwal1">&nbsp;:&nbsp;</label></td>
-				                            <td align="left">
-				                                <input type="text" readonly value="<%= strDate1 %>" name="txtTglAwal" id="txtTglAwal" maxlength="10" size="10">
-				                                &nbsp;<button type="reset" id="btTglAwal">...</button>
-				                            </td>
-				                            <script type="text/javascript">
-				                                Calendar.setup({
-				                                    inputField     :    "txtTglAwal",      // id of the input field
-				                                    ifFormat       :    "%d/%m/%Y",       // format of the input field
-				                                    showsTime      :    false,            // will display a time selector
-				                                    button         :    "btTglAwal",   // trigger for the calendar (button ID)
-				                                    singleClick    :    true,           // double-click mode
-				                                    step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-				                                });
-				                            </script>
-				                        </tr>
-				                        <tr id="rowTglAkhir" class="clHidden">
-				                        	<td align="right"><label id="lblTglAkhir">Tgl Akhir</label></td>
-				                            <td><label id="lblTglAkhir1">&nbsp;:&nbsp;</label></td>
-				                            <td align="left">
-				                                <input type="text" readonly value="<%= strDate2 %>" name="txtTglAkhir" id="txtTglAkhir" maxlength="10" size="10">
-				                                &nbsp;<button type="reset" id="btTglAkhir">...</button>
-				                            </td>
-				                            <script type="text/javascript">
-				                                Calendar.setup({
-				                                    inputField     :    "txtTglAkhir",      // id of the input field
-				                                    ifFormat       :    "%d/%m/%Y",       // format of the input field
-				                                    showsTime      :    false,            // will display a time selector
-				                                    button         :    "btTglAkhir",   // trigger for the calendar (button ID)
-				                                    singleClick    :    true,           // double-click mode
-				                                    step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-				                                });
-				                            </script>
-				                        </tr>
-				                        <tr id="rowJnsPajak" class="clHidden">
-				                            <td align="right">Jenis Pajak</td>
-				                            <td>&nbsp;:&nbsp;</td>
-				                            <td align="left">
-				                            	<select name="slctJnsPajak" id="slctJnsPajak">
-				                            		<%
-				                            			if (request.getSession().getAttribute("htPajak") != null) {
-				                            				Hashtable htPajak = (Hashtable) request.getSession().getAttribute("htPajak");
-				                            				if (htPajak.size() > 0) {
-				                            					int intHtPajak = htPajak.size();
-				                            					for (int aa=1; aa<=intHtPajak; aa++) {
-				                            						String[] strPajak = (String[]) htPajak.get(String.valueOf(aa));
-				                            						%>
-				                            							<option value="<%= strPajak[2] %>"><%= strPajak[1] %></option>
-				                            						<%
-				                            					}
-				                            				}
-				                            			}
-				                            		%>
-				                            	</select>
-				                            </td>
-				                        </tr>
+                                            <td align="right"><label id="lblTglAwal">Tgl Awal</label></td>
+                                            <td><label id="lblTglAwal1">&nbsp;:&nbsp;</label></td>
+                                            <td align="left">
+                                                <input type="text" readonly value="<%= strDate1 %>" name="txtTglAwal" id="txtTglAwal" maxlength="10" size="10">
+                                                &nbsp;<button type="reset" id="btTglAwal">...</button>
+                                                <script type="text/javascript">
+                                                    Calendar.setup({
+                                                        inputField     :    "txtTglAwal",      // id of the input field
+                                                        ifFormat       :    "%d/%m/%Y",       // format of the input field
+                                                        showsTime      :    false,            // will display a time selector
+                                                        button         :    "btTglAwal",   // trigger for the calendar (button ID)
+                                                        singleClick    :    true,           // double-click mode
+                                                        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+                                                    });
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        <tr id="rowTglAkhir" class="clHidden">
+                                                <td align="right"><label id="lblTglAkhir">Tgl Akhir</label></td>
+                                            <td><label id="lblTglAkhir1">&nbsp;:&nbsp;</label></td>
+                                            <td align="left">
+                                                <input type="text" readonly value="<%= strDate2 %>" name="txtTglAkhir" id="txtTglAkhir" maxlength="10" size="10">
+                                                &nbsp;<button type="reset" id="btTglAkhir">...</button>
+                                                <script type="text/javascript">
+                                                    Calendar.setup({
+                                                        inputField     :    "txtTglAkhir",      // id of the input field
+                                                        ifFormat       :    "%d/%m/%Y",       // format of the input field
+                                                        showsTime      :    false,            // will display a time selector
+                                                        button         :    "btTglAkhir",   // trigger for the calendar (button ID)
+                                                        singleClick    :    true,           // double-click mode
+                                                        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+                                                    });
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        <tr id="rowJnsPajak" class="clHidden">
+                                            <td align="right">Jenis Pajak</td>
+                                            <td>&nbsp;:&nbsp;</td>
+                                            <td align="left">
+                                                <select name="slctJnsPajak" id="slctJnsPajak">
+                                                        <%
+                                                                if (request.getSession().getAttribute("htPajak") != null) {
+                                                                        Hashtable htPajak = (Hashtable) request.getSession().getAttribute("htPajak");
+                                                                        if (htPajak.size() > 0) {
+                                                                                int intHtPajak = htPajak.size();
+                                                                                for (int aa=1; aa<=intHtPajak; aa++) {
+                                                                                        String[] strPajak = (String[]) htPajak.get(String.valueOf(aa));
+                                                                                        %>
+                                                                                                <option value="<%= strPajak[2] %>"><%= strPajak[1] %></option>
+                                                                                        <%
+                                                                                }
+                                                                        }
+                                                                }
+                                                        %>
+                                                </select>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>
