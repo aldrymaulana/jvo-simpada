@@ -69,7 +69,10 @@
             }
         </script>
     </head>
-    <body topmargin="0" leftmargin="0">
+    <body topmargin="0" leftmargin="0"
+          style="background-image: url('../image/countryRoad1.jpg');
+                 background-repeat: no-repeat;
+                 background-attachment: fixed;">
         <form name="main_form">
         <input type="hidden" name="mode" id="mode">
         <input type="hidden" name="hidLogin" id="hidLogin">   
@@ -98,7 +101,7 @@
                                     </tr>
                                     <tr>
                                         <td rowspan="4">
-                                            <img src="image/logo.jpg">
+                                            <img src="image/logo1.gif" height="150" width="119">
                                         </td>
                                     </tr>
                                     <tr>

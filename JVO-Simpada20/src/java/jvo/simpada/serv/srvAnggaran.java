@@ -83,7 +83,7 @@ public class srvAnggaran extends HttpServlet {
         request.getSession().setAttribute("strNamaBendahara", strNamaBendahara);
         request.getSession().setAttribute("strNIPBendahara", strNIPBendahara);
         switch (Integer.parseInt(strMode)) {
-            case 0: // '\0'
+            case 0: // default?
                 try {
                     String strSource = "anggaran.jsp";
                     request.getSession().setAttribute("strSource", strSource);
@@ -104,7 +104,7 @@ public class srvAnggaran extends HttpServlet {
                 }
                 return;
 
-            case 1: // '\001'
+            case 1: // simpan
                 try {
                     String strSource = "anggaran.jsp";
                     request.getSession().setAttribute("strSource", strSource);
@@ -155,7 +155,7 @@ public class srvAnggaran extends HttpServlet {
                 }
                 return;
 
-            case 2: // '\002'
+            case 2: // ubah tahun anggaran
                 try {
                     String strThnAnggaran = request.getParameter("hidThnAnggaran");
                     request.getSession().setAttribute("strThnAnggaran", strThnAnggaran);
@@ -178,7 +178,7 @@ public class srvAnggaran extends HttpServlet {
                 }
                 return;
 
-            case 3: // '\003'
+            case 3: // cetak?
                 try {
                     String strSource = "anggaran.jsp";
                     request.getSession().setAttribute("strSource", strSource);
