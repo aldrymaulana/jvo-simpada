@@ -9,7 +9,7 @@
         <table width="100%" cellpadding="0" cellspacing="0">
             <tr class="footer">
                 <td>
-                    Copyright ©2009-2010, 18Group
+                    Copyright ©2011, Master Technologies
                 </td>
             </tr>
         </table>
