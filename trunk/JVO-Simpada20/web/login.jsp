@@ -53,6 +53,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JVO-SIMPADA</title>
         <link href="css/simpada.css" rel="stylesheet">
+        <script type="text/javascript" src="../js/jsUtility.js"></script>
         <script type="text/javascript">
             function fnLogin() {
                 var vLogin = document.main_form.txtLogin.value;

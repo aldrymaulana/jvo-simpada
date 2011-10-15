@@ -159,29 +159,58 @@ function terbilang(bilangan) {
 /**
  * Memberi nama setiap element
  */
- 		function fnGetAllElement() {
-			var vJmlElement = document.main_form.elements.length;
-			for (var w=0; w<=vJmlElement-1; w++) {
-				var vElementName = '';
-				if (document.main_form.elements[w].name != null) {
-					vElementName = document.main_form.elements[w].name;
-				}
-				document.main_form.elements[w].title = vElementName;
-			}
-		}
+function fnGetAllElement() {
+        var vJmlElement = document.main_form.elements.length;
+        for (var w=0; w<=vJmlElement-1; w++) {
+                var vElementName = '';
+                if (document.main_form.elements[w].name != null) {
+                        vElementName = document.main_form.elements[w].name;
+                }
+                document.main_form.elements[w].title = vElementName;
+        }
+}
 				
 /**
  * Menyimpan data element terakhir yang digunakan
  */
- 		function fnLastElement(vElement) {
-			document.main_form.hidLastElement.value = vElement;	
-		}
+function fnLastElement(vElement) {
+        document.main_form.hidLastElement.value = vElement;
+}
 		
 /**
  * Menuju element terakhir yang digunakan
  */		
-		function fnGotoLastElement() {
-			var vLastElement = document.main_form.hidLastElement.value;
-			document.getElementById(vLastElement).focus();
-		}
+function fnGotoLastElement() {
+        var vLastElement = document.main_form.hidLastElement.value;
+        document.getElementById(vLastElement).focus();
+}
 
+/**
+ * Mencegah klik kanan
+ */
+function right(e) {
+    if (navigator.appName == 'Netscape' && (e.which == 3 || e.which == 2)) {
+        return false;
+    } else if (navigator.appName == 'Microsoft Internet Explorer' && (event.button == 2 || event.button == 3)) {
+        alert("Sorry, you do not have permission to right click.");
+        return false;
+    }
+    return true;
+}
+
+document.onmousedown=right;
+document.onmouseup=right;
+if (document.layers) window.captureEvents(Event.MOUSEDOWN);
+if (document.layers) window.captureEvents(Event.MOUSEUP);
+window.onmousedown=right;
+window.onmouseup=right;
+
+top.window.moveTo(0,0);
+if (document.all) {
+    top.window.resizeTo(screen.availWidth,screen.availHeight);
+} else if (document.layers||document.getElementById) {
+    if (top.window.outerHeight<screen.availHeight||top.window.outerWidth<screen.availWidth){
+        top.window.outerHeight = screen.availHeight;
+        top.window.outerWidth = screen.availWidth;
+    }
+}
