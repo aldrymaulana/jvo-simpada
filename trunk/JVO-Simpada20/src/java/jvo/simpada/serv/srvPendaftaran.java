@@ -57,6 +57,8 @@ public class srvPendaftaran extends HttpServlet {
         if (request.getParameter("mode") != null) {
             strMode = request.getParameter("mode").toString();
         }
+        String strIfFrame = "ifPendaftaran";
+        request.getSession().setAttribute("strIfFrame", strIfFrame);
         strWidth = request.getParameter("hidWidth").toString();
         request.getSession().setAttribute("strWidth", strWidth);
         strHeight = request.getParameter("hidHeight").toString();
