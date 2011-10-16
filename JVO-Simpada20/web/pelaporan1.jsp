@@ -59,7 +59,6 @@
     
     String strWidth = request.getSession().getAttribute("strWidth").toString();
     String strHeight = request.getSession().getAttribute("strHeight").toString();
-    String strLastElement = request.getSession().getAttribute("strLastElement").toString();
 	
     jvCommon jvc = new jvCommon();
     
@@ -80,6 +79,11 @@
     
     String strDate1 = "01/" + jvc.fnLRPad("LPAD",String.valueOf(intMonth+1),"0",2) + "/" + intYear;
     String strDate2 = intMaxDay2 + "/" + jvc.fnLRPad("LPAD",String.valueOf(intMonth+1),"0",2) + "/" + intYear;
+
+    String strIdxLaporan = "0";
+    if (request.getSession().getAttribute("strIdxLaporan") != null) {
+        strIdxLaporan = request.getSession().getAttribute("strIdxLaporan").toString();
+    }
     
 %>
 <html>
@@ -87,7 +91,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link href="css/simpada.css" rel="stylesheet">
-        <script type="text/javascript" src="js/jsUtility.js"></script> 
+        <script type="text/javascript" src="js/jsUtility.js"></script>
         <script type="text/javascript" src="js/calendar.js"></script>
 		<script type="text/javascript" src="js/calendar-en.js"></script>
 		<script type="text/javascript" src="js/calendar-setup.js"></script>
@@ -100,75 +104,60 @@
 			}
 		</style>
         <script type="text/javascript">
-        	function fnPilihLaporan() {
-        		var vIdxLap = document.main_form.slctJnsLaporan.selectedIndex;
-	        	if (vIdxLap != 0) {
-		        	if (vIdxLap == 1) {
-		        		document.getElementById("lblTglAwal").innerHTML = "Tgl Laporan";
-		        		document.getElementById("txtTglAwal").value = '<%= strToday1 %>';
-		        		document.getElementById("rowTglAwal").className = "clShow";
-		        		document.getElementById("rowTglAkhir").className = "clHidden";
-		        		document.getElementById("rowJnsPajak").className = "clHidden";
-		        	} else if (vIdxLap == 5) {
-		        		document.getElementById("lblTglAwal").innerHTML = "Tgl Awal";
-		        		document.getElementById("txtTglAwal").value = '<%= strDate1 %>';
-		        		document.getElementById("rowTglAwal").className = "clShow";
-		        		document.getElementById("rowTglAkhir").className = "clShow";
-		        		document.getElementById("rowJnsPajak").className = "clShow";
-		        	} else if (vIdxLap == 6) {
-		        		document.getElementById("rowTglAwal").className = "clHidden";
-		        		document.getElementById("rowTglAkhir").className = "clHidden";
-		        		document.getElementById("rowJnsPajak").className = "clHidden";
-		        	} else {
-		        		document.getElementById("lblTglAwal").innerHTML = "Tgl Awal";
-		        		document.getElementById("txtTglAwal").value = '<%= strDate1 %>';
-		        		document.getElementById("rowTglAwal").className = "clShow";
-		        		document.getElementById("rowTglAkhir").className = "clShow";
-		        		document.getElementById("rowJnsPajak").className = "clHidden";
-		        	}
-	        	} else {
-	        		document.getElementById("rowTglAwal").className = "clHidden";
-	        		document.getElementById("rowTglAkhir").className = "clHidden";
-	        		document.getElementById("rowJnsPajak").className = "clHidden";
-	        	}
-        	}
-        	
-	        function fnCreateReport() {
-	        	var vIdxLap = document.main_form.slctJnsLaporan.selectedIndex;
-	        	if (vIdxLap != 0) {
-		        	var vIdxJnsPajak = document.main_form.slctJnsPajak.selectedIndex;
-		        	var vJnsPajak = document.main_form.slctJnsPajak[vIdxJnsPajak].value;
-		        	document.main_form.hidJnsPajak.value = vJnsPajak;
+            function fnAutoPilihLaporan() {
+                var vIdxLaporan = document.main_form.hidTypeLap.value;
+                document.main_form.slctJnsLaporan.selectedIndex = vIdxLaporan;
+                fnPilihLaporan();
+            }
 
-		        	document.main_form.hidTypeLap.value = vIdxLap;
-		        	document.main_form.method = "post";
-	    	        document.main_form.target = "_parent"
-	        	    document.main_form.mode.value = 1;
-	            	document.main_form.action = "srvLaporan";
-	            	document.main_form.submit();
-	        	}
-	        }
-    	
-            function fnGetAllElement() {
-                var vJmlElement = document.main_form.elements.length;
-                for (var w=0; w<=vJmlElement-1; w++) {
-                    var vElementName = '';
-                    if (document.main_form.elements[w].name != null) {
-                        vElementName = document.main_form.elements[w].name;
+            function fnPilihLaporan() {
+                var vIdxLap = document.main_form.slctJnsLaporan.selectedIndex;
+                if (vIdxLap != 0) {
+                    if (vIdxLap == 1) {
+                            document.getElementById("lblTglAwal").innerHTML = "Tgl Laporan";
+                            document.getElementById("txtTglAwal").value = '<%= strToday1 %>';
+                            document.getElementById("rowTglAwal").className = "clShow";
+                            document.getElementById("rowTglAkhir").className = "clHidden";
+                            document.getElementById("rowJnsPajak").className = "clHidden";
+                    } else if (vIdxLap == 5) {
+                            document.getElementById("lblTglAwal").innerHTML = "Tgl Awal";
+                            document.getElementById("txtTglAwal").value = '<%= strDate1 %>';
+                            document.getElementById("rowTglAwal").className = "clShow";
+                            document.getElementById("rowTglAkhir").className = "clShow";
+                            document.getElementById("rowJnsPajak").className = "clShow";
+                    } else if (vIdxLap == 6) {
+                            document.getElementById("rowTglAwal").className = "clHidden";
+                            document.getElementById("rowTglAkhir").className = "clHidden";
+                            document.getElementById("rowJnsPajak").className = "clHidden";
+                    } else {
+                            document.getElementById("lblTglAwal").innerHTML = "Tgl Awal";
+                            document.getElementById("txtTglAwal").value = '<%= strDate1 %>';
+                            document.getElementById("rowTglAwal").className = "clShow";
+                            document.getElementById("rowTglAkhir").className = "clShow";
+                            document.getElementById("rowJnsPajak").className = "clHidden";
                     }
-                    document.main_form.elements[w].title = vElementName;
+                } else {
+                    document.getElementById("rowTglAwal").className = "clHidden";
+                    document.getElementById("rowTglAkhir").className = "clHidden";
+                    document.getElementById("rowJnsPajak").className = "clHidden";
                 }
             }
-            
-            function fnLastElement(lastElement) {
-                document.main_form.hidLastElement.value = lastElement;
-            }
 
-            function fnGotoLastElement() {
-                var vLastElement = document.main_form.hidLastElement.value;
-                document.getElementById(vLastElement).focus();
+            function fnCreateReport() {
+                var vIdxLap = document.main_form.slctJnsLaporan.selectedIndex;
+                if (vIdxLap != 0) {
+                    var vIdxJnsPajak = document.main_form.slctJnsPajak.selectedIndex;
+                    var vJnsPajak = document.main_form.slctJnsPajak[vIdxJnsPajak].value;
+                    document.main_form.hidJnsPajak.value = vJnsPajak;
+                    document.main_form.hidTypeLap.value = vIdxLap;
+                    document.main_form.method = "post";
+                    document.main_form.target = "_parent"
+                    document.main_form.mode.value = 1;
+                    document.main_form.action = "srvLaporan";
+                    document.main_form.submit();
+                }
             }
-            
+    	
             function fnBatal() {
                 document.main_form.method = "post";
                 document.main_form.target = "_parent"
@@ -178,13 +167,14 @@
             }
         </script>
     </head>
-    <body onload="fnGetAllElement();fnGotoLastElement();">
+    <body onload="fnGetAllElement();fnAutoPilihLaporan();">
+    <!--body-->
         <form name="main_form">
             <input type="hidden" name="mode" id="mode">
             <input type="hidden" name="hidWidth" id="hidWidth" value="<%= strWidth %>">
             <input type="hidden" name="hidHeight" id="hidHeight" value="<%= strHeight %>">
-            <input type="hidden" name="hidLastElement" id="hidLastElement" value="<%= strLastElement %>">
-            <input type="hidden" name="hidTypeLap" id="hidTypeLap">
+            <input type="hidden" name="hidLastElement" id="hidLastElement">
+            <input type="hidden" name="hidTypeLap" id="hidTypeLap" value="<%= strIdxLaporan %>">
             <input type="hidden" name="hidJnsPajak" id="hidJnsPajak">
             <table border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr valign="top">
@@ -234,13 +224,13 @@
                                             <td>&nbsp;:&nbsp;</td>
                                             <td align="left">
                                                 <select name="slctJnsLaporan" id="slctJnsLaporan" onchange="fnPilihLaporan()">
-                                                        <option>
-                                                        <option>Buku Rekapitulasi Penerimaan Harian</option>
-                                                        <option>Buku Kas Pembantu</option>
-                                                        <option>Buku Kas Umum</option>
-                                                        <option>SPJ Pendapatan - Fungsional</option>
-                                                        <option>Daftar Rekapitulasi Penetapan Pajak</option>
-                                                        <option>Daftar Perusahaan</option>
+                                                        <option value="0">
+                                                        <option value="1" <%= strIdxLaporan.equalsIgnoreCase("1")?"SELECTED":"" %>>Buku Rekapitulasi Penerimaan Harian</option>
+                                                        <option value="2" <%= strIdxLaporan.equalsIgnoreCase("2")?"SELECTED":"" %>>Buku Kas Pembantu</option>
+                                                        <option value="3" <%= strIdxLaporan.equalsIgnoreCase("3")?"SELECTED":"" %>>Buku Kas Umum</option>
+                                                        <option value="4" <%= strIdxLaporan.equalsIgnoreCase("4")?"SELECTED":"" %>>SPJ Pendapatan - Fungsional</option>
+                                                        <option value="5" <%= strIdxLaporan.equalsIgnoreCase("5")?"SELECTED":"" %>>Daftar Rekapitulasi Penetapan Pajak</option>
+                                                        <option value="6" <%= strIdxLaporan.equalsIgnoreCase("6")?"SELECTED":"" %>>Daftar Perusahaan</option>
                                                 </select>
                                             </td>
                                         </tr>

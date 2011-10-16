@@ -28,6 +28,7 @@
             String strKodePos = "";
             String strTelepon = "";
             String strFacsimile = "";
+            String strCekBtSimpan = "0";
             if (request.getSession().getAttribute("htDataPemda") != null) {
                 htDataPemda = (Hashtable) request.getSession().getAttribute("htDataPemda");
                 int intDataPemda = htDataPemda.size();
@@ -98,6 +99,7 @@
                 strTglTerimaUang = strArrayBiaya[3];
                 java.util.Date dtTglTerimaUang = jvc.fnStr2Date(strTglTerimaUang, "yyyy-MM-dd");
                 strTglTerimaUang = jvc.fnDate2Str(dtTglTerimaUang, "dd/MM/yyyy");
+                strCekBtSimpan = "1";
             } else {
                 strTglTerimaUang = strToday;
             }
@@ -199,7 +201,16 @@
             }
 
             function fnUbah() {
-                document.main_form.txtUbah.value = "1";
+                var vText = document.main_form.btEdit.value;
+                if (vText == 'Ubah') {
+                    document.main_form.txtUbah.value = "1";
+                    document.main_form.btSimpan.disabled = false;
+                    document.main_form.btEdit.value = "Batal";
+                } else if (vText == 'Batal') {
+                    document.main_form.txtUbah.value = "";
+                    document.main_form.btSimpan.disabled = true;
+                    document.main_form.btEdit.value = "Ubah";
+                }
             }
 
             function fnChangeTahun() {
@@ -423,7 +434,7 @@
                 </tr>
                 <tr>
                     <td colspan="3" align="center">
-                        <button type="button" name="btSimpan" id="btSimpan" onclick="fnSimpan()">Simpan</button>
+                        <button type="button" <%= (strCekBtSimpan.equalsIgnoreCase("1")?"DISABLED":"") %> name="btSimpan" id="btSimpan" onclick="fnSimpan()">Simpan</button>
                         <button type="button" name="btEdit" id="btEdit" onclick="fnUbah()">Ubah</button>
                         <!--
 				<button type="button" name="btCetak" id="btCetak" onclick="fnCetak()">Cetak</button>

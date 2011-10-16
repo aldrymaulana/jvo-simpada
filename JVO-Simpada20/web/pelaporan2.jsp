@@ -74,7 +74,7 @@
     
     String strWidth = request.getSession().getAttribute("strWidth").toString();
     String strHeight = request.getSession().getAttribute("strHeight").toString();
-    String strLastElement = request.getSession().getAttribute("strLastElement").toString();
+    String strLastElement = "";//request.getSession().getAttribute("strLastElement").toString();
     String strNamaBendahara = request.getSession().getAttribute("strNamaBendahara").toString();
     String strNIPBendahara = request.getSession().getAttribute("strNIPBendahara").toString();
     
@@ -154,7 +154,7 @@
 	<input type="hidden" name="mode" id="mode">
 	<input type="hidden" name="hidWidth" id="hidWidth" value="<%= strWidth %>">
     <input type="hidden" name="hidHeight" id="hidHeight" value="<%= strHeight %>">
-    <input type="hidden" name="hidLastElement" id="hidLastElement" value="<%= strLastElement %>">
+    <input type="hidden" name="hidLastElement" id="hidLastElement">
         
 	<input style="display: none;" type="text" name="hidNamaPejabat" id="hidNamaPejabat">
     <input style="display: none;" type="text" name="hidJabatanPejabat" id="hidJabatanPejabat">
@@ -320,9 +320,9 @@
 		<tr>
 			<td colspan="3" align="left">
 				Pada hari ini, tanggal <%= strToday %><br>
-				Oleh kami didapat dalam kas, Rp: <input style="text-align: right" onblur="fnGetTerbilang()" type="text" name="txtRp" id="txtRp"></input><br>
+				Oleh kami didapat dalam kas, Rp: <input style="text-align: right" onblur="fnGetTerbilang()" type="text" name="txtRp" id="txtRp"/><br>
 				<div id="lblRp"></div><br>
-				<input type="hidden" name="hidLblRp" id="hidLblRp"></input>
+				<input type="hidden" name="hidLblRp" id="hidLblRp"/>
 				Terdiri dari:
 				<table>
 					<tr>
@@ -330,7 +330,7 @@
 						<td>Uang Tunai</td>
 						<td>:</td>
 						<td>
-							<input type="text" name="txtTunai" id="txtTunai"></input>
+							<input type="text" name="txtTunai" id="txtTunai"/>
 						</td>
 					</tr>
 					<tr>
@@ -338,7 +338,7 @@
 						<td>Surat Berharga</td>
 						<td>:</td>
 						<td>
-							<input type="text" name="txtSurat" id="txtSurat"></input>
+							<input type="text" name="txtSurat" id="txtSurat"/>
 						</td>
 					</tr>
 					<tr>
@@ -346,7 +346,7 @@
 						<td>Saldo Bank</td>
 						<td>:</td>
 						<td>
-							<input type="text" name="txtSaldo" id="txtSaldo"></input>
+							<input type="text" name="txtSaldo" id="txtSaldo"/>
 						</td>
 					</tr>
 				</table>
