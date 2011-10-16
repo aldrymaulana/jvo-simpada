@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jvo.simpada.common;
 
 import java.sql.*;
@@ -11,12 +10,9 @@ import java.util.*;
 
 // Referenced classes of package common:
 //            jvCommon, ifcSetting, ifcPenetapan, ifcPendaftaran
+public class jvGeneral {
 
-public class jvGeneral
-{
-
-    public jvGeneral()
-    {
+    public jvGeneral() {
         DBurl = "jdbc:odbc:Simpada_v01";
         con = null;
         stmt = null;
@@ -25,8 +21,7 @@ public class jvGeneral
         jvc = new jvCommon();
     }
 
-    public Hashtable fnGetDfPerusahaan()
-    {
+    public Hashtable fnGetDfPerusahaan(String strIdxKolom, String strOrder) {
         Hashtable htResult = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("select NamaBU, AlamatBU, iif(len(a.jnspekerjaan1) = 5,(select mJnsPekerjaan.JnsPekerjaan from mJnsPekerjaan where mJnsPekerjaan.KdNPWP = mid(a.NPWP,1,5)),a.JnsPekerjaan1) as JnsPekerjaan ");
@@ -39,9 +34,32 @@ public class jvGeneral
         sqlQuery.append("FROM (dataPemilik INNER JOIN dataBU ON dataPemilik.KdPemilik = dataBU.KdPemilik) ");
         sqlQuery.append("INNER JOIN mSKPD ON dataBU.KdPemilik = mSKPD.KdPemilik ORDER BY dataBU.Nama ");
         sqlQuery.append(") a ");
+        sqlQuery.append("order by ");
+
+        if (strIdxKolom.equalsIgnoreCase("0")) {
+            sqlQuery.append("NamaBU ");
+        } else if (strIdxKolom.equalsIgnoreCase("1")) {
+            sqlQuery.append("AlamatBU ");
+        } else if (strIdxKolom.equalsIgnoreCase("2")) {
+            sqlQuery.append("JnsPekerjaan ");
+        } else if (strIdxKolom.equalsIgnoreCase("3")) {
+            sqlQuery.append("NamaPemilik ");
+        } else if (strIdxKolom.equalsIgnoreCase("5")) {
+            sqlQuery.append("modal ");
+        } else if (strIdxKolom.equalsIgnoreCase("6")) {
+            sqlQuery.append("NPWP ");
+        } else if (strIdxKolom.equalsIgnoreCase("7")) {
+            sqlQuery.append("TglAkhir ");
+        }
+
+        if (strOrder.equalsIgnoreCase("up")) {
+            sqlQuery.append("DESC ");
+        } else {
+            sqlQuery.append("ASC ");
+        }
+
         jvc.fnPrint((new StringBuilder("fnGetDfPerusahaan: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -49,29 +67,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetRekapPajak(String tglAwal, String tglAkhir, String jnsPajak)
-    {
+    public Hashtable fnGetRekapPajak(String tglAwal, String tglAkhir, String jnsPajak) {
         Hashtable htResult = new Hashtable();
         String strDtDate3 = tglAwal.substring(0, 2);
         String strDtMonth3 = tglAwal.substring(3, 5);
@@ -82,6 +95,7 @@ public class jvGeneral
         String strDtYear4 = tglAkhir.substring(6, tglAkhir.length());
         tglAkhir = (new StringBuilder(String.valueOf(strDtMonth4))).append("/").append(strDtDate4).append("/").append(strDtYear4).toString();
         StringBuffer sqlQuery = new StringBuffer();
+
         sqlQuery.append("SELECT a.nama, a.nmPemilik, a.alamat, a.npwpd, iif(len(a.jnspekerjaan) = 5 ");
         sqlQuery.append(",(select mJnsPekerjaan.JnsPekerjaan from mJnsPekerjaan where mJnsPekerjaan.KdNPWP = mid(a.npwpd,1,5)),a.jnspekerjaan) AS JenisPekerjaan ");
         sqlQuery.append(", a.total1, b.total AS denda, a.tglawal, a.tglakhir, a.tglskpd, a.tgllunas ");
@@ -94,9 +108,9 @@ public class jvGeneral
         sqlQuery.append(") AS a LEFT JOIN qrekap_lain_persh AS b ON (a.tglskpd = b.tglskpd) AND (a.tglakhir = b.tglakhir) AND (a.tglawal = b.tglawal) AND (a.npwpd = b.npwpd) ");
         sqlQuery.append((new StringBuilder("WHERE a.tglskpd between DateValue('")).append(tglAwal).append("') and DateValue('").append(tglAkhir).append("') ").toString());
         sqlQuery.append((new StringBuilder("and mid(a.npwpd,1,5) = '")).append(jnsPajak).append("' ").toString());
+
         jvc.fnPrint((new StringBuilder("fnGetRekapPajak: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -104,29 +118,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public int fnSimpanAkses(ifcSetting ifcs)
-    {
+    public int fnSimpanAkses(ifcSetting ifcs) {
         int intResult = 0;
         String txtKdJabatan = jvc.fnGetValue(ifcs.getTxtKdJabatan());
         String txt10000 = jvc.fnGetValue(ifcs.getTxt10000());
@@ -136,8 +145,7 @@ public class jvGeneral
         String txt50000 = jvc.fnGetValue(ifcs.getTxt50000());
         String txt60000 = jvc.fnGetValue(ifcs.getTxt60000());
         StringBuffer sqlQuery = new StringBuffer();
-        try
-        {
+        try {
             OpenConnection();
             sqlQuery.delete(0, sqlQuery.length());
             sqlQuery.append("DELETE FROM mAkses ");
@@ -145,8 +153,7 @@ public class jvGeneral
             jvc.fnPrint((new StringBuilder("fnSimpanAkses 1: ")).append(sqlQuery).toString());
             stmt = con.createStatement();
             stmt.executeUpdate(sqlQuery.toString());
-            if(stmt != null)
-            {
+            if (stmt != null) {
                 stmt.close();
                 stmt = null;
             }
@@ -158,33 +165,27 @@ public class jvGeneral
             String strSql60000 = (new StringBuilder("INSERT INTO mAkses(KdJabatan, KdMenu) VALUES ('")).append(txtKdJabatan).append("', '60000')").toString();
             String strSql70000 = (new StringBuilder("INSERT INTO mAkses(KdJabatan, KdMenu) VALUES ('")).append(txtKdJabatan).append("', '70000')").toString();
             stmt = con.createStatement();
-            if(txt10000.equalsIgnoreCase("on"))
-            {
+            if (txt10000.equalsIgnoreCase("on")) {
                 stmt.addBatch(strSql10000);
                 jvc.fnPrint((new StringBuilder("strSql10000: ")).append(strSql10000).toString());
             }
-            if(txt20000.equalsIgnoreCase("on"))
-            {
+            if (txt20000.equalsIgnoreCase("on")) {
                 stmt.addBatch(strSql20000);
                 jvc.fnPrint((new StringBuilder("strSql20000: ")).append(strSql20000).toString());
             }
-            if(txt30000.equalsIgnoreCase("on"))
-            {
+            if (txt30000.equalsIgnoreCase("on")) {
                 stmt.addBatch(strSql30000);
                 jvc.fnPrint((new StringBuilder("strSql30000: ")).append(strSql30000).toString());
             }
-            if(txt40000.equalsIgnoreCase("on"))
-            {
+            if (txt40000.equalsIgnoreCase("on")) {
                 stmt.addBatch(strSql40000);
                 jvc.fnPrint((new StringBuilder("strSql40000: ")).append(strSql40000).toString());
             }
-            if(txt50000.equalsIgnoreCase("on"))
-            {
+            if (txt50000.equalsIgnoreCase("on")) {
                 stmt.addBatch(strSql50000);
                 jvc.fnPrint((new StringBuilder("strSql50000: ")).append(strSql50000).toString());
             }
-            if(txt60000.equalsIgnoreCase("on"))
-            {
+            if (txt60000.equalsIgnoreCase("on")) {
                 stmt.addBatch(strSql60000);
                 jvc.fnPrint((new StringBuilder("strSql60000: ")).append(strSql60000).toString());
             }
@@ -192,30 +193,25 @@ public class jvGeneral
             jvc.fnPrint((new StringBuilder("strSql70000: ")).append(strSql70000).toString());
             int intResultBatch[] = stmt.executeBatch();
             int intBatch = intResultBatch.length;
-            for(int b = 0; b <= intBatch - 1; b++)
-            {
+            for (int b = 0; b <= intBatch - 1; b++) {
                 int intRslt = intResultBatch[b];
-                if(intRslt >= 0)
+                if (intRslt >= 0) {
                     continue;
+                }
                 intResult = 0;
                 break;
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public Hashtable fnGetMenu()
-    {
+    public Hashtable fnGetMenu() {
         Hashtable htMenu = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.delete(0, sqlQuery.length());
@@ -223,8 +219,7 @@ public class jvGeneral
         sqlQuery.append("FROM mMenu ");
         sqlQuery.append("WHERE mMenu.Kode not in ('70000') ");
         jvc.fnPrint((new StringBuilder("fnGetMenu: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -232,37 +227,31 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htMenu.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htMenu.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htMenu;
     }
 
-    public Hashtable fnGetListAkses()
-    {
+    public Hashtable fnGetListAkses() {
         Hashtable htListAkses = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.delete(0, sqlQuery.length());
         sqlQuery.append("SELECT Kode, Keterangan, m10000, m20000, m30000, m40000, m50000, m60000 ");
         sqlQuery.append("FROM qHakAkses ");
         jvc.fnPrint((new StringBuilder("fnGetHakAkses: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -270,29 +259,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htListAkses.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htListAkses.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htListAkses;
     }
 
-    public Hashtable fnGetSewaReklame(String strData[])
-    {
+    public Hashtable fnGetSewaReklame(String strData[]) {
         Hashtable htData = new Hashtable();
         String strKdWilayah = strData[0];
         String strJnsReklame = strData[1];
@@ -301,33 +285,27 @@ public class jvGeneral
         String strTempat = strData[4];
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.delete(0, sqlQuery.length());
-        if(strJnsReklame.equalsIgnoreCase("0"))
-        {
-            if(strTempat.equalsIgnoreCase("1"))
-            {
+        if (strJnsReklame.equalsIgnoreCase("0")) {
+            if (strTempat.equalsIgnoreCase("1")) {
                 sqlQuery.append("SELECT SewaJalan, FaktorKali ");
                 sqlQuery.append("FROM mPajakReklame ");
                 sqlQuery.append((new StringBuilder("WHERE Wilayah = '")).append(strKdWilayah).append("' ").toString());
                 sqlQuery.append((new StringBuilder("AND KdSatuan = '")).append(strSatuan).append("' ").toString());
                 sqlQuery.append((new StringBuilder("AND ")).append(strUraian).append(" BETWEEN LuasBawah AND LuasAtas ").toString());
-            } else
-            {
+            } else {
                 sqlQuery.append("SELECT SewaToko, FaktorKali ");
                 sqlQuery.append("FROM mPajakReklame ");
                 sqlQuery.append((new StringBuilder("WHERE Wilayah = '")).append(strKdWilayah).append("' ").toString());
                 sqlQuery.append((new StringBuilder("AND KdSatuan = '")).append(strSatuan).append("' ").toString());
                 sqlQuery.append((new StringBuilder("AND ")).append(strUraian).append(" BETWEEN LuasBawah AND LuasAtas ").toString());
             }
-        } else
-        if(strTempat.equalsIgnoreCase("1"))
-        {
+        } else if (strTempat.equalsIgnoreCase("1")) {
             sqlQuery.append("SELECT SewaJalan, FaktorKali ");
             sqlQuery.append("FROM mPajakReklame1 ");
             sqlQuery.append((new StringBuilder("WHERE Wilayah = '")).append(strKdWilayah).append("' ").toString());
             sqlQuery.append((new StringBuilder("AND KdSatuan = '")).append(strSatuan).append("' ").toString());
             sqlQuery.append((new StringBuilder("AND KdJenis = '")).append(strJnsReklame).append("' ").toString());
-        } else
-        {
+        } else {
             sqlQuery.append("SELECT SewaToko, FaktorKali ");
             sqlQuery.append("FROM mPajakReklame1 ");
             sqlQuery.append((new StringBuilder("WHERE Wilayah = '")).append(strKdWilayah).append("' ").toString());
@@ -335,40 +313,32 @@ public class jvGeneral
             sqlQuery.append((new StringBuilder("AND KdJenis = '")).append(strJnsReklame).append("' ").toString());
         }
         jvc.fnPrint((new StringBuilder("fnGetSewaReklame: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             String strFaktorKali;
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); htData.put("FaktorKali", strFaktorKali))
-            {
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); htData.put("FaktorKali", strFaktorKali)) {
                 String strSewa = rs.getString(1);
                 strFaktorKali = rs.getString(2);
                 htData.put("Sewa", strSewa);
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htData;
     }
 
-    public int fnSimpanBank(ifcSetting ifcs)
-    {
+    public int fnSimpanBank(ifcSetting ifcs) {
         int intResult = 0;
         String txtKodeBank = jvc.fnGetValue(ifcs.getTxtUkeyKary());
         String txtNamaBank = jvc.fnGetValue(ifcs.getTxtLogin());
         String txtNoRekBank = jvc.fnGetValue(ifcs.getTxtPassword());
         StringBuffer sqlQuery = new StringBuffer();
-        try
-        {
+        try {
             OpenConnection();
             sqlQuery.delete(0, sqlQuery.length());
             sqlQuery.append("UPDATE mBank SET ");
@@ -379,31 +349,26 @@ public class jvGeneral
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public Hashtable fnGetInfoBank(String strKode)
-    {
+    public Hashtable fnGetInfoBank(String strKode) {
         Hashtable htBidUsaha = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.delete(0, sqlQuery.length());
         sqlQuery.append("SELECT mBank.NamaBank, mBank.NoRekening, mBank.Kode, mBank.Status ");
         sqlQuery.append("FROM mBank ");
         sqlQuery.append("WHERE Status = '1' ");
-        if(strKode.trim().length() > 0)
+        if (strKode.trim().length() > 0) {
             sqlQuery.append((new StringBuilder("AND Kode = '")).append(strKode).append("' ").toString());
+        }
         jvc.fnPrint((new StringBuilder("fnGetInfoBank: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -411,29 +376,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htBidUsaha.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htBidUsaha.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htBidUsaha;
     }
 
-    public int fnHapusLogin(ifcSetting ifcs)
-    {
+    public int fnHapusLogin(ifcSetting ifcs) {
         int intResult = 0;
         String uKeyKary = jvc.fnGetValue(ifcs.getTxtUkeyKary());
         StringBuffer sqlQuery = new StringBuffer();
@@ -441,49 +401,41 @@ public class jvGeneral
         sqlQuery.append("DELETE * FROM dataLogin ");
         sqlQuery.append((new StringBuilder("WHERE FUkey = ")).append(uKeyKary).append(" ").toString());
         jvc.fnPrint((new StringBuilder("fnHapusLogin: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnSimpanLogin(ifcSetting ifcs)
-    {
+    public int fnSimpanLogin(ifcSetting ifcs) {
         int intResult = 0;
         String uKeyKary = jvc.fnGetValue(ifcs.getTxtUkeyKary());
         String txtLogin = jvc.fnGetValue(ifcs.getTxtLogin());
         String txtPassword = jvc.fnGetValue(ifcs.getTxtPassword());
         StringBuffer sqlQuery = new StringBuffer();
-        try
-        {
+        try {
             OpenConnection();
             sqlQuery.delete(0, sqlQuery.length());
             sqlQuery.append("SELECT count(*) as jumlah ");
             sqlQuery.append("FROM dataLogin ");
             sqlQuery.append((new StringBuilder("WHERE FUkey = ")).append(uKeyKary).append(" ").toString());
             stmt = con.createStatement();
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next();)
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next();) {
                 intResult = rs.getInt(1);
+            }
 
-            if(intResult == 0)
-            {
+            if (intResult == 0) {
                 sqlQuery.delete(0, sqlQuery.length());
                 sqlQuery.append("INSERT INTO dataLogin(LoginId, Password, FUkey) ");
                 sqlQuery.append((new StringBuilder("VALUES ('")).append(txtLogin).append("', '").append(txtPassword).append("', ").append(uKeyKary).append(") ").toString());
-            } else
-            {
+            } else {
                 sqlQuery.delete(0, sqlQuery.length());
                 sqlQuery.append("UPDATE dataLogin SET ");
                 sqlQuery.append((new StringBuilder("LoginId = '")).append(txtLogin).append("', ").toString());
@@ -494,20 +446,15 @@ public class jvGeneral
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnTambahKaryawan(ifcSetting ifcs)
-    {
+    public int fnTambahKaryawan(ifcSetting ifcs) {
         int intResult = 0;
         String txtNamaKary = jvc.fnGetValue(ifcs.getTxtNamaKary());
         String txtJabatanKary = jvc.fnGetValue(ifcs.getTxtJabatanKary());
@@ -542,52 +489,40 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("'")).append(txtTeleponKary).append("', ").toString());
         sqlQuery.append((new StringBuilder("'")).append(txtFacsimileKary).append("') ").toString());
         jvc.fnPrint((new StringBuilder("fnTambahKaryawan: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnDeleteKaryawan(String strUkeyKary)
-    {
+    public int fnDeleteKaryawan(String strUkeyKary) {
         int intResult = 0;
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("DELETE * ");
         sqlQuery.append("FROM mPegawai ");
         sqlQuery.append((new StringBuilder("WHERE Ukey = ")).append(strUkeyKary).append(" ").toString());
         jvc.fnPrint((new StringBuilder("fnDeleteKaryawan: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnUpdateKaryawan(ifcSetting ifcs)
-    {
+    public int fnUpdateKaryawan(ifcSetting ifcs) {
         int intResult = 0;
         String uKeyKary = jvc.fnGetValue(ifcs.getTxtUkeyKary());
         String txtNamaKary = jvc.fnGetValue(ifcs.getTxtNamaKary());
@@ -622,26 +557,20 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("Facs = '")).append(txtFacsimileKary).append("' ").toString());
         sqlQuery.append((new StringBuilder("WHERE Ukey = ")).append(uKeyKary).append(" ").toString());
         jvc.fnPrint((new StringBuilder("fnUpdateKary: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnUpdatePemda(ifcSetting ifcs)
-    {
+    public int fnUpdatePemda(ifcSetting ifcs) {
         int intResult = 0;
         String uKeyPemda = jvc.fnGetValue(ifcs.getTxtUkeyPemda());
         String txtNamaPemda = jvc.fnGetValue(ifcs.getTxtNamaPemda());
@@ -674,26 +603,20 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("Facs = '")).append(txtFacsimilePemda).append("' ").toString());
         sqlQuery.append((new StringBuilder("WHERE Ukey = ")).append(uKeyPemda).append(" ").toString());
         jvc.fnPrint((new StringBuilder("fnUpdatePemda: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public Hashtable fnGetSPJFungsional()
-    {
+    public Hashtable fnGetSPJFungsional() {
         Hashtable htResult = new Hashtable();
         Calendar cal = new GregorianCalendar();
         int intDayOfMonth = cal.get(5);
@@ -705,8 +628,7 @@ public class jvGeneral
         String strDate1 = (new StringBuilder(String.valueOf(jvc.fnLRPad("LPAD", String.valueOf(intMonth + 1), "0", 2)))).append("/").append("01").append("/").append(intYear).toString();
         String strDate2 = (new StringBuilder(String.valueOf(jvc.fnLRPad("LPAD", String.valueOf(intMonth + 1), "0", 2)))).append("/").append(intMaxDay2).append("/").append(intYear).toString();
         int intBulanLalu = intMonth - 1;
-        if(intBulanLalu < 0)
-        {
+        if (intBulanLalu < 0) {
             intBulanLalu = 11;
             intYear--;
         }
@@ -772,8 +694,7 @@ public class jvGeneral
         sqlQuery.append(") as spjBulanan ");
         sqlQuery.append("ON spjLengkap.[Kode Rekening] = spjBulanan.KdRekening ");
         jvc.fnPrint((new StringBuilder("fnGetSPJFungsional: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -781,29 +702,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetBukuKasPembantu(String tglAwal, String tglAkhir, String thnAnggaran)
-    {
+    public Hashtable fnGetBukuKasPembantu(String tglAwal, String tglAkhir, String thnAnggaran) {
         Hashtable htResult = new Hashtable();
         String strDtDate3 = tglAwal.substring(0, 2);
         String strDtMonth3 = tglAwal.substring(3, 5);
@@ -821,8 +737,7 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("AND mAnggaran.Tahun = '")).append(thnAnggaran).append("' ").toString());
         sqlQuery.append("GROUP BY mSKPD.KdRekening, mRekening.Keterangan, mSKPD.TglSKPD, mAnggaran.Jumlah ");
         jvc.fnPrint((new StringBuilder("fnGetBukuKasPembantu: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -830,29 +745,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetLapHarian(String tglAwal)
-    {
+    public Hashtable fnGetLapHarian(String tglAwal) {
         Hashtable htResult = new Hashtable();
         String strDtDate3 = tglAwal.substring(0, 2);
         String strDtMonth3 = tglAwal.substring(3, 5);
@@ -893,8 +803,7 @@ public class jvGeneral
         sqlQuery.append(") AS PADLAIN ");
         sqlQuery.append("ON  PAJAK.KdPajak = PADLAIN.KdLain ");
         jvc.fnPrint((new StringBuilder("fnGetLapHarian: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -902,64 +811,51 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public int fnHapusAnggaran(String strTahun)
-    {
+    public int fnHapusAnggaran(String strTahun) {
         int intResult = 0;
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("DELETE * ");
         sqlQuery.append("FROM mAnggaran ");
         sqlQuery.append((new StringBuilder("WHERE Tahun = '")).append(strTahun).append("' ").toString());
         jvc.fnPrint((new StringBuilder("fnHapusAnggaran: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnSimpanAnggaran(Hashtable htData)
-    {
+    public int fnSimpanAnggaran(Hashtable htData) {
         int intResult = 1;
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             int intHtData = htData.size();
-            for(int a = 1; a <= intHtData; a++)
-            {
-                String strData[] = (String[])htData.get(String.valueOf(a));
+            for (int a = 1; a <= intHtData; a++) {
+                String strData[] = (String[]) htData.get(String.valueOf(a));
                 String strThnAnggaran = strData[0];
                 String strKdRekening = strData[1];
                 String strJumlah = strData[2];
@@ -970,7 +866,7 @@ public class jvGeneral
                 String strDtMonth4 = strTglTerima.substring(3, 5);
                 String strDtYear4 = strTglTerima.substring(6, strTglTerima.length());
                 strTglTerima = (new StringBuilder(String.valueOf(strDtMonth4))).append("/").append(strDtDate4).append("/").append(strDtYear4).toString();
-                StringBuffer sqlQuery = new StringBuffer();
+                StringBuilder sqlQuery = new StringBuilder();
                 sqlQuery.delete(0, sqlQuery.length());
                 sqlQuery.append("INSERT INTO mAnggaran (Tahun, KdRekening, Jumlah, NIPPenerima, NIPPejabat, TglTerima) ");
                 sqlQuery.append((new StringBuilder("VALUES ('")).append(strThnAnggaran).append("', '").append(strKdRekening).append("' ").toString());
@@ -982,30 +878,25 @@ public class jvGeneral
 
             int intResultBatch[] = stmt.executeBatch();
             int intBatch = intResultBatch.length;
-            for(int b = 0; b <= intBatch - 1; b++)
-            {
+            for (int b = 0; b <= intBatch - 1; b++) {
                 int intRslt = intResultBatch[b];
-                if(intRslt >= 0)
+                if (intRslt >= 0) {
                     continue;
+                }
                 intResult = 0;
                 break;
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public Hashtable fnGetRincianAnggaran(String strTahun)
-    {
+    public Hashtable fnGetRincianAnggaran(String strTahun) {
         Hashtable htResult = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("SELECT Tahun, KdRekening, Jumlah, TglTerima ");
@@ -1013,8 +904,7 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("WHERE Tahun = '")).append(strTahun).append("' ").toString());
         sqlQuery.append("ORDER BY KdRekening ");
         jvc.fnPrint((new StringBuilder("fnGetRincianAnggaran: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -1022,31 +912,26 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
                 jvc.fnPrint((new StringBuilder("strArray[1]: ")).append(strArray[2]).toString());
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         jvc.fnPrint((new StringBuilder("fnGetRincianAnggaran: ")).append(htResult.size()).toString());
         return htResult;
     }
 
-    public Hashtable fnGetNoRekRetribusi()
-    {
+    public Hashtable fnGetNoRekRetribusi() {
         Hashtable htResult = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("SELECT [Kode1] & [Kode2] & [Kode3] & [Kode4] & [Kode5] AS NoRekRetribusi, KdRetribusi, mRetribusi.Keterangan ");
@@ -1054,8 +939,7 @@ public class jvGeneral
         sqlQuery.append("WHERE mRekening.KdRetribusi=mRetribusi.Kode ");
         sqlQuery.append("ORDER BY [Kode1] & [Kode2] & [Kode3] & [Kode4] & [Kode5] ");
         jvc.fnPrint((new StringBuilder("fnGetNoRekRetribusi: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -1063,38 +947,31 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = jvc.fnGetValue(rs.getString(a + 1));
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public int fnSaveSTS(Hashtable htSTS)
-    {
+    public int fnSaveSTS(Hashtable htSTS) {
         int intResult = 1;
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             int intHtSTS = htSTS.size();
-            for(int a = 1; a <= intHtSTS; a++)
-            {
-                String strValidArray[] = (String[])htSTS.get(String.valueOf(a));
+            for (int a = 1; a <= intHtSTS; a++) {
+                String strValidArray[] = (String[]) htSTS.get(String.valueOf(a));
                 String strTglSTS = strValidArray[0];
                 String strDtDate4 = strTglSTS.substring(0, 2);
                 String strDtMonth4 = strTglSTS.substring(3, 5);
@@ -1116,30 +993,25 @@ public class jvGeneral
 
             int intResultBatch[] = stmt.executeBatch();
             int intBatch = intResultBatch.length;
-            for(int b = 0; b <= intBatch - 1; b++)
-            {
+            for (int b = 0; b <= intBatch - 1; b++) {
                 int intRslt = intResultBatch[b];
-                if(intRslt >= 0)
+                if (intRslt >= 0) {
                     continue;
+                }
                 intResult = 0;
                 break;
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public Hashtable fnGetSTS(String strTglSTS)
-    {
+    public Hashtable fnGetSTS(String strTglSTS) {
         Hashtable htResult = new Hashtable();
         String strDtDate4 = strTglSTS.substring(0, 2);
         String strDtMonth4 = strTglSTS.substring(3, 5);
@@ -1160,8 +1032,7 @@ public class jvGeneral
         sqlQuery.append("group by mKodeRek.KodeRekening, mKodeRek.UraianRincianObyek) as ListTerbayar ");
         sqlQuery.append("ON ListRekening.KodeRekening = ListTerbayar.KodeRekening ");
         jvc.fnPrint((new StringBuilder("fnGetSTS: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -1169,34 +1040,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = jvc.fnGetValue(rs.getString(a + 1));
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetPajakC()
-    {
+    public Hashtable fnGetPajakC() {
         Hashtable htPajakC = new Hashtable();
         String sqlQuery = "SELECT JnsBahan, SatuanUkuran, HargaDasar, FaktorKali FROM mPajakC";
         jvc.fnPrint((new StringBuilder("fnGetPajakC: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -1204,34 +1069,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htPajakC.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htPajakC.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htPajakC;
     }
 
-    public Hashtable fnGetInfoPejabat()
-    {
+    public Hashtable fnGetInfoPejabat() {
         Hashtable htInfoPejabat = new Hashtable();
         String sqlQuery = "SELECT Kode, Nama, NIP, Keterangan, HakTTD FROM mJabatan INNER JOIN mPegawai ON mJabatan.Kode=mPegawai.Jabatan";
         jvc.fnPrint((new StringBuilder("fnGetInfoPejabat: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -1239,29 +1098,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htInfoPejabat.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htInfoPejabat.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htInfoPejabat;
     }
 
-    public Hashtable fnGetBukuKasUmum(String tglAwal, String strTglAkhir)
-    {
+    public Hashtable fnGetBukuKasUmum(String tglAwal, String strTglAkhir) {
         Hashtable htResult = new Hashtable();
         String strDtDate3 = tglAwal.substring(0, 2);
         String strDtMonth3 = tglAwal.substring(3, 5);
@@ -1283,8 +1137,7 @@ public class jvGeneral
         sqlQuery.append("group by mSKPD.TglSKPD, mSKPD.KdRekening, Uraian ");
         sqlQuery.append("order by mSKPD.TglSKPD, mSKPD.KdRekening, sum(Penerimaan), sum(Pengeluaran) ");
         jvc.fnPrint((new StringBuilder("fnGetBukuKasUmum: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -1292,29 +1145,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetRincianBiaya(String strTglSTS)
-    {
+    public Hashtable fnGetRincianBiaya(String strTglSTS) {
         Hashtable htResult = new Hashtable();
         String strDtDate3 = strTglSTS.substring(0, 2);
         String strDtMonth3 = strTglSTS.substring(3, 5);
@@ -1326,8 +1174,7 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("WHERE TglSKPD = DateValue('")).append(strTglSTS).append("') ").toString());
         sqlQuery.append("GROUP BY TglSKPD, KdRekening ");
         jvc.fnPrint((new StringBuilder("fnGetRincianBiaya: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -1335,37 +1182,31 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetRincian()
-    {
+    public Hashtable fnGetRincian() {
         Hashtable htResult = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("SELECT [Kode1]&[Kode2]&[Kode3]&[Kode4]&[Kode5] as [Kode Rekening] ");
         sqlQuery.append(", [Keterangan] as [Uraian Rincian Obyek] ");
         sqlQuery.append("FROM mRekening ");
         jvc.fnPrint((new StringBuilder("fnGetRincian: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -1373,29 +1214,24 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htResult.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetSKPD(String strNoSKPD, String strKdPemilik, String strNoNPWPD, String strNoNPWRD)
-    {
+    public Hashtable fnGetSKPD(String strNoSKPD, String strKdPemilik, String strNoNPWPD, String strNoNPWRD) {
         Hashtable htResult = new Hashtable();
         String Nama = "";
         String Jalan = "";
@@ -1424,12 +1260,10 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("and  (([dataBU.KdNPWP]&[dataBU.NPWPD]&[dataBU.WilNPWP] = '")).append(strNoNPWPD).append("') ").toString());
         sqlQuery.append((new StringBuilder("      or ([dataBU.KdNPWR]&[dataBU.NPWRD]&[dataBU.WilNPWR] = '")).append(strNoNPWRD).append("')) ").toString());
         jvc.fnPrint((new StringBuilder("fnGetCounter 1: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); htResult.put("Kelurahan", Kelurahan))
-            {
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); htResult.put("Kelurahan", Kelurahan)) {
                 Nama = jvc.fnGetValue(rs.getString(1));
                 htResult.put("Nama", Nama);
                 Jalan = jvc.fnGetValue(rs.getString(2));
@@ -1452,20 +1286,15 @@ public class jvGeneral
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public Hashtable fnGetSKPD0(String strNoSKPD, String strKdPemilik, String strNoNPWPD, String strNoNPWRD)
-    {
+    public Hashtable fnGetSKPD0(String strNoSKPD, String strKdPemilik, String strNoNPWPD, String strNoNPWRD) {
         Hashtable htResult = new Hashtable();
         String Nama = "";
         String Jalan = "";
@@ -1494,12 +1323,10 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("and  (([dataBU.KdNPWP]&[dataBU.NPWPD]&[dataBU.WilNPWP] = '")).append(strNoNPWPD).append("') ").toString());
         sqlQuery.append((new StringBuilder("      or ([dataBU.KdNPWR]&[dataBU.NPWRD]&[dataBU.WilNPWR] = '")).append(strNoNPWRD).append("')) ").toString());
         jvc.fnPrint((new StringBuilder("fnGetSKPD0 1: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); htResult.put("Kelurahan", Kelurahan))
-            {
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); htResult.put("Kelurahan", Kelurahan)) {
                 Nama = jvc.fnGetValue(rs.getString(1));
                 htResult.put("Nama", Nama);
                 Jalan = jvc.fnGetValue(rs.getString(2));
@@ -1522,29 +1349,22 @@ public class jvGeneral
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htResult;
     }
 
-    public int fnSaveDetilSKPD(String strNoSKPD, String strNoNPWPD, Hashtable htUraian)
-    {
+    public int fnSaveDetilSKPD(String strNoSKPD, String strNoNPWPD, Hashtable htUraian) {
         int intResult = 1;
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             int intHtUraian = htUraian.size();
-            for(int a = 1; a <= intHtUraian; a++)
-            {
-                String strArray[] = (String[])htUraian.get(String.valueOf(a));
+            for (int a = 1; a <= intHtUraian; a++) {
+                String strArray[] = (String[]) htUraian.get(String.valueOf(a));
                 String strDetailUraian = strArray[0];
                 String strRpUraian = strArray[1];
                 StringBuffer sqlQuery = new StringBuffer();
@@ -1557,39 +1377,32 @@ public class jvGeneral
 
             int intResultBatch[] = stmt.executeBatch();
             int intBatch = intResultBatch.length;
-            for(int b = 0; b <= intBatch - 1; b++)
-            {
+            for (int b = 0; b <= intBatch - 1; b++) {
                 int intRslt = intResultBatch[b];
-                if(intRslt >= 0)
+                if (intRslt >= 0) {
                     continue;
+                }
                 intResult = 0;
                 break;
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnSaveDetilSKPD0(String strNoSKPD, String strNoNPWPD, Hashtable htUraian)
-    {
+    public int fnSaveDetilSKPD0(String strNoSKPD, String strNoNPWPD, Hashtable htUraian) {
         int intResult = 1;
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             int intHtUraian = htUraian.size();
-            for(int a = 1; a <= intHtUraian; a++)
-            {
-                String strArray[] = (String[])htUraian.get(String.valueOf(a));
+            for (int a = 1; a <= intHtUraian; a++) {
+                String strArray[] = (String[]) htUraian.get(String.valueOf(a));
                 String strDetailUraian = strArray[0];
                 String strRpUraian = strArray[1];
                 StringBuffer sqlQuery = new StringBuffer();
@@ -1602,30 +1415,25 @@ public class jvGeneral
 
             int intResultBatch[] = stmt.executeBatch();
             int intBatch = intResultBatch.length;
-            for(int b = 0; b <= intBatch - 1; b++)
-            {
+            for (int b = 0; b <= intBatch - 1; b++) {
                 int intRslt = intResultBatch[b];
-                if(intRslt >= 0)
+                if (intRslt >= 0) {
                     continue;
+                }
                 intResult = 0;
                 break;
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnSaveSKPD(ifcPenetapan ifcp)
-    {
+    public int fnSaveSKPD(ifcPenetapan ifcp) {
         int intResult = 0;
         String strBunga = jvc.fnGetValue(ifcp.getStrBunga());
         String strDate1 = jvc.fnGetValue(ifcp.getStrDate1());
@@ -1673,26 +1481,20 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder(", '")).append(strNoNPWPD).append("' ").toString());
         sqlQuery.append((new StringBuilder(", '")).append(strJnsPekerjaan).append("') ").toString());
         jvc.fnPrint((new StringBuilder("fnSaveSKPD : ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public int fnSaveSKPD0(ifcPenetapan ifcp)
-    {
+    public int fnSaveSKPD0(ifcPenetapan ifcp) {
         int intResult = 0;
         String strBunga = jvc.fnGetValue(ifcp.getStrBunga());
         String strDate1 = jvc.fnGetValue(ifcp.getStrDate1());
@@ -1740,26 +1542,20 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder(", '")).append(strNoNPWPD).append("' ").toString());
         sqlQuery.append((new StringBuilder(", '")).append(strJnsPekerjaan).append("') ").toString());
         jvc.fnPrint((new StringBuilder("fnSaveSKPD0 : ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             intResult = stmt.executeUpdate(sqlQuery.toString());
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return intResult;
     }
 
-    public String fnGetCounter(String strKode, String strNoRek, String strBulan, String strTahun, String strSimpan)
-    {
+    public String fnGetCounter(String strKode, String strNoRek, String strBulan, String strTahun, String strSimpan) {
         String strResult = "";
         int intNoUrut = 0;
         StringBuffer sqlQuery = new StringBuffer();
@@ -1771,19 +1567,17 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("AND Tahun = '")).append(strTahun).append("' ").toString());
         sqlQuery.append((new StringBuilder("AND KdRekening = '")).append(strNoRek).append("' ").toString());
         jvc.fnPrint((new StringBuilder("fnGetCounter 1: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next();)
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next();) {
                 strResult = rs.getString(1);
+            }
 
             CloseConnection();
-            if(strResult.equalsIgnoreCase("0"))
-            {
+            if (strResult.equalsIgnoreCase("0")) {
                 intNoUrut = 1;
-                if(strSimpan.equals("1"))
-                {
+                if (strSimpan.equals("1")) {
                     sqlQuery.delete(0, sqlQuery.length());
                     sqlQuery.append("INSERT INTO mCounter (NoUrut, Bulan, Tahun, Kode, KdRekening) ");
                     sqlQuery.append((new StringBuilder("VALUES ('")).append(String.valueOf(intNoUrut)).append("' ").toString());
@@ -1797,11 +1591,9 @@ public class jvGeneral
                     int intResult = stmt.executeUpdate(sqlQuery.toString());
                     CloseConnection();
                 }
-            } else
-            {
+            } else {
                 intNoUrut = Integer.parseInt(strResult) + 1;
-                if(strSimpan.equals("1"))
-                {
+                if (strSimpan.equals("1")) {
                     sqlQuery.delete(0, sqlQuery.length());
                     sqlQuery.append("UPDATE mCounter ");
                     sqlQuery.append((new StringBuilder("SET NoUrut = '")).append(String.valueOf(intNoUrut)).append("' ").toString());
@@ -1816,20 +1608,15 @@ public class jvGeneral
                     CloseConnection();
                 }
             }
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return String.valueOf(intNoUrut);
     }
 
-    public Hashtable fnGetNoRek()
-    {
+    public Hashtable fnGetNoRek() {
         Hashtable htNoRek = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("SELECT [Kode1]&[Kode2]&[Kode3]&[Kode4]&[Kode5] as noRek, KdPajak, Keterangan, 'PAJAK' as  kode ");
@@ -1841,8 +1628,7 @@ public class jvGeneral
         sqlQuery.append("SELECT [Kode1]&[Kode2]&[Kode3]&[Kode4]&[Kode5] as noRek, KdLain, Keterangan, 'PADLain' as kode ");
         sqlQuery.append("FROM mRekening where KdLain is not null and KdPajak is null and KdRetribusi is null ");
         jvc.fnPrint((new StringBuilder("fnGetNoRek: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -1850,55 +1636,44 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htNoRek.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htNoRek.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htNoRek;
     }
 
-    public String fnHapusDetail(String strKdPemilik)
-    {
+    public String fnHapusDetail(String strKdPemilik) {
         String strResult = "0";
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("DELETE FROM dataPemilik ");
         sqlQuery.append((new StringBuilder("WHERE kdPemilik = '")).append(strKdPemilik).append("' ").toString());
         jvc.fnPrint((new StringBuilder("fnHapusDetail: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             int intResult = stmt.executeUpdate(sqlQuery.toString());
             strResult = String.valueOf(intResult);
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return strResult;
     }
 
-    private ifcPendaftaran fnGetIFCP(String strNPWP, String strNamaBU, String strNamaPemilik)
-    {
+    private ifcPendaftaran fnGetIFCP(String strNPWP, String strNamaBU, String strNamaPemilik) {
         ifcPendaftaran ifcp = new ifcPendaftaran();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("select a.NoForm, a.Nama, a.Jalan, a.[No], a.RT, ");
@@ -1915,13 +1690,11 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("or (a.Nama = '")).append(strNamaBU).append("' ").toString());
         sqlQuery.append((new StringBuilder("and b.Nama = '")).append(strNamaPemilik).append("')) ").toString());
         jvc.fnPrint((new StringBuilder("fnGetIFCP: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             String hidRetribusi;
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); ifcp.setStrRetribusi(hidRetribusi))
-            {
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next(); ifcp.setStrRetribusi(hidRetribusi)) {
                 String txtNoForm = rs.getString("NoForm");
                 String txtNamaBU = rs.getString("Nama");
                 String txtJalanBU = rs.getString("Jalan");
@@ -1994,28 +1767,22 @@ public class jvGeneral
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return ifcp;
     }
 
-    private Hashtable fnGetSI(String strKdPemilik)
-    {
+    private Hashtable fnGetSI(String strKdPemilik) {
         Hashtable htSI = new Hashtable();
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("select JenisSI, NoSI, TglSI ");
         sqlQuery.append("from dataSI ");
         sqlQuery.append((new StringBuilder("where KdPemilik = '")).append(strKdPemilik).append("' ").toString());
         jvc.fnPrint((new StringBuilder("fnGetSI: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery.toString());
@@ -2023,45 +1790,41 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htSI.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htSI.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htSI;
     }
 
-    public Hashtable fnGetDetail(String strNPWP, String strNamaBU, String strNamaPemilik)
-    {
+    public Hashtable fnGetDetail(String strNPWP, String strNamaBU, String strNamaPemilik) {
         Hashtable htResult = new Hashtable();
         ifcPendaftaran ifcp = new ifcPendaftaran();
         ifcp = fnGetIFCP(strNPWP, strNamaBU, strNamaPemilik);
         String strKdPemilik = "";
-        if(ifcp.getStrKodePemilik() != null)
+        if (ifcp.getStrKodePemilik() != null) {
             strKdPemilik = ifcp.getStrKodePemilik();
+        }
         Hashtable htSI = new Hashtable();
-        if(strKdPemilik.trim().length() > 0)
+        if (strKdPemilik.trim().length() > 0) {
             htSI = fnGetSI(strKdPemilik);
+        }
         htResult.put("ifcp", ifcp);
         htResult.put("htSI", htSI);
         return htResult;
     }
 
-    private String fnCreateCode()
-    {
+    private String fnCreateCode() {
         String strResult = "";
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyh24mmss");
         java.util.Date todayDate = new java.util.Date();
@@ -2070,8 +1833,7 @@ public class jvGeneral
         return strResult;
     }
 
-    public String fnSimpanPemilik(ifcPendaftaran ifcp)
-    {
+    public String fnSimpanPemilik(ifcPendaftaran ifcp) {
         String strResult = "0";
         String txtNama = jvc.fnGetValue(ifcp.getStrNama());
         String txtJabatan = jvc.fnGetValue(ifcp.getStrJabatan());
@@ -2098,58 +1860,46 @@ public class jvGeneral
         sqlQuery.append((new StringBuilder("'")).append(hidKecamatan).append("', '").append(hidKabupaten).append("', '").append(hidKabupaten).append("', '").append(txtKdPos).append("', ").toString());
         sqlQuery.append((new StringBuilder("'")).append(txtTelp).append("', '").append(strKdPemilik).append("', '").append(txtJabatan).append("', '").append(hidPajak).append("', '").append(hidRetribusi).append("') ").toString());
         jvc.fnPrint((new StringBuilder("fnSimpanPemilik: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             int intResult = stmt.executeUpdate(sqlQuery.toString());
-            if(intResult > 0)
+            if (intResult > 0) {
                 strResult = strKdPemilik;
+            }
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return strResult;
     }
 
-    public String fnAmbilNoForm()
-    {
+    public String fnAmbilNoForm() {
         String strResult = "0000";
         StringBuffer sqlQuery = new StringBuffer();
         sqlQuery.append("Select NoForm from dataBU ");
         sqlQuery.append("where Ukey = (select max(ukey) from dataBU) ");
         jvc.fnPrint((new StringBuilder("fnAmbilNoForm: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next();)
-            {
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next();) {
                 String strNoForm = rs.getString(1);
                 strResult = strNoForm.substring(strNoForm.length() - 4, strNoForm.length());
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return strResult;
     }
 
-    public String fnSimpanBU(ifcPendaftaran ifcp, String strKodePemilik)
-    {
+    public String fnSimpanBU(ifcPendaftaran ifcp, String strKodePemilik) {
         String strResult = "0";
         String txtNoForm = jvc.fnGetValue(ifcp.getStrNoForm());
         String txtNamaBU = jvc.fnGetValue(ifcp.getStrNamaBU());
@@ -2178,17 +1928,13 @@ public class jvGeneral
         sqlQuery.append("FROM dataBU ");
         sqlQuery.append((new StringBuilder("WHERE dataBU.KdNPWP&dataBU.NPWPD&dataBU.WilNPWP = '")).append(strCekNPWP).append("' ").toString());
         jvc.fnPrint((new StringBuilder("fnSimpanBU 1: ")).append(sqlQuery.toString()).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
-            for(rs = stmt.executeQuery(sqlQuery.toString()); rs.next();)
-            {
+            for (rs = stmt.executeQuery(sqlQuery.toString()); rs.next();) {
                 int intCek = rs.getInt(1);
-                if(intCek == 0)
-                {
-                    if(stmt != null)
-                    {
+                if (intCek == 0) {
+                    if (stmt != null) {
                         stmt.close();
                         stmt = null;
                     }
@@ -2207,39 +1953,32 @@ public class jvGeneral
                     jvc.fnPrint((new StringBuilder("fnSimpanBU 2: ")).append(sqlQuery.toString()).toString());
                     stmt = con.createStatement();
                     int intResult = stmt.executeUpdate(sqlQuery.toString());
-                    if(intResult > 0)
+                    if (intResult > 0) {
                         strResult = String.valueOf(intResult);
-                } else
-                {
+                    }
+                } else {
                     strResult = "0";
                 }
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return strResult;
     }
 
-    public String fnSimpanSI(Hashtable htSI, String strKodePemilik)
-    {
+    public String fnSimpanSI(Hashtable htSI, String strKodePemilik) {
         String strResult = "0";
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             int intHtSI = htSI.size();
             int intTotalResult = 0;
-            for(int a = 1; a <= intHtSI; a++)
-            {
-                String strSI[] = (String[])htSI.get(String.valueOf(a));
+            for (int a = 1; a <= intHtSI; a++) {
+                String strSI[] = (String[]) htSI.get(String.valueOf(a));
                 String strJnsSI = strSI[0];
                 String strNoSI = strSI[1];
                 String strTglSI = strSI[2];
@@ -2253,25 +1992,19 @@ public class jvGeneral
 
             strResult = String.valueOf(intTotalResult);
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return strResult;
     }
 
-    public Hashtable fnGetKelurahan()
-    {
+    public Hashtable fnGetKelurahan() {
         Hashtable htKelurahan = new Hashtable();
         String sqlQuery = "SELECT mKelurahan.KdKabupaten, mKelurahan.KdKecamatan, mKelurahan.Kode, mKelurahan.Keterangan FROM mKelurahan";
         jvc.fnPrint((new StringBuilder("fnGetKelurahan: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2279,34 +2012,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htKelurahan.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htKelurahan.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htKelurahan;
     }
 
-    public Hashtable fnGetKecamatan()
-    {
+    public Hashtable fnGetKecamatan() {
         Hashtable htKecamatan = new Hashtable();
         String sqlQuery = "SELECT mKecamatan.KdKabupaten, mKecamatan.Kode, mKecamatan.Keterangan FROM mKecamatan";
         jvc.fnPrint((new StringBuilder("fnGetKecamatan: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2314,34 +2041,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htKecamatan.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htKecamatan.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htKecamatan;
     }
 
-    public Hashtable fnGetKabupaten()
-    {
+    public Hashtable fnGetKabupaten() {
         Hashtable htKabupaten = new Hashtable();
         String sqlQuery = "SELECT mKabupaten.Kode, mKabupaten.Keterangan FROM mKabupaten";
         jvc.fnPrint((new StringBuilder("fnGetKabupaten: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2349,34 +2070,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htKabupaten.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htKabupaten.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htKabupaten;
     }
 
-    public Hashtable fnGetPADLain()
-    {
+    public Hashtable fnGetPADLain() {
         Hashtable htRetribusi = new Hashtable();
         String sqlQuery = "SELECT mPAD.Kode, mPAD.Keterangan, mPAD.KodeNPWD FROM mPAD";
         jvc.fnPrint((new StringBuilder("fnGetPADLain: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2384,34 +2099,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htRetribusi.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htRetribusi.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htRetribusi;
     }
 
-    public Hashtable fnGetRetribusi()
-    {
+    public Hashtable fnGetRetribusi() {
         Hashtable htRetribusi = new Hashtable();
         String sqlQuery = "SELECT mRetribusi.Kode, mRetribusi.Keterangan, mRetribusi.KodeNPWR FROM mRetribusi";
         jvc.fnPrint((new StringBuilder("fnGetRetribusi: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2419,34 +2128,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htRetribusi.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htRetribusi.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htRetribusi;
     }
 
-    public Hashtable fnGetPajak()
-    {
+    public Hashtable fnGetPajak() {
         Hashtable htPajak = new Hashtable();
         String sqlQuery = "SELECT mPajak.Kode, mPajak.Keterangan, mPajak.KodeNPWP FROM mPajak";
         jvc.fnPrint((new StringBuilder("fnGetPajak: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2454,34 +2157,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htPajak.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htPajak.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htPajak;
     }
 
-    public Hashtable fnGetBidUsaha()
-    {
+    public Hashtable fnGetBidUsaha() {
         Hashtable htBidUsaha = new Hashtable();
         String sqlQuery = "SELECT mBidUsaha.Kode, mBidUsaha.Keterangan FROM mBidUsaha";
         jvc.fnPrint((new StringBuilder("fnGetBidUsaha: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2489,34 +2186,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htBidUsaha.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htBidUsaha.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htBidUsaha;
     }
 
-    public Hashtable fnGetHakAkses(String strKdJabatan)
-    {
+    public Hashtable fnGetHakAkses(String strKdJabatan) {
         Hashtable htBidUsaha = new Hashtable();
         String sqlQuery = (new StringBuilder("SELECT mAkses.KdMenu, mMenu.Menu FROM mAkses, mMenu WHERE mAkses.KdMenu = mMenu.Kode AND mAkses.KdJabatan = '")).append(strKdJabatan).append("' ").toString();
         jvc.fnPrint((new StringBuilder("fnGetBidUsaha: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2524,85 +2215,71 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htBidUsaha.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htBidUsaha.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htBidUsaha;
     }
 
-    public Hashtable fnGetInfoLogin(String strLoginId, String strPassword)
-    {
+    public Hashtable fnGetInfoLogin(String strLoginId, String strPassword) {
         Hashtable htInfoLogin = new Hashtable();
         String sqlQuery1 = (new StringBuilder("SELECT count(*) as jml FROM dataLogin WHERE dataLogin.LoginId = '")).append(strLoginId).append("'").toString();
         jvc.fnPrint((new StringBuilder("fnGetInfoLogin 1: ")).append(sqlQuery1).toString());
         String sqlQuery2 = (new StringBuilder("SELECT mPegawai.Nama, mPegawai.Jabatan, dataLogin.LoginId, dataLogin.Password , mPegawai.NIP, mJabatan.Keterangan FROM dataLogin, mPegawai, mJabatan WHERE 1 = 1 and dataLogin.LoginId = '")).append(strLoginId).append("' ").append("and dataLogin.Password = '").append(strPassword).append("' ").append("and dataLogin.FUkey = mPegawai.Ukey ").append("and mPegawai.Jabatan = mJabatan.Kode ").toString();
         jvc.fnPrint((new StringBuilder("fnGetInfoLogin 2: ")).append(sqlQuery2).toString());
         int intCount = 0;
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery1);
-            if(rs.next())
+            if (rs.next()) {
                 intCount = rs.getInt(1);
-            if(intCount > 0)
-            {
+            }
+            if (intCount > 0) {
                 rs = stmt.executeQuery(sqlQuery2);
                 rsmd = rs.getMetaData();
                 int intCols = rsmd.getColumnCount();
                 int i = 1;
-                if(rs.next())
-                {
+                if (rs.next()) {
                     String strArray[] = new String[intCols];
-                    for(int a = 0; a <= intCols - 1; a++)
+                    for (int a = 0; a <= intCols - 1; a++) {
                         strArray[a] = rs.getString(a + 1);
+                    }
 
                     htInfoLogin.put((new StringBuilder()).append(i++).toString(), strArray);
-                } else
-                {
+                } else {
                     htInfoLogin.put("1", "ERROR");
                     htInfoLogin.put("2", "Login Id dan Password tidak sesuai!");
                 }
-            } else
-            {
+            } else {
                 htInfoLogin.put("1", "ERROR");
                 htInfoLogin.put("2", "Login tidak ditemukan!");
             }
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htInfoLogin;
     }
 
-    public Hashtable fnGetListLogin()
-    {
+    public Hashtable fnGetListLogin() {
         Hashtable htInfoLogin = new Hashtable();
         String sqlQuery = "SELECT mPegawai.Ukey, mPegawai.Nama, LoginId, Password FROM mPegawai LEFT JOIN dataLogin ON mPegawai.Ukey = dataLogin.FUkey";
         jvc.fnPrint((new StringBuilder("fnGetListLogin: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2610,34 +2287,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htInfoLogin.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htInfoLogin.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htInfoLogin;
     }
 
-    public Hashtable fnGetListJabatan()
-    {
+    public Hashtable fnGetListJabatan() {
         Hashtable htInfoPemda = new Hashtable();
         String sqlQuery = "SELECT mJabatan.Ukey, mJabatan.Kode, mJabatan.Keterangan, mJabatan.HakTTD FROM mJabatan";
         jvc.fnPrint((new StringBuilder("fnGetListJabatan: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2645,34 +2316,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htInfoPemda.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htInfoPemda.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htInfoPemda;
     }
 
-    public Hashtable fnGetInfoPemda()
-    {
+    public Hashtable fnGetInfoPemda() {
         Hashtable htInfoPemda = new Hashtable();
         String sqlQuery = "SELECT mPemerintah.Daerah, mPemerintah.Bidang, mPemerintah.Alamat, mPemerintah.[No], mPemerintah.RT, mPemerintah.RW, mPemerintah.RK, mPemerintah.Kelurahan, mPemerintah.Kecamatan, mPemerintah.Kabupaten, mPemerintah.KodePos, mPemerintah.Telepon, mPemerintah.Facs, mPemerintah.Ukey FROM mPemerintah";
         jvc.fnPrint((new StringBuilder("fnGetInfoPemda: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2680,34 +2345,28 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htInfoPemda.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htInfoPemda.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htInfoPemda;
     }
 
-    public Hashtable fnGetDaftarPegawai()
-    {
+    public Hashtable fnGetDaftarPegawai() {
         Hashtable htDaftarPegawai = new Hashtable();
         String sqlQuery = "SELECT mPegawai.Nama, mPegawai.Jabatan, mPegawai.NIP, mPegawai.Alamat, mPegawai.[No], mPegawai.RT, mPegawai.RW, mPegawai.RK, mPegawai.Kelurahan, mPegawai.Kecamatan, mPegawai.Kabupaten, mPegawai.KodePos, mPegawai.Telepon, mPegawai.Facs, mPegawai.Email, mPegawai.Agama, mPegawai.GolDarah, mPegawai.Ukey FROM mPegawai";
         jvc.fnPrint((new StringBuilder("fnGetDaftarPegawai: ")).append(sqlQuery).toString());
-        try
-        {
+        try {
             OpenConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(sqlQuery);
@@ -2715,67 +2374,51 @@ public class jvGeneral
             int intCols = rsmd.getColumnCount();
             int i = 1;
             String strArray[];
-            for(; rs.next(); htDaftarPegawai.put((new StringBuilder()).append(i++).toString(), strArray))
-            {
+            for (; rs.next(); htDaftarPegawai.put((new StringBuilder()).append(i++).toString(), strArray)) {
                 strArray = new String[intCols];
-                for(int a = 0; a <= intCols - 1; a++)
+                for (int a = 0; a <= intCols - 1; a++) {
                     strArray[a] = rs.getString(a + 1);
+                }
 
             }
 
             CloseConnection();
-        }
-        catch(SQLException se)
-        {
+        } catch (SQLException se) {
             jvc.fnPrint((new StringBuilder("SQLException: ")).append(se).toString());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(e).toString());
         }
         return htDaftarPegawai;
     }
 
-    public void CloseConnection()
-    {
-        try
-        {
-            if(rs != null)
-            {
+    public void CloseConnection() {
+        try {
+            if (rs != null) {
                 rs.close();
                 rs = null;
             }
-            if(stmt != null)
-            {
+            if (stmt != null) {
                 stmt.close();
                 stmt = null;
             }
-            if(con != null)
-            {
+            if (con != null) {
                 con.close();
                 con = null;
             }
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(ex).toString());
         }
     }
 
-    public void OpenConnection()
-    {
-        try
-        {
+    public void OpenConnection() {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             con = DriverManager.getConnection(DBurl, "", "");
             con.setAutoCommit(true);
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(ex).append("<br>").toString());
         }
     }
-
     static final String DSNname = "Simpada_v01";
     static final String USERname = "";
     static final String PASSword = "";
