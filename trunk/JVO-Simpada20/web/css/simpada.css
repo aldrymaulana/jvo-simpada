@@ -121,6 +121,84 @@ root {
     overflow: auto;
 }
 
+#ifPelaporan1 iframe {
+    width: 980px;
+    height: 150%;
+    border: none;
+}
+
+#ifPelaporan1 {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#ifPelaporan2 iframe {
+    width: 980px;
+    height: 150%;
+    border: none;
+}
+
+#ifPelaporan2 {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#ifPelaporan3 iframe {
+    width: 980px;
+    height: 150%;
+    border: none;
+}
+
+#ifPelaporan3 {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#ifPelaporan4 iframe {
+    width: 980px;
+    height: 150%;
+    border: none;
+}
+
+#ifPelaporan4 {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#ifPelaporan5 iframe {
+    width: 980px;
+    height: 150%;
+    border: none;
+}
+
+#ifPelaporan5 {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
+#ifPelaporan6 iframe {
+    width: 980px;
+    height: 600%;
+    border: none;
+}
+
+#ifPelaporan6 {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: auto;
+}
+
 .header {
   background-color: #000000;
   font-family: monospace;

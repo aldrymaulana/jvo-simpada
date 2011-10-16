@@ -134,9 +134,6 @@
                         </tr>
                         <tr height="90%">
                             <td>
-                                <%
-                                    System.out.println("strIfFrame: " + strIfFrame);
-                                %>
                                 <div id="<%= strIfFrame %>">
                                     <iframe src="<%= strSource %>"
                                             marginheight="0" marginwidth="0"

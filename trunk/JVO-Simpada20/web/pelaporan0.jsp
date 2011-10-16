@@ -72,7 +72,7 @@
     
     String strWidth = request.getSession().getAttribute("strWidth").toString();
     String strHeight = request.getSession().getAttribute("strHeight").toString();
-    String strLastElement = request.getSession().getAttribute("strLastElement").toString();
+    String strLastElement = "";//request.getSession().getAttribute("strLastElement").toString();
     String strNamaBendahara = request.getSession().getAttribute("strNamaBendahara").toString();
     String strNIPBendahara = request.getSession().getAttribute("strNIPBendahara").toString();
     
@@ -89,25 +89,6 @@
 		<script type="text/javascript" src="js/calendar-en.js"></script>
 		<script type="text/javascript" src="js/calendar-setup.js"></script>
 		<script type="text/javascript">
-		function fnGetAllElement() {
-            var vJmlElement = document.main_form.elements.length;
-            for (var w=0; w<=vJmlElement-1; w++) {
-                var vElementName = '';
-                if (document.main_form.elements[w].name != null) {
-                    vElementName = document.main_form.elements[w].name;
-                }
-                document.main_form.elements[w].title = vElementName;
-            }
-        }
-        
-        function fnLastElement(lastElement) {
-            document.main_form.hidLastElement.value = lastElement;
-        }
-
-        function fnGotoLastElement() {
-            var vLastElement = document.main_form.hidLastElement.value;
-            document.getElementById(vLastElement).focus();
-        }
         
         function fnCetak() {
 			var vIdxPejabat = document.getElementById("slctPejabat").selectedIndex;
@@ -161,12 +142,12 @@
 		}
 		</script>
 </head>
-<body onload="fnChangePejabat();fnGetAllElement();fnGotoLastElement();">
+<body onload="fnChangePejabat();fnGetAllElement();">
 	<form name="main_form">
 	<input type="hidden" name="mode" id="mode">
 	<input type="hidden" name="hidWidth" id="hidWidth" value="<%= strWidth %>">
     <input type="hidden" name="hidHeight" id="hidHeight" value="<%= strHeight %>">
-    <input type="hidden" name="hidLastElement" id="hidLastElement" value="<%= strLastElement %>">
+    <input type="hidden" name="hidLastElement" id="hidLastElement">
         
 	<input style="display: none;" type="text" name="hidNamaPejabat" id="hidNamaPejabat">
     <input style="display: none;" type="text" name="hidJabatanPejabat" id="hidJabatanPejabat">
