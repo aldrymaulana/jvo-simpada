@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jvo.simpada.serv;
 
 import jvo.simpada.common.*;
@@ -24,11 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.*;
 
-public class srvLaporan extends HttpServlet
-{
+public class srvLaporan extends HttpServlet {
 
-    public srvLaporan()
-    {
+    public srvLaporan() {
         jvg = new jvGeneral();
         jvc = new jvCommon();
         JRXML_LOCAL_PATH = jvCommon.fnGetProperty("JRXML_LOCAL_PATH").toString();
@@ -36,249 +33,232 @@ public class srvLaporan extends HttpServlet
         OUTPUT_LOCAL_PATH = jvCommon.fnGetProperty("OUTPUT_LOCAL_PATH").toString();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+//        PrintWriter out = response.getWriter();
         String strMode = "0";
-        if(request.getParameter("mode") != null) {
+        if (request.getParameter("mode") != null) {
             strMode = request.getParameter("mode").toString();
         }
-        String strIfFrame = "ifPelaporan";
-        request.getSession().setAttribute("strIfFrame", strIfFrame);
         String strWidth = request.getParameter("hidWidth").toString();
         request.getSession().setAttribute("strWidth", strWidth);
         String strHeight = request.getParameter("hidHeight").toString();
         request.getSession().setAttribute("strHeight", strHeight);
-        String strLastElement = "";
-        if(request.getParameter("hidLastElement") != null)
-            strLastElement = request.getParameter("hidLastElement").toString();
-        request.getSession().setAttribute("strLastElement", strLastElement);
+
+        String strIdxLaporan = "0";
+        if (request.getParameter("hidTypeLap") != null) {
+            strIdxLaporan = request.getParameter("hidTypeLap").toString();
+        } else {
+            if (request.getSession().getAttribute("strIdxLaporan") != null) {
+                strIdxLaporan = request.getSession().getAttribute("strIdxLaporan").toString();
+            } 
+        }
+        request.getSession().setAttribute("strIdxLaporan", strIdxLaporan);
+
         String strNamaBendahara = "";
         String strNIPBendahara = "";
         String strNamaKabid = "";
         String strNIPKabid = "";
         Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
         int intHtInfoPejabat = htInfoPejabat1.size();
-        for(int a = 1; a <= intHtInfoPejabat; a++)
-        {
-            String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-            if(strArray[0].equals("31100"))
-            {
+        for (int a = 1; a <= intHtInfoPejabat; a++) {
+            String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+            if (strArray[0].equals("31100")) {
                 strNamaBendahara = strArray[1];
                 strNIPBendahara = strArray[2];
-            } else
-            if(strArray[0].equals("31000"))
-            {
+            } else if (strArray[0].equals("31000")) {
                 strNamaKabid = strArray[1];
                 strNIPKabid = strArray[2];
             }
         }
-
         request.getSession().setAttribute("strNamaBendahara", strNamaBendahara);
         request.getSession().setAttribute("strNIPBendahara", strNIPBendahara);
         request.getSession().setAttribute("strNamaKabid", strNamaKabid);
         request.getSession().setAttribute("strNIPKabid", strNIPKabid);
+
         Hashtable htPajak = jvg.fnGetPajak();
         request.getSession().setAttribute("htPajak", htPajak);
-        switch(Integer.parseInt(strMode))
-        {
-        case 0: // '\0'
-            try
-            {
-                String strSource = "pelaporan1.jsp";
-                request.getSession().setAttribute("strSource", strSource);
-                response.sendRedirect((new StringBuilder("index.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).toString());
-                return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
 
-        case 1: // '\001'
-            try
-            {
-                String strTglAwal = request.getParameter("txtTglAwal").toString();
-                String strTglAkhir = request.getParameter("txtTglAkhir").toString();
-                String strTypeLap = request.getParameter("hidTypeLap").toString();
-                String strSource = "";
-                String strKetPajak = "";
-                String strJnsPajak = request.getParameter("hidJnsPajak").toString();
-                if(strJnsPajak.trim().length() > 0 && htPajak.size() > 0)
-                {
-                    for(int qq = 1; qq <= htPajak.size(); qq++)
-                    {
-                        String strPajak[] = (String[])htPajak.get(String.valueOf(qq));
-                        if(strPajak[2].equalsIgnoreCase(strJnsPajak))
-                            strKetPajak = strPajak[1];
+        switch (Integer.parseInt(strMode)) {
+            case 0: // menu laporan
+                try {
+                    String strIfFrame = "ifPelaporan";
+                    request.getSession().setAttribute("strIfFrame", strIfFrame);
+                    String strSource = "pelaporan1.jsp";
+                    request.getSession().setAttribute("strSource", strSource);
+                    response.sendRedirect((new StringBuilder("index.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).toString());
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
+                }
+                return;
+
+            case 1: // create laporan
+                try {
+                    String strTypeLap = request.getParameter("hidTypeLap").toString();
+                    String strTglAwal = "";
+                    String strTglAkhir = "";
+                    if (!strTypeLap.equals("6")) {
+                        strTglAwal = request.getParameter("txtTglAwal").toString();
+                        strTglAkhir = request.getParameter("txtTglAkhir").toString();
+                    }
+                    String strSource = "";
+                    String strKetPajak = "";
+                    String strJnsPajak = request.getParameter("hidJnsPajak").toString();
+                    if (strJnsPajak.trim().length() > 0 && htPajak.size() > 0) {
+                        for (int qq = 1; qq <= htPajak.size(); qq++) {
+                            String strPajak[] = (String[]) htPajak.get(String.valueOf(qq));
+                            if (strPajak[2].equalsIgnoreCase(strJnsPajak)) {
+                                strKetPajak = strPajak[1];
+                            }
+                        }
+
+                    }
+                    if (strTypeLap.equals("1")) {
+                        String strIfFrame = "ifPelaporan1";
+                        request.getSession().setAttribute("strIfFrame", strIfFrame);
+                        strSource = "pelaporan0.jsp";
+                        Hashtable htLapHarian = new Hashtable();
+                        htLapHarian = jvg.fnGetLapHarian(strTglAwal);
+                        request.getSession().setAttribute("strTglAwal", strTglAwal);
+                        request.getSession().setAttribute("htLapHarian", htLapHarian);
+                    } else if (strTypeLap.equals("2")) {
+                        String strIfFrame = "ifPelaporan2";
+                        request.getSession().setAttribute("strIfFrame", strIfFrame);
+                        strSource = "pelaporan2b.jsp";
+                        String strThnAnggaran = strTglAwal.substring(6, strTglAwal.length());
+                        Hashtable htBKP = new Hashtable();
+                        htBKP = jvg.fnGetBukuKasPembantu(strTglAwal, strTglAkhir, strThnAnggaran);
+                        request.getSession().setAttribute("strTglAwal", strTglAwal);
+                        request.getSession().setAttribute("strTglAkhir", strTglAkhir);
+                        request.getSession().setAttribute("strThnAnggaran", strThnAnggaran);
+                        request.getSession().setAttribute("htBKP", htBKP);
+                    } else if (strTypeLap.equals("3")) {
+                        String strIfFrame = "ifPelaporan3";
+                        request.getSession().setAttribute("strIfFrame", strIfFrame);
+                        strSource = "pelaporan2.jsp";
+                        Hashtable htGetBukuKasUmum = new Hashtable();
+                        htGetBukuKasUmum = jvg.fnGetBukuKasUmum(strTglAwal, strTglAkhir);
+                        request.getSession().setAttribute("strTglAwal", strTglAwal);
+                        request.getSession().setAttribute("strTglAkhir", strTglAkhir);
+                        request.getSession().setAttribute("htGetBukuKasUmum", htGetBukuKasUmum);
+                    } else if (strTypeLap.equals("4")) {
+                        String strIfFrame = "ifPelaporan4";
+                        request.getSession().setAttribute("strIfFrame", strIfFrame);
+                        strSource = "pelaporan3.jsp";
+                        Hashtable htFungsional = new Hashtable();
+                        htFungsional = jvg.fnGetSPJFungsional();
+                        request.getSession().setAttribute("htFungsional", htFungsional);
+                    } else if (strTypeLap.equals("5")) {
+                        String strIfFrame = "ifPelaporan5";
+                        request.getSession().setAttribute("strIfFrame", strIfFrame);
+                        strSource = "pelaporan4.jsp";
+                        Hashtable htRkpPajak = new Hashtable();
+                        htRkpPajak = jvg.fnGetRekapPajak(strTglAwal, strTglAkhir, strJnsPajak);
+                        request.getSession().setAttribute("htRkpPajak", htRkpPajak);
+                        request.getSession().setAttribute("strKetPajak", strKetPajak);
+                        request.getSession().setAttribute("strKodePajak", strJnsPajak);
+                        request.getSession().setAttribute("strTglAwal", strTglAwal);
+                        request.getSession().setAttribute("strTglAkhir", strTglAkhir);
+                    } else if (strTypeLap.equals("6")) {
+                        String strIfFrame = "ifPelaporan6";
+                        request.getSession().setAttribute("strIfFrame", strIfFrame);
+                        strSource = "pelaporan5.jsp";
+                        Hashtable htDfPerusahaan = new Hashtable();
+                        String strIdxKolom = (request.getParameter("hidIdxKolom")==null?"0":request.getParameter("hidIdxKolom").toString());
+                        String strOrder = (request.getParameter("hidOrder")==null?"down":request.getParameter("hidOrder").toString());
+                        htDfPerusahaan = jvg.fnGetDfPerusahaan(strIdxKolom,strOrder);
+                        request.getSession().setAttribute("htDfPerusahaan", htDfPerusahaan);
                     }
 
+                    request.getSession().setAttribute("strSource", strSource);
+                    Hashtable htInfoPejabat = jvg.fnGetInfoPejabat();
+                    request.getSession().setAttribute("htInfoPejabat", htInfoPejabat);
+                    response.sendRedirect((new StringBuilder("index.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).toString());
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
                 }
-                if(strTypeLap.equals("1"))
-                {
-                    strSource = "pelaporan0.jsp";
-                    Hashtable htLapHarian = new Hashtable();
-                    htLapHarian = jvg.fnGetLapHarian(strTglAwal);
-                    request.getSession().setAttribute("strTglAwal", strTglAwal);
-                    request.getSession().setAttribute("htLapHarian", htLapHarian);
-                } else
-                if(strTypeLap.equals("2"))
-                {
-                    strSource = "pelaporan2b.jsp";
-                    String strThnAnggaran = strTglAwal.substring(6, strTglAwal.length());
-                    Hashtable htBKP = new Hashtable();
-                    htBKP = jvg.fnGetBukuKasPembantu(strTglAwal, strTglAkhir, strThnAnggaran);
-                    request.getSession().setAttribute("strTglAwal", strTglAwal);
-                    request.getSession().setAttribute("strTglAkhir", strTglAkhir);
-                    request.getSession().setAttribute("strThnAnggaran", strThnAnggaran);
-                    request.getSession().setAttribute("htBKP", htBKP);
-                } else
-                if(strTypeLap.equals("3"))
-                {
-                    strSource = "pelaporan2.jsp";
-                    Hashtable htGetBukuKasUmum = new Hashtable();
-                    htGetBukuKasUmum = jvg.fnGetBukuKasUmum(strTglAwal, strTglAkhir);
-                    request.getSession().setAttribute("strTglAwal", strTglAwal);
-                    request.getSession().setAttribute("strTglAkhir", strTglAkhir);
-                    request.getSession().setAttribute("htGetBukuKasUmum", htGetBukuKasUmum);
-                } else
-                if(strTypeLap.equals("4"))
-                {
-                    strSource = "pelaporan3.jsp";
-                    Hashtable htFungsional = new Hashtable();
-                    htFungsional = jvg.fnGetSPJFungsional();
-                    request.getSession().setAttribute("htFungsional", htFungsional);
-                } else
-                if(strTypeLap.equals("5"))
-                {
-                    strSource = "pelaporan4.jsp";
-                    Hashtable htRkpPajak = new Hashtable();
-                    htRkpPajak = jvg.fnGetRekapPajak(strTglAwal, strTglAkhir, strJnsPajak);
-                    request.getSession().setAttribute("htRkpPajak", htRkpPajak);
-                    request.getSession().setAttribute("strKetPajak", strKetPajak);
-                    request.getSession().setAttribute("strKodePajak", strJnsPajak);
-                    request.getSession().setAttribute("strTglAwal", strTglAwal);
-                    request.getSession().setAttribute("strTglAkhir", strTglAkhir);
-                } else
-                if(strTypeLap.equals("6"))
-                {
-                    strSource = "pelaporan5.jsp";
-                    Hashtable htDfPerusahaan = new Hashtable();
-                    htDfPerusahaan = jvg.fnGetDfPerusahaan();
-                    request.getSession().setAttribute("htDfPerusahaan", htDfPerusahaan);
+                return;
+
+            case 2: // cetak laporan
+                try {
+                    System.out.println("Case 2, Cetak Laporan Buku Kas Umum");
+                    createReport2(request, response);
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
                 }
-                request.getSession().setAttribute("strSource", strSource);
-                Hashtable htInfoPejabat = jvg.fnGetInfoPejabat();
-                request.getSession().setAttribute("htInfoPejabat", htInfoPejabat);
-                response.sendRedirect((new StringBuilder("index.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).toString());
                 return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
 
-        case 2: // '\002'
-            try
-            {
-                System.out.println("Case 2, Cetak Laporan Buku Kas Umum");
-                createReport2(request, response);
+            case 3: // '\003'
+                try {
+                    System.out.println("Case 3, Cetak Laporan Buku Kas Pembantu");
+                    createReport3(request, response);
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
+                }
                 return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
 
-        case 3: // '\003'
-            try
-            {
-                System.out.println("Case 3, Cetak Laporan Buku Kas Pembantu");
-                createReport3(request, response);
+            case 4: // '\004'
+                try {
+                    System.out.println("Case 4, Cetak Rekapitulasi Penerimaan Harian");
+                    createReport4(request, response);
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
+                }
                 return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
 
-        case 4: // '\004'
-            try
-            {
-                System.out.println("Case 4, Cetak Rekapitulasi Penerimaan Harian");
-                createReport4(request, response);
+            case 5: // '\005'
+                try {
+                    System.out.println("Case 5, Cetak SPJ Pendapatan - Fungsional");
+                    createReport5(request, response);
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
+                }
                 return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
 
-        case 5: // '\005'
-            try
-            {
-                System.out.println("Case 5, Cetak SPJ Pendapatan - Fungsional");
-                createReport5(request, response);
+            case 6: // '\006'
+                try {
+                    System.out.println("Case 6, Cetak Rekap Penetapan Pajak");
+                    createReport6(request, response);
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
+                }
                 return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
 
-        case 6: // '\006'
-            try
-            {
-                System.out.println("Case 6, Cetak Rekap Penetapan Pajak");
-                createReport6(request, response);
+            case 7: // '\007'
+                try {
+                    System.out.println("Case 7, Cetak Daftar Perusahaan");
+                    createReport7(request, response);
+                    return;
+                } catch (Exception exp) {
+                    System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
+                }
                 return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
-
-        case 7: // '\007'
-            try
-            {
-                System.out.println("Case 7, Cetak Daftar Perusahaan");
-                createReport7(request, response);
-                return;
-            }
-            catch(Exception exp)
-            {
-                System.out.println((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
         }
     }
 
     protected void createReport2(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
             String strFileJRXML = "report2.jrxml";
@@ -322,11 +302,9 @@ public class srvLaporan extends HttpServlet
             String strNIPBendahara = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
                 }
@@ -346,26 +324,18 @@ public class srvLaporan extends HttpServlet
             JasperExportManager.exportReportToPdfFile(print, strOutput);
             String strPDFOutput = (new StringBuilder(String.valueOf(OUTPUT_LOCAL_PATH))).append(strFilePDF).toString();
             resp.sendRedirect(strPDFOutput);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
 
     protected void createReport3(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
             String strFileJRXML = "report7.jrxml";
@@ -401,11 +371,9 @@ public class srvLaporan extends HttpServlet
             String strNIPBendahara = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
                 }
@@ -425,26 +393,18 @@ public class srvLaporan extends HttpServlet
             JasperExportManager.exportReportToPdfFile(print, strOutput);
             String strPDFOutput = (new StringBuilder(String.valueOf(OUTPUT_LOCAL_PATH))).append(strFilePDF).toString();
             resp.sendRedirect(strPDFOutput);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
 
     protected void createReport4(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
             String strFileJRXML = "report6.jrxml";
@@ -475,11 +435,9 @@ public class srvLaporan extends HttpServlet
             String strNIPBendahara = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
                 }
@@ -496,26 +454,18 @@ public class srvLaporan extends HttpServlet
             JasperExportManager.exportReportToPdfFile(print, strOutput);
             String strPDFOutput = (new StringBuilder(String.valueOf(OUTPUT_LOCAL_PATH))).append(strFilePDF).toString();
             resp.sendRedirect(strPDFOutput);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
 
     protected void createReport5(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
             Calendar cal = new GregorianCalendar();
@@ -528,8 +478,7 @@ public class srvLaporan extends HttpServlet
             String strDate1 = (new StringBuilder(String.valueOf(jvc.fnLRPad("LPAD", String.valueOf(intMonth + 1), "0", 2)))).append("/").append("01").append("/").append(intYear).toString();
             String strDate2 = (new StringBuilder(String.valueOf(jvc.fnLRPad("LPAD", String.valueOf(intMonth + 1), "0", 2)))).append("/").append(intMaxDay2).append("/").append(intYear).toString();
             int intBulanLalu = intMonth - 1;
-            if(intBulanLalu < 0)
-            {
+            if (intBulanLalu < 0) {
                 intBulanLalu = 11;
                 intYear--;
             }
@@ -561,11 +510,9 @@ public class srvLaporan extends HttpServlet
             String strNIPBendahara = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
                 }
@@ -585,26 +532,18 @@ public class srvLaporan extends HttpServlet
             JasperExportManager.exportReportToPdfFile(print, strOutput);
             String strPDFOutput = (new StringBuilder(String.valueOf(OUTPUT_LOCAL_PATH))).append(strFilePDF).toString();
             resp.sendRedirect(strPDFOutput);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
 
     protected void createReport6(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
             Calendar cal = new GregorianCalendar();
@@ -639,16 +578,12 @@ public class srvLaporan extends HttpServlet
             String strNIPKabid = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
-                } else
-                if(strArray[0].equals("31000"))
-                {
+                } else if (strArray[0].equals("31000")) {
                     strNamaKabid = strArray[1];
                     strNIPKabid = strArray[2];
                 }
@@ -676,26 +611,18 @@ public class srvLaporan extends HttpServlet
             JasperExportManager.exportReportToPdfFile(print, strOutput);
             String strPDFOutput = (new StringBuilder(String.valueOf(OUTPUT_LOCAL_PATH))).append(strFilePDF).toString();
             resp.sendRedirect(strPDFOutput);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
 
     protected void createReport7(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
             Calendar cal = new GregorianCalendar();
@@ -730,16 +657,12 @@ public class srvLaporan extends HttpServlet
             String strNIPKabid = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
-                } else
-                if(strArray[0].equals("31000"))
-                {
+                } else if (strArray[0].equals("31000")) {
                     strNamaKabid = strArray[1];
                     strNIPKabid = strArray[2];
                 }
@@ -765,21 +688,14 @@ public class srvLaporan extends HttpServlet
             JasperExportManager.exportReportToPdfFile(print, strOutput);
             String strPDFOutput = (new StringBuilder(String.valueOf(OUTPUT_LOCAL_PATH))).append(strFilePDF).toString();
             resp.sendRedirect(strPDFOutput);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
-
     private static final long serialVersionUID = 1L;
     jvGeneral jvg;
     jvCommon jvc;
