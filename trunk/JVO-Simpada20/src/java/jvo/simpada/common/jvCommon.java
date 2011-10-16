@@ -95,11 +95,11 @@ public class jvCommon {
      */
     public static String fnDropCurrencySign(String strNumber) {
             String strReturn = "0";
-            System.out.println("strNumber: " + strNumber);
+//            System.out.println("strNumber: " + strNumber);
             String strNumber1 = strNumber.replaceAll(",00","");
-            System.out.println("strNumber1: " + strNumber1);
+//            System.out.println("strNumber1: " + strNumber1);
             String strNumber2 = strNumber1.replaceAll("\\.","");
-            System.out.println("strNumber2: " + strNumber2);
+//            System.out.println("strNumber2: " + strNumber2);
             strReturn = strNumber2;
             return strReturn;
     }
