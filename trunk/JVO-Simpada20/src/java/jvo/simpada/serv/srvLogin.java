@@ -40,7 +40,9 @@ public class srvLogin extends HttpServlet {
             strMode = request.getParameter("mode").toString();
         }
         String strWidth = jvc.fnGetProperty("SCR_WIDTH");
+        request.getSession().setAttribute("strWidth", strWidth);
         String strHeight = jvc.fnGetProperty("SCR_HEIGHT");
+        request.getSession().setAttribute("strHeight", strHeight);
         switch (Integer.parseInt(strMode)) {
             case 0: // '\0'
                 try {
@@ -107,9 +109,9 @@ public class srvLogin extends HttpServlet {
                     Hashtable htDataPemda = jvg.fnGetInfoPemda();
                     request.getSession().setAttribute("htDataPemda", htDataPemda);
 //                    String strWidth = "1019";
-                    request.getSession().setAttribute("strWidth", strWidth);
+//                    request.getSession().setAttribute("strWidth", strWidth);
 //                    String strHeight = "739";
-                    request.getSession().setAttribute("strHeight", strHeight);
+//                    request.getSession().setAttribute("strHeight", strHeight);
                     response.sendRedirect((new StringBuilder("login.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).toString());
                     return;
                 } catch (Exception exp) {
