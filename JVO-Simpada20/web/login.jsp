@@ -87,43 +87,54 @@
                                 <%@ include file="header.jsp" %>
                             </td>
                         </tr>
-                        <tr height="90%">
-                            <td>
+                        <tr height="90%" valign="middle">
+                            <td align="center">
                                 <table border="0">
                                     <tr>
                                         <td align="center" colspan="4">
+                                            <fieldset>
                                             <font class="NmPemda">PEMERINTAH&nbsp;<%= strNamaPemda%></font><br>
                                             <font class="NmDinas"><%= strNamaBidang %></font><br>
                                             <font class="AlmDinas"><%= strAlamatPemda %>,&nbsp;<%= strKotamadyaPemda %>&nbsp;<%= strKodePos %></font><br>
                                             <font class="AlmDinas">Telp:&nbsp;<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
-                                            <hr>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td rowspan="4">
-                                            <img src="image/logo1.gif" height="150" width="119">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left">Login Id</td>
-                                        <td>&nbsp;:&nbsp;</td>
-                                        <td align="left"><input type="text" name="txtLogin" id="txtLogin"></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left">Password</td>
-                                        <td>&nbsp;:&nbsp;</td>
-                                        <td align="left"><input type="password" name="txtPassword" id="txtPassword"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <button type="button" onclick="javascript=fnLogin();">Login</button>
+                                            </fieldset>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            <font class="error"><%= strErrMsg%></font>
+                                            <fieldset>
+                                            <table border="0" width="100%">
+                                                <tr>
+                                                    <td rowspan="4">
+                                                        <img src="image/logo1.gif" height="150" width="119">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left">Login Id</td>
+                                                    <td>&nbsp;:&nbsp;</td>
+                                                    <td align="left"><input type="text" name="txtLogin" id="txtLogin"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left">Password</td>
+                                                    <td>&nbsp;:&nbsp;</td>
+                                                    <td align="left"><input type="password" name="txtPassword" id="txtPassword"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <button type="button" onclick="javascript=fnLogin();">Login</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            </fieldset>
                                         </td>
                                     </tr>
+                                    <!--
+                                    <tr>
+                                        <td colspan="4">
+                                            <font class="error"><--%= strErrMsg%></font>
+                                        </td>
+                                    </tr>
+                                    -->
                                 </table>
                             </td>
                         </tr>

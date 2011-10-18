@@ -261,24 +261,32 @@
                     <td colspan="3">&nbsp;</td>
                 </tr>
 
-                <tr valign="top">
+                <tr valign="middle">
                     <td colspan="3" align="center">
-                        <font class="NmDinas">PEMERINTAH <%= strNamaPemda.toUpperCase()%></font><br>
-                        <font class="NmPemda">URAIAN PENERIMAAN ANGGARAN</font>
-                    </td>
-                </tr>
+                        <fieldset>
+                        <table border="0">
+                            <tr valign="top">
+                                <td colspan="3" align="center">
+                                    <font class="NmDinas">PEMERINTAH <%= strNamaPemda.toUpperCase()%></font><br>
+                                    <font class="NmPemda">URAIAN PENERIMAAN ANGGARAN</font>
+                                </td>
+                            </tr>
 
-                <tr>
-                    <td colspan="3" align="center">Tahun Anggaran&nbsp;
-                        <select onchange="fnChangeTahun()" name="slctTahun" id="slctTahun" onfocus="fnLastElement(this.name)">
-                            <%
-                                            for (int a = intAwThn; a <= intAkThn; a++) {
-                            %>
-                            <option value="<%= a%>" <%= (String.valueOf(a).equals(strThnAnggaran)) ? "SELECTED" : ""%>><%= a%>
-                                <%
-                                            }
-                                %>
-                        </select>
+                            <tr>
+                                <td colspan="3" align="center">Tahun Anggaran&nbsp;
+                                    <select onchange="fnChangeTahun()" name="slctTahun" id="slctTahun" onfocus="fnLastElement(this.name)">
+                                        <%
+                                                        for (int a = intAwThn; a <= intAkThn; a++) {
+                                        %>
+                                        <option value="<%= a%>" <%= (String.valueOf(a).equals(strThnAnggaran)) ? "SELECTED" : ""%>><%= a%>
+                                            <%
+                                                        }
+                                            %>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                        </fieldset>
                     </td>
                 </tr>
 

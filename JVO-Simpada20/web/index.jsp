@@ -8,8 +8,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <%
-    String strWidth = request.getParameter("vWidth").toString();
-    String strHeight = request.getParameter("vHeight").toString();
+    //String strWidth = request.getParameter("vWidth").toString();
+    //String strHeight = request.getParameter("vHeight").toString();
+    String strWidth = request.getSession().getAttribute("strWidth").toString();
+    String strHeight = request.getSession().getAttribute("strHeight").toString();
     int intWidth = Integer.parseInt(strWidth);
     int intHeight = Integer.parseInt(strHeight);
     
@@ -129,19 +131,19 @@
                         </tr>
                         <tr valign="top">
                             <td align="left">
-                                <%@ include file="menu1.jsp" %>
+                                <%@ include file="menu2.jsp" %>
                             </td>
                         </tr>
-                        <tr height="90%">
+                        <tr>
                             <td>
-                                <div id="<%= strIfFrame %>">
+                                <!--<div id="<--%= strIfFrame %>">-->
                                     <iframe src="<%= strSource %>"
                                             marginheight="0" marginwidth="0"
                                             name="ifrmBody" id="ifrmBody"
-                                            height="100%" width="100%"
-                                            frameborder="0" scrolling="no">
+                                            width="100%" height="600px"
+                                            frameborder="0" scrolling="auto">
                                     </iframe>
-                                </div>
+                                <!--</div>-->
                             </td>
                         </tr>
                         <tr valign="top">
