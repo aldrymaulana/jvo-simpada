@@ -106,7 +106,7 @@ public class srvPendaftaran extends HttpServlet {
         ifcp.setStrKelurahanBU(hidKelurahanBU);
         ifcp.setStrKecamatanBU(hidKecamatanBU);
         ifcp.setStrKabupatenBU(hidKabupatenBU);
-        ifcp.setStrModal(txtModal);
+        ifcp.setStrModal(jvc.fnDropCurrencySign(txtModal));
         String strCekAlamat = jvc.fnGetValue(request.getParameter("chkAlamat"));
         jvc.fnPrint((new StringBuilder("strCekAlamat: ")).append(strCekAlamat).toString());
         String txtNama = jvc.fnGetValue(request.getParameter("txtNama"));
