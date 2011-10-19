@@ -181,43 +181,29 @@
                     <td align="center">
                         <table border="0" cellpadding="2" cellspacing="2" width="75%">
                             <tr>
-                                <td valign="top" align="left" colspan="2">
-                                    <table border="0" cellpadding="0" cellspacing="0" topmargin="0" leftmargin="0">
-                                        <tr>
-                                            <td align="left">
-                                                <font class="NmPemda">PEMERINTAH&nbsp;<%= strNamaPemda%></font><br>
-                                                <font class="NmDinas"><%= strNamaBidang %></font><br>
-                                                <font class="AlmDinas"><%= strAlamatPemda %>,&nbsp;<%= strKotamadyaPemda %>&nbsp;<%= strKodePos %></font><br>
-                                                <font class="AlmDinas">Telp:&nbsp<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <hr>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <td valign="top" align="left" colspan="3">
+                                    <%@ include file="genHeader.jsp" %>
                                 </td>
-                                <td valign="top" align="left">
-                                    &nbsp;
-                                </td>
-                            </tr>
+                           </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" align="center">
+                                    <font class="NmDinas">PELAPORAN</font>
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">
-                                    PELAPORAN
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" valign="top" align="center">
+                                    <fieldset>
+                                        <legend>Informasi Awal</legend>
+                                        <br>
+                                        <table border="0">
+                                            <tr>
+                                                <td colspan="3" valign="top" align="center">
                                     <table border="0" cellpadding="0" cellspacing="0">
                                     	<tr>
                                             <td align="right">Jenis Laporan</td>
@@ -293,6 +279,11 @@
                                             </td>
                                         </tr>
                                     </table>
+                                </td>
+                                            </tr>
+                                        </table>
+                                                <br>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>

@@ -80,25 +80,25 @@
 		<script type="text/javascript" src="js/calendar-en.js"></script>
 		<script type="text/javascript" src="js/calendar-setup.js"></script>
         <script type="text/javascript">
-            function fnGetAllElement() {
-                var vJmlElement = document.main_form.elements.length;
-                for (var w=0; w<=vJmlElement-1; w++) {
-                    var vElementName = '';
-                    if (document.main_form.elements[w].name != null) {
-                        vElementName = document.main_form.elements[w].name;
-                    }
-                    document.main_form.elements[w].title = vElementName;
-                }
-            }
-            
-            function fnLastElement(lastElement) {
-                document.main_form.hidLastElement.value = lastElement;
-            }
-
-            function fnGotoLastElement() {
-                var vLastElement = document.main_form.hidLastElement.value;
-                document.getElementById(vLastElement).focus();
-            }
+//            function fnGetAllElement() {
+//                var vJmlElement = document.main_form.elements.length;
+//                for (var w=0; w<=vJmlElement-1; w++) {
+//                    var vElementName = '';
+//                    if (document.main_form.elements[w].name != null) {
+//                        vElementName = document.main_form.elements[w].name;
+//                    }
+//                    document.main_form.elements[w].title = vElementName;
+//                }
+//            }
+//
+//            function fnLastElement(lastElement) {
+//                document.main_form.hidLastElement.value = lastElement;
+//            }
+//
+//            function fnGotoLastElement() {
+//                var vLastElement = document.main_form.hidLastElement.value;
+//                document.getElementById(vLastElement).focus();
+//            }
             
             function fnBatal() {
                 document.main_form.method = "post";
@@ -117,7 +117,7 @@
             }
         </script>
     </head>
-    <body onload="fnGetAllElement();fnGotoLastElement();">
+    <body onload="fnGetAllElement()">
         <form name="main_form">
             <input type="hidden" name="mode" id="mode">
             <input type="hidden" name="hidWidth" id="hidWidth" value="<%= strWidth %>">
@@ -128,64 +128,55 @@
                     <td align="center">
                         <table border="0" cellpadding="2" cellspacing="2" width="75%">
                             <tr>
-                                <td valign="top" align="left" colspan="2">
-                                    <table border="0" cellpadding="0" cellspacing="0" topmargin="0" leftmargin="0">
-                                        <tr>
-                                            <td align="left">
-                                                <font class="NmPemda">PEMERINTAH&nbsp;<%= strNamaPemda%></font><br>
-                                                <font class="NmDinas"><%= strNamaBidang %></font><br>
-                                                <font class="AlmDinas"><%= strAlamatPemda %>,&nbsp;<%= strKotamadyaPemda %>&nbsp;<%= strKodePos %></font><br>
-                                                <font class="AlmDinas">Telp:&nbsp<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <hr>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <td valign="top" align="left" colspan="3">
+                                    <%@ include file="genHeader.jsp" %>
                                 </td>
-                                <td valign="top" align="left">
-                                    &nbsp;
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">
-                                	PEMBUATAN<br>
-                                    SURAT TANDA SETORAN
+                                	<font class="NmDinas">PEMBUATAN<br>
+                                    SURAT TANDA SETORAN</font>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
-                                <td colspan="3" valign="top" align="center">
-                                    <table border="0" cellpadding="0" cellspacing="0">
+                                <td colspan="3" align="center">
+                                    <fieldset>
+                                    <legend>Informasi Awal</legend>
+                                    <br>
+                                    <table border="0">
                                         <tr>
-                                            <td>Tanggal Setor</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>
-				                                <input type="text" readonly value="<%= strToday %>" name="txtTglAwal" id="txtTglAwal" maxlength="10" size="10">
-				                                &nbsp;<button type="reset" id="btTglAwal">...</button>
-				                            </td>
+                                            <td colspan="3" valign="top" align="center">
+                                                <table border="0" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td>Tanggal Setor</td>
+                                                        <td>&nbsp;:&nbsp;</td>
+                                                        <td>
+                                                                            <input type="text" readonly value="<%= strToday %>" name="txtTglAwal" id="txtTglAwal" maxlength="10" size="10">
+                                                                            &nbsp;<button type="reset" id="btTglAwal">...</button>
+                                                                        </td>
+                                                    </tr>
+                                                    <script type="text/javascript">
+                                                                    Calendar.setup({
+                                                                        inputField     :    "txtTglAwal",      // id of the input field
+                                                                        ifFormat       :    "%d/%m/%Y",       // format of the input field
+                                                                        showsTime      :    false,            // will display a time selector
+                                                                        button         :    "btTglAwal",   // trigger for the calendar (button ID)
+                                                                        singleClick    :    true,           // double-click mode
+                                                                        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+                                                                    });
+                                                                </script>
+                                                </table>
+                                            </td>
                                         </tr>
-                                        <script type="text/javascript">
-			                                Calendar.setup({
-			                                    inputField     :    "txtTglAwal",      // id of the input field
-			                                    ifFormat       :    "%d/%m/%Y",       // format of the input field
-			                                    showsTime      :    false,            // will display a time selector
-			                                    button         :    "btTglAwal",   // trigger for the calendar (button ID)
-			                                    singleClick    :    true,           // double-click mode
-			                                    step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-			                                });
-			                            </script>
                                     </table>
+                                                                            <br>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>

@@ -148,25 +148,25 @@
         <link href="css/simpada.css" rel="stylesheet">
         <script type="text/javascript" src="js/jsUtility.js"></script>
         <script type="text/javascript">
-            function fnGetAllElement() {
-                var vJmlElement = document.main_form.elements.length;
-                for (var w=0; w<=vJmlElement-1; w++) {
-                    var vElementName = '';
-                    if (document.main_form.elements[w].name != null) {
-                        vElementName = document.main_form.elements[w].name;
-                    }
-                    document.main_form.elements[w].title = vElementName;
-                }
-            }
-            
-            function fnLastElement(lastElement) {
-                document.main_form.hidLastElement.value = lastElement;
-            }
-
-            function fnGotoLastElement() {
-                var vLastElement = document.main_form.hidLastElement.value;
-                document.getElementById(vLastElement).focus();
-            }
+//            function fnGetAllElement() {
+//                var vJmlElement = document.main_form.elements.length;
+//                for (var w=0; w<=vJmlElement-1; w++) {
+//                    var vElementName = '';
+//                    if (document.main_form.elements[w].name != null) {
+//                        vElementName = document.main_form.elements[w].name;
+//                    }
+//                    document.main_form.elements[w].title = vElementName;
+//                }
+//            }
+//
+//            function fnLastElement(lastElement) {
+//                document.main_form.hidLastElement.value = lastElement;
+//            }
+//
+//            function fnGotoLastElement() {
+//                var vLastElement = document.main_form.hidLastElement.value;
+//                document.getElementById(vLastElement).focus();
+//            }
             
             function fnBatal() {
                 document.main_form.method = "post";
@@ -185,7 +185,7 @@
             }
         </script>
     </head>
-    <body onload="fnGetAllElement();fnGotoLastElement();">
+    <body onload="fnGetAllElement()">
         <form name="main_form">
             <input type="hidden" name="mode" id="mode">
             <input type="hidden" name="hidJmlSI" id="hidJmlSI" value="<%= intJmlSI %>">
@@ -210,75 +210,17 @@
                     <td align="center">
                         <table border="0" cellpadding="2" cellspacing="2" width="75%">
                             <tr>
-                                <td valign="top" align="left" colspan="2">
-                                    <table border="0" cellpadding="0" cellspacing="0" topmargin="0" leftmargin="0">
-                                        <tr>
-                                            <td align="left">
-                                                <font class="NmPemda">PEMERINTAH&nbsp;<%= strNamaPemda%></font><br>
-                                                <font class="NmDinas"><%= strNamaBidang %></font><br>
-                                                <font class="AlmDinas"><%= strAlamatPemda %>,&nbsp;<%= strKotamadyaPemda %>&nbsp;<%= strKodePos %></font><br>
-                                                <font class="AlmDinas">Telp:&nbsp<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <hr>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <td valign="top" align="left" colspan="3">
+                                    <%@ include file="genHeader.jsp" %>
                                 </td>
-                                <td valign="top" align="left">
-                                    &nbsp;
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">
-                                    PERUBAHAN DATA<br>
-                                    PAJAK / RETRIBUSI BADAN *)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" valign="top" align="left">
-                                    <table border="0" cellpadding="0" cellspacing="0">
-                                        <tr valign="top">
-                                            <td>1.</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>
-                                            	Nomor NPWPD<br>
-                                            	<input type="text" value="" name="txtNPWPD" id="txtNPWPD" tabindex="1" onfocus="fnLastElement(this.name)" size="100">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                        	<td colspan="3">
-                                        		&nbsp;
-                                        	</td>
-                                        </tr>
-                                        <tr valign="top">
-                                            <td>2.</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>
-                                            	Nama Badan / Merk Usaha<br>
-                                                <input type="text" value="" name="txtNamaBU" id="txtNamaBU" tabindex="2" onfocus="fnLastElement(this.name)" size="100">
-                                            </td>
-                                        </tr>
-                                        <tr valign="top">
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>
-                                            	Nama Pemilik / Pengelola<br>
-                                                <input type="text" value="" name="txtNama" id="txtNama" tabindex="3" onfocus="fnLastElement(this.name)" size="100">
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    <font class="NmDinas">PERUBAHAN DATA<br>
+                                    PAJAK / RETRIBUSI BADAN *)</font>
                                 </td>
                             </tr>
                             <tr>
@@ -286,10 +228,58 @@
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    Untuk melakukan pencarian data, masukkan<br>
-                                    NPWPD / NPWRD<br>
-                                    atau<br>
-                                    Nama Badan / Merk Usaha dan Nama Pemilik / Pengelola<br>
+                                    <fieldset>
+                                    <legend>Informasi Awal</legend>
+                                    <br>
+                                    <table border="0">
+                                        <tr>
+                                            <td colspan="3" valign="top" align="left">
+                                                <table border="0" cellpadding="0" cellspacing="0">
+                                                    <tr valign="top">
+                                                        <td>1.</td>
+                                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                                        <td>
+                                                            Nomor NPWPD<br>
+                                                            <input type="text" value="" name="txtNPWPD" id="txtNPWPD" tabindex="1" onfocus="fnLastElement(this.name)" size="100">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td colspan="3">
+                                                                    &nbsp;
+                                                            </td>
+                                                    </tr>
+                                                    <tr valign="top">
+                                                        <td>2.</td>
+                                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                                        <td>
+                                                            Nama Badan / Merk Usaha<br>
+                                                            <input type="text" value="" name="txtNamaBU" id="txtNamaBU" tabindex="2" onfocus="fnLastElement(this.name)" size="100">
+                                                        </td>
+                                                    </tr>
+                                                    <tr valign="top">
+                                                        <td>&nbsp;</td>
+                                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                                        <td>
+                                                            Nama Pemilik / Pengelola<br>
+                                                            <input type="text" value="" name="txtNama" id="txtNama" tabindex="3" onfocus="fnLastElement(this.name)" size="100">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                Untuk melakukan pencarian data, masukkan<br>
+                                                NPWPD / NPWRD<br>
+                                                atau<br>
+                                                Nama Badan / Merk Usaha dan Nama Pemilik / Pengelola<br>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>

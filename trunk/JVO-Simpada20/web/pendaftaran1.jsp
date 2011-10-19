@@ -168,25 +168,25 @@
 	<script type="text/javascript" src="js/calendar-en.js"></script>
 	<script type="text/javascript" src="js/calendar-setup.js"></script>
         <script type="text/javascript">
-            function fnGetAllElement() {
-                var vJmlElement = document.main_form.elements.length;
-                for (var w=0; w<=vJmlElement-1; w++) {
-                    var vElementName = '';
-                    if (document.main_form.elements[w].name != null) {
-                        vElementName = document.main_form.elements[w].name;
-                    }
-                    document.main_form.elements[w].title = vElementName;
-                }
-            }
-            
-            function fnLastElement(lastElement) {
-                document.main_form.hidLastElement.value = lastElement;
-            }
-
-            function fnGotoLastElement() {
-                var vLastElement = document.main_form.hidLastElement.value;
-                document.getElementById(vLastElement).focus();
-            }
+//            function fnGetAllElement() {
+//                var vJmlElement = document.main_form.elements.length;
+//                for (var w=0; w<=vJmlElement-1; w++) {
+//                    var vElementName = '';
+//                    if (document.main_form.elements[w].name != null) {
+//                        vElementName = document.main_form.elements[w].name;
+//                    }
+//                    document.main_form.elements[w].title = vElementName;
+//                }
+//            }
+//
+//            function fnLastElement(lastElement) {
+//                document.main_form.hidLastElement.value = lastElement;
+//            }
+//
+//            function fnGotoLastElement() {
+//                var vLastElement = document.main_form.hidLastElement.value;
+//                document.getElementById(vLastElement).focus();
+//            }
             
             function fnAddSI(vJmlSI) {
                 var vIdxKelBU = document.getElementById("slctKelurahanBU").selectedIndex;
@@ -456,7 +456,7 @@
             }
         </script>
     </head>
-    <body onload="fnGetAllElement();fnGotoLastElement();">
+    <body onload="fnGetAllElement()">
         <form name="main_form">
         <input type="hidden" name="mode" id="mode">
         <input type="hidden" name="hidJmlSI" id="hidJmlSI" value="<%= intJmlSI %>">
@@ -496,117 +496,61 @@
                     <td align="center">
                         <table border="0" cellpadding="2" cellspacing="2" width="75%">
                             <tr>
-                                <td valign="top" align="left" colspan="2">
-                                    <table border="0" cellpadding="0" cellspacing="0">
+                                <td colspan="3">
+                                    <fieldset>
+                                    <table>
                                         <tr>
-                                            <td align="left">
-                                                <font class="NmPemda">PEMERINTAH&nbsp;<%= strNamaPemda%></font><br>
-                                                <font class="NmDinas"><%= strNamaBidang %></font><br>
-                                                <font class="AlmDinas"><%= strAlamatPemda %><br><%= strKotamadyaPemda %>&nbsp;<%= strKodePos %></font><br>
-                                                <font class="AlmDinas">Telp:&nbsp;<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
+                                            <td style="width: 90%" valign="top" align="left">
+                                                <table border="0" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td align="left">
+                                                            <font class="NmPemda">PEMERINTAH&nbsp;<%= strNamaPemda%></font><br>
+                                                            <font class="NmDinas"><%= strNamaBidang %></font><br>
+                                                            <font class="AlmDinas"><%= strAlamatPemda %>,&nbsp;<%= strKotamadyaPemda %>&nbsp;<%= strKodePos %></font><br>
+                                                            <font class="AlmDinas">Telp:&nbsp;<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
+                                                        </td>
+                                                    </tr>
+                                                    <!--<tr>
+                                                        <td align="left">
+                                                            <hr>
+                                                        </td>
+                                                    </tr>-->
+                                                </table>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <hr>
+                                            <td valign="top" align="right">
+                                                Nomor Formulir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                                                <input type="text" readonly size="20" name="txtNoForm" id="txtNoForm" tabindex="1" onfocus="fnLastElement(this.name)" value="<%= strNoForm %>">
                                             </td>
                                         </tr>
                                     </table>
+                                    </fieldset>
                                 </td>
-                                <td valign="top" align="right">
-                                    Nomor Formulir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                                    <input type="text" readonly size="20" name="txtNoForm" id="txtNoForm" tabindex="1" onfocus="fnLastElement(this.name)" value="<%= strNoForm %>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">
-                                    FORMULIR PENDAFTARAN<br>
-                                    WAJIB PAJAK / RETRIBUSI BADAN *)
+                                    <font class="NmDinas">FORMULIR PENDAFTARAN<br>
+                                    WAJIB PAJAK / RETRIBUSI BADAN *)</font>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
-                            
-                            <!-- 
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
-                            </tr>
-                            -->
-                             
-                            <!-- 
-                            <tr>
-                                <td valign="top" align="left">&nbsp;</td>
-                                <td width="40%">&nbsp;</td>
-                                <td valign="top" align="left">
-                                    Kepada Yth<br>
-                                    <br>
-                                    <br>
-                                    di<br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
-                            </tr>
-                            -->
-                            
-                            <!-- 
-                            <tr>
-                                <td colspan="3" valign="top" align="left">
-                                    <table border="0" cellpadding="0" cellspacing="0">
-                                        <tr>
-                                            <td colspan="3">PERHATIAN</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1.</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>Harap diisi dalam rangkap dua (2) ditulis dengan huruf CETAK</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2.</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>Beri tanda V pada kotak <input type="checkbox" onclick="return false"> yang tersedia untuk jawaban yang diberikan</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3.</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>Setelah Formulir Pendaftaran ini diisi dan ditandatangani, harap diserahkan kembali</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>kepada Dinas Pendapatan Daerah Tingkat II Jl.</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>&nbsp;&nbsp;&nbsp;</td>
-                                            <td>langsung atau dikirim melalui Pos paling lambat tanggal</td>
-                                        </tr>
-                                    </table>
-                                </td>    
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
-                            </tr>
-                            -->
-                             
+                            <!--
                             <tr>
                                 <td colspan="3" align="left" style="font-weight: bold">DIISI OLEH SELURUH WAJIB PAJAK BADAN</td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
+                            -->
                             <tr>
                                 <td colspan="3" valign="top" align="left">
+                                    <fieldset>
+                                    <legend>DIISI OLEH SELURUH WAJIB PAJAK BADAN</legend>
+                                    <br>
                                     <table border="0" cellpadding="0" cellspacing="0">
                                         <tr valign="top">
                                             <td>1.</td>
@@ -874,23 +818,35 @@
                                             	Modal Badan Usaha
                                             </td>
                                             <td colspan="2" align="right">
-                                                <input style="width:150px" type="text" value="<%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strModal)) %>" name="txtModal" id="txtModal" onfocus="fnLastElement(this.name)" size="100">
+                                                <input style="text-align: right; width:150px" type="text"
+                                                       name="txtModal" id="txtModal" size="100"
+                                                       onfocus="delContent('txtModal', this.value);"
+                                                       onkeypress="return filterInput(1, event)"
+                                                       onkeyup="this.value = formatAngka(this);"
+                                                       onBlur="this.value = fnFormatNum(this.value);"
+                                                       value="<%= jvc.fnFormatNumberInd(strModal) %>">
                                             </td>
                                         </tr>
                                     </table>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
+                            <!--
                             <tr>
                                 <td colspan="3" align="left" style="font-weight: bold">KETERANGAN PEMILIK / PENGELOLA</td>
                             </tr>
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
+                            -->
                             <tr>
                                 <td colspan="3" valign="top" align="left">
+                                    <fieldset>
+                                    <legend>KETERANGAN PEMILIK / PENGELOLA</legend>
+                                    <br>
                                     <table border="0" cellpadding="0" cellspacing="0">
                                         <tr valign="top">
                                             <td>6.</td>
@@ -1100,6 +1056,7 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
