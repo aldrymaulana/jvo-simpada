@@ -239,22 +239,22 @@ A:vlink {
 }
 
 .NmPemda {
-  font-size: 16px;
-  font-family: monospace;
+  font-size: 24px;
+  font-family: serif;
   color: black;
   font-weight: bold;
 }
 
 .NmDinas {
   font-size: 12px;
-  font-family: monospace;
+  font-family: serif;
   color: black;
   font-weight: bold;  
 }
 
 .AlmDinas {
-  font-size: 12px;
-  font-family: monospace;
+  font-size: 10px;
+  font-family: serif;
   color: black;
   font-weight: normal;  
 }

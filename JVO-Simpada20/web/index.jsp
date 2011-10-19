@@ -146,7 +146,7 @@
                                 <!--</div>-->
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="bottom">
                             <td>
                                 <%@ include file="footer.jsp" %>
                             </td>
