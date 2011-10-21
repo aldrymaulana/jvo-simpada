@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class srvLaporan extends HttpServlet {
 
@@ -680,6 +681,10 @@ public class srvLaporan extends HttpServlet {
             parameters.put("pAlamatPemda", strAlamatPemda);
             net.sf.jasperreports.engine.JasperReport jasperReport = JasperCompileManager.compileReport(strFileJasper);
             net.sf.jasperreports.engine.JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, con);
+
+//            JasperViewer.viewReport(print, false);
+//            resp.sendRedirect(new StringBuilder("pelaporan1.jsp").toString());
+
             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
             Date todayDate = new Date();
             String strToday = sdf.format(todayDate);

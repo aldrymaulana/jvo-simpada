@@ -119,7 +119,7 @@
         <form name="main_form">
         <input type="hidden" name="mode" id="mode">
         <input type="hidden" name="hidWidth" id="hidWidth" value="<%= intWidth %>">
-        <input type="hidden" name="hidHeight" id="hidHeight" value="<%= intHeight %>">    
+        <input type="hidden" name="hidHeight" id="hidHeight" value="<%= intHeight %>">
         <table width="<%= intWidth*0.98 %>" height="<%= intHeight*0.92 %>" border="1" cellpadding="0" cellspacing="0">
             <tr valign="middle">
                 <td align="center">
