@@ -313,7 +313,7 @@
                                             %>
                                             <tr class="JUDUL2">
                                                 <td colspan="4">J U M L A H</td>
-                                                <td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(dblTotalPenerimaan) %></td>
+                                                <td align="right"><%= jvc.fnFormatNumberInd(String.valueOf((int)(double)dblTotalPenerimaan)) %></td>
                                                 <td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(dblTotalPengeluaran) %></td>
                                             </tr>
 
