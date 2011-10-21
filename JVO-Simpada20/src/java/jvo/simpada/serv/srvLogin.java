@@ -45,11 +45,11 @@ public class srvLogin extends HttpServlet {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
         double dobWidth = dim.getWidth();
-        String strWidth = String.valueOf(dobWidth); //jvc.fnGetProperty("SCR_WIDTH");
+        String strWidth = String.valueOf((int)dobWidth); //jvc.fnGetProperty("SCR_WIDTH");
         request.getSession().setAttribute("strWidth", strWidth);
         
-        double dobHeight = dim.getHeight();
-        String strHeight = String.valueOf(dobHeight); //jvc.fnGetProperty("SCR_HEIGHT");
+        double dobHeight = dim.getHeight()-35;
+        String strHeight = String.valueOf((int)dobHeight); //jvc.fnGetProperty("SCR_HEIGHT");
         request.getSession().setAttribute("strHeight", strHeight);
 
         switch (Integer.parseInt(strMode)) {
