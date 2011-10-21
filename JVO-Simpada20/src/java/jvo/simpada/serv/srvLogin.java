@@ -4,6 +4,8 @@
  */
 package jvo.simpada.serv;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import jvo.simpada.common.jvGeneral;
 import jvo.simpada.common.jvCommon;
 import java.io.IOException;
@@ -39,10 +41,17 @@ public class srvLogin extends HttpServlet {
         if (request.getParameter("mode") != null) {
             strMode = request.getParameter("mode").toString();
         }
-        String strWidth = jvc.fnGetProperty("SCR_WIDTH");
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        double dobWidth = dim.getWidth();
+        String strWidth = String.valueOf(dobWidth); //jvc.fnGetProperty("SCR_WIDTH");
         request.getSession().setAttribute("strWidth", strWidth);
-        String strHeight = jvc.fnGetProperty("SCR_HEIGHT");
+        
+        double dobHeight = dim.getHeight();
+        String strHeight = String.valueOf(dobHeight); //jvc.fnGetProperty("SCR_HEIGHT");
         request.getSession().setAttribute("strHeight", strHeight);
+
         switch (Integer.parseInt(strMode)) {
             case 0: // '\0'
                 try {
