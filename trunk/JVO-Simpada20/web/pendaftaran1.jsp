@@ -510,11 +510,6 @@
                                                             <font class="AlmDinas">Telp:&nbsp;<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
                                                         </td>
                                                     </tr>
-                                                    <!--<tr>
-                                                        <td align="left">
-                                                            <hr>
-                                                        </td>
-                                                    </tr>-->
                                                 </table>
                                             </td>
                                             <td valign="top" align="right">

@@ -261,7 +261,8 @@ public class srvLaporan extends HttpServlet {
             throws ServletException, IOException {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
+            String strDSN = jvCommon.fnGetProperty("DSN");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
             String strFileJRXML = "report2.jrxml";
             String strFileJasper = (new StringBuilder(String.valueOf(JRXML_LOCAL_PATH))).append(strFileJRXML).toString();
             String strTglAwal = req.getSession().getAttribute("strTglAwal").toString();
@@ -338,7 +339,8 @@ public class srvLaporan extends HttpServlet {
             throws ServletException, IOException {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
+            String strDSN = jvCommon.fnGetProperty("DSN");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
             String strFileJRXML = "report7.jrxml";
             String strFileJasper = (new StringBuilder(String.valueOf(JRXML_LOCAL_PATH))).append(strFileJRXML).toString();
             String strTglAwal = req.getSession().getAttribute("strTglAwal").toString();
@@ -407,7 +409,8 @@ public class srvLaporan extends HttpServlet {
             throws ServletException, IOException {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
+            String strDSN = jvCommon.fnGetProperty("DSN");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
             String strFileJRXML = "report6.jrxml";
             String strFileJasper = (new StringBuilder(String.valueOf(JRXML_LOCAL_PATH))).append(strFileJRXML).toString();
             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
@@ -468,7 +471,8 @@ public class srvLaporan extends HttpServlet {
             throws ServletException, IOException {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
+            String strDSN = jvCommon.fnGetProperty("DSN");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
             Calendar cal = new GregorianCalendar();
             int intDayOfMonth = cal.get(5);
             int intDayOfWeek = cal.get(7);
@@ -546,7 +550,8 @@ public class srvLaporan extends HttpServlet {
             throws ServletException, IOException {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
+            String strDSN = jvCommon.fnGetProperty("DSN");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
             Calendar cal = new GregorianCalendar();
             int intDayOfMonth = cal.get(5);
             int intDayOfWeek = cal.get(7);
@@ -625,7 +630,8 @@ public class srvLaporan extends HttpServlet {
             throws ServletException, IOException {
         try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
+            String strDSN = jvCommon.fnGetProperty("DSN");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
             Calendar cal = new GregorianCalendar();
             int intDayOfMonth = cal.get(5);
             int intDayOfWeek = cal.get(7);

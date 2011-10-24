@@ -178,7 +178,7 @@
             <input type="hidden" name="hidNamaBendahara" id="hidNamaBendahara" value="<%= strNamaBendahara%>">
             <input type="hidden" name="hidNIPBendahara" id="hidNIPBendahara" value="<%= strNIPBendahara%>">
 
-            <table border="0" width="100%" cellpadding="1" cellspacing="1">
+            <table border="0" width="98%" cellpadding="1" cellspacing="1">
                 <tr colspan="3" valign="top">
                     <td colspan="3">&nbsp;</td>
                 </tr>
@@ -186,7 +186,7 @@
                 <tr colspan="3" valign="top">
                     <td colspan="3" align="center">
                         <fieldset>
-                        <font class="NmDinas">PEMERINTAH <%= strNamaPemda.toUpperCase()%></font><br>
+                        <font class="NmDinas">PPEMERINTAH <%= strNamaPemda.toUpperCase()%></font><br>
                         <font class="NmPemda">BUKU KAS UMUM</font>
                         </fieldset>
                     </td>
@@ -231,8 +231,8 @@
                                                 <td>Tanggal</td>
                                                 <td>Kode Rekening</td>
                                                 <td>Uraian</td>
-                                                <td>Penerimaan</td>
-                                                <td>Pengeluaran</td>
+                                                <td>Penerimaan (Rp)</td>
+                                                <td>Pengeluaran (Rp)</td>
                                             </tr>
 
                                             <%
@@ -313,8 +313,8 @@
                                             %>
                                             <tr class="JUDUL2">
                                                 <td colspan="4">J U M L A H</td>
-                                                <td align="right"><%= jvc.fnFormatNumberInd(String.valueOf((int)(double)dblTotalPenerimaan)) %></td>
-                                                <td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(dblTotalPengeluaran) %></td>
+                                                <td align="right"><%= jvc.fnFormatNumberInd(String.valueOf(dblTotalPenerimaan)) %></td>
+                                                <td align="right"><%= jvc.fnFormatNumberInd(String.valueOf(dblTotalPengeluaran)) %></td>
                                             </tr>
 
                                         </table>

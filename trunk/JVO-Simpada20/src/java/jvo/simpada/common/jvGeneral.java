@@ -13,7 +13,7 @@ import java.util.*;
 public class jvGeneral {
 
     public jvGeneral() {
-        DBurl = "jdbc:odbc:Simpada_v01";
+        DBurl = "jdbc:odbc:Simpada_v02";
         con = null;
         stmt = null;
         rs = null;
@@ -2419,7 +2419,7 @@ public class jvGeneral {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(ex).append("<br>").toString());
         }
     }
-    static final String DSNname = "Simpada_v01";
+    static final String DSNname = "Simpada_v02";
     static final String USERname = "";
     static final String PASSword = "";
     String DBurl;

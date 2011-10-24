@@ -193,7 +193,7 @@
             <input type="hidden" name="hidNoSTS" id="hidNoSTS" value="<%= strNoSTS%>">
             <input type="hidden" name="hidTglSTS" id="hidTglSTS" value="<%= strTglTerimaUang%>">
 
-            <table border="0" width="100%" cellpadding="1" cellspacing="1">
+            <table border="0" width="98%" cellpadding="1" cellspacing="1">
                 <tr valign="top">
                     <td colspan="3">&nbsp;</td>
                 </tr>
@@ -298,7 +298,7 @@
 
                                         <tr class="<%= strNmClass%>">
                                             <td><%= a%></td>
-                                            <td align="left"><%= strArray[0]%></td>
+                                            <td align="left" <%= strFontWeight%>><%= strArray[0]%></td>
                                             <td align="left" <%= strFontWeight%>><%= strArray[1]%></td>
                                             <td align="right"><%= jvc.fnFormatNumberInd(strJumlah) %></td>
                                         </tr>

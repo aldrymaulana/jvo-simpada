@@ -210,7 +210,8 @@ public class srvSetoran extends HttpServlet
         try
         {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-            Connection con = DriverManager.getConnection("jdbc:odbc:Simpada_v01");
+            String strDSN = jvCommon.fnGetProperty("DSN");
+            java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
             String strFileJRXML = "report5.jrxml";
             String strFileJasper = (new StringBuilder(String.valueOf(JRXML_LOCAL_PATH))).append(strFileJRXML).toString();
             String strTglSTS = req.getSession().getAttribute("strTglSTS").toString();
