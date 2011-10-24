@@ -256,7 +256,7 @@
 
             <input type="hidden" name="hidTglTerima" id="hidTglTerima" value="<%= strTglTerimaUang%>">
 
-            <table border="0" width="100%" cellpadding="1" cellspacing="1">
+            <table border="0" width="98%" cellpadding="1" cellspacing="1">
                 <tr valign="top">
                     <td colspan="3">&nbsp;</td>
                 </tr>
@@ -350,7 +350,7 @@
 
                                         <tr class="<%= strNmClass%>">
                                             <td align="center"><%= a%></td>
-                                            <td align="left"><%= strArray[0]%></td>
+                                            <td align="left" <%= strFontWeight%>><%= strArray[0]%></td>
                                             <td align="left" <%= strFontWeight%>><%= strArray[1]%></td>
                                             <td align="right">
                                                 <input type="hidden" name="txtKodeRek_<%= a%>" id="txtKodeRek_<%= a%>" value="<%= strArray[0]%>"/>

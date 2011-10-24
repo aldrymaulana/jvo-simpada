@@ -193,15 +193,22 @@
 			    
 			<tr valign="top">
 	            <td colspan="3" align="center">
+	            <fieldset>
 	            	<font class="NmDinas">PEMERINTAH <%= strNamaPemda.toUpperCase() %></font><br>
 	            	<font class="NmPemda">DAFTAR REKAPITULASI PENETAPAN <%= strKetPajak.toUpperCase() %></font><br>
 	            	<font class="NmDinas"><%= strToday1 %></font>
+	            	</fieldset>
 	            </td>
 	        </tr>
 	        
 	        <tr valign="top">
 	            <td colspan="3">&nbsp;</td>
 	        </tr>
+
+<tr>
+  <td colspan="3">
+      <fieldset>
+          <table border="0" width="100%">  
         
 			<tr>
 				<td colspan="3">
@@ -211,8 +218,8 @@
 							<td valign="middle" rowspan="2">Alamat</td>
 							<td valign="middle" rowspan="2">NPWP</td>
 							<td valign="middle" rowspan="2">Jenis Usaha</td>
-							<td valign="middle" rowspan="2">Jumlah</td>
-							<td valign="middle" rowspan="2">Denda</td>
+							<td valign="middle" rowspan="2">Jumlah<br>(Rp)</td>
+							<td valign="middle" rowspan="2">Denda<br>(Rp)</td>
 							<td colspan="2">Masa Pajak</td>
 							<td colspan="2">Keterangan</td>
 						</tr>
@@ -243,9 +250,9 @@
 											
 											<td align="left"><%= strHtRkpPajak[3] %></td>
 											<td align="left"><%= strHtRkpPajak[4] %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strHtRkpPajak[5])) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strHtRkpPajak[5]) %></td>
 											
-											<td align="right"><%= (strHtRkpPajak[6] != null)?new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strHtRkpPajak[6])):"-" %></td>
+											<td align="right"><%= (strHtRkpPajak[6] != null)?jvc.fnFormatNumberInd(strHtRkpPajak[6]):"-" %></td>
 											<td align="center"><%= new java.text.SimpleDateFormat("dd MMM yyyy").format(new java.text.SimpleDateFormat("yyyy-MM-dd").parse(strHtRkpPajak[7])) %></td>
 											<td align="center"><%= new java.text.SimpleDateFormat("dd MMM yyyy").format(new java.text.SimpleDateFormat("yyyy-MM-dd").parse(strHtRkpPajak[8])) %></td>
 											
@@ -260,6 +267,12 @@
 					</table>
 				</td>
 			</tr>
+			
+                  </table>
+        </fieldset>
+    </td>
+</tr>			
+			
 			<tr>
 				<td colspan="3">&nbsp;</td>
 			</tr>

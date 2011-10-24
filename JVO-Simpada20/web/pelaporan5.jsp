@@ -148,7 +148,21 @@
                     document.getElementById("hidNIPPejabat").value = vNip;
                 }
             }
-
+            
+            /**
+            function fnSlctSort() {
+                vIdxSort = document.getElementById("slctSort").selectedIndex;
+                document.main_form.hidIdxKolom.value = vIdxSort;
+                vIdxSortType = document.getElementById("slctSortType").selectedIndex;
+                vOrder = 'up';
+                if (vIdxSortType == 0) {
+                    vOrder = 'down';
+                }
+                document.main_form.hidOrder.value = vOrder;
+                fnCreateReport();
+            }
+            */
+            
             function fnOrderUp(a) {
                 document.main_form.hidIdxKolom.value = a;
                 document.main_form.hidOrder.value = "up";
@@ -160,7 +174,7 @@
                 document.main_form.hidOrder.value = "down";
                 fnCreateReport();
             }
-
+            
             function fnCreateReport() {
                 var vIdxLap = document.main_form.hidTypeLap.value;
                 if (vIdxLap != 0) {
@@ -208,21 +222,29 @@
 
             <input type="hidden" name="hidNamaBendahara" id="hidNamaBendahara" value="<%= strNamaBendahara%>">
             <input type="hidden" name="hidNIPBendahara" id="hidNIPBendahara" value="<%= strNIPBendahara%>">
-            <table border="0" width="100%" cellpadding="1" cellspacing="1">
+            <table border="0" width="98%" cellpadding="1" cellspacing="1">
                 <tr valign="top">
                     <td colspan="3">&nbsp;</td>
                 </tr>
 
                 <tr valign="top">
                     <td colspan="3" align="center">
+                        <fieldset>
                         <font class="NmDinas">PEMERINTAH <%= strNamaPemda.toUpperCase()%></font><br>
                         <font class="NmPemda">DAFTAR PERUSAHAAN</font><br>
+                        </fieldset>
                     </td>
                 </tr>
 
                 <tr valign="top">
                     <td colspan="3">&nbsp;</td>
                 </tr>
+                
+<tr>
+    <td colspan="3">
+        <fieldset>
+            <table border="0" width="100%">      
+                      
 
                 <tr>
                     <td colspan="3">
@@ -233,45 +255,81 @@
                                 <td valign="middle" rowspan="2">
                                     <table border="0">
                                         <tr>
-                                            <td><img onclick="fnOrderUp(2)" alt="arrow up" src="../image/arrowbigup.gif" align="middle"/></td>
                                             <td>&nbsp;Jenis Usaha&nbsp;</td>
-                                            <td><img onclick="fnOrderDown(2)" alt="arrow down" src="../image/arrowbigdown.gif" align="middle" /></td>
+                                            <!--
+                                            <td><button type="button" onclick="fnOrderUp(2)">
+                                                <img alt="arrow up" src="image/arrowbigup.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            <td><button type="button" onclick="fnOrderDown(2)">
+                                                <img alt="arrow down" src="image/arrowbigdown.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            -->
                                         </tr>
                                     </table>
                                 </td>
                                 <td valign="middle" rowspan="2">
                                     <table border="0">
                                         <tr>
-                                            <td><img onclick="fnOrderUp(1)" alt="arrow up" src="../image/arrowbigup.gif" align="middle"/></td>
                                             <td>&nbsp;Alamat&nbsp;</td>
-                                            <td><img onclick="fnOrderDown(1)" alt="arrow down" src="../image/arrowbigdown.gif" align="middle" /></td>
+                                            <!--
+                                            <td><button type="button" onclick="fnOrderUp(1)">
+                                                <img alt="arrow up" src="image/arrowbigup.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            <td><button type="button" onclick="fnOrderDown(1)">
+                                                <img alt="arrow down" src="image/arrowbigdown.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            -->
                                         </tr>
                                     </table>
                                 </td>
                                 <td valign="middle" rowspan="2">
                                     <table border="0">
                                         <tr>
-                                            <td><img onclick="fnOrderUp(5)" alt="arrow up" src="../image/arrowbigup.gif" align="middle"/></td>
                                             <td>&nbsp;Modal&nbsp;</td>
-                                            <td><img onclick="fnOrderDown(5)" alt="arrow down" src="../image/arrowbigdown.gif" align="middle" /></td>
+                                            <td><button type="button" onclick="fnOrderUp(5)">
+                                                <img alt="arrow up" src="image/arrowbigup.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            <td><button type="button" onclick="fnOrderDown(5)">
+                                                <img alt="arrow down" src="image/arrowbigdown.gif" align="middle"/>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </table>
                                 </td>
                                 <td valign="middle" rowspan="2">
                                     <table border="0">
                                         <tr>
-                                            <td><img onclick="fnOrderUp(6)" alt="arrow up" src="../image/arrowbigup.gif" align="middle"/></td>
                                             <td>&nbsp;NPWP&nbsp;</td>
-                                            <td><img onclick="fnOrderDown(6)" alt="arrow down" src="../image/arrowbigdown.gif" align="middle" /></td>
+                                            <td><button type="button" onclick="fnOrderUp(6)">
+                                                <img alt="arrow up" src="image/arrowbigup.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            <td><button type="button" onclick="fnOrderDown(6)">
+                                                <img alt="arrow down" src="image/arrowbigdown.gif" align="middle"/>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </table>
                                 </td>
                                 <td valign="middle" rowspan="2">
                                     <table border="0">
                                         <tr>
-                                            <td><img onclick="fnOrderUp(7)" alt="arrow up" src="../image/arrowbigup.gif" align="middle"/></td>
                                             <td>&nbsp;Masa Pajak<br>s.d.&nbsp;</td>
-                                            <td><img onclick="fnOrderDown(7)" alt="arrow down" src="../image/arrowbigdown.gif" align="middle" /></td>
+                                            <!--
+                                            <td><button type="button" onclick="fnOrderUp(7)">
+                                                <img alt="arrow up" src="image/arrowbigup.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            <td><button type="button" onclick="fnOrderDown(7)">
+                                                <img alt="arrow down" src="image/arrowbigdown.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            -->
                                         </tr>
                                     </table>
                                 </td>
@@ -281,18 +339,30 @@
                                 <td valign="middle">
                                     <table border="0">
                                         <tr>
-                                            <td><img onclick="fnOrderUp(0)" alt="arrow up" src="../image/arrowbigup.gif" align="middle"/></td>
                                             <td>&nbsp;Perusahaan&nbsp;</td>
-                                            <td><img onclick="fnOrderDown(0)" alt="arrow down" src="../image/arrowbigdown.gif" align="middle" /></td>
+                                            <td><button type="button" onclick="fnOrderUp(0)">
+                                                <img alt="arrow up" src="image/arrowbigup.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            <td><button type="button" onclick="fnOrderDown(0)">
+                                                <img alt="arrow down" src="image/arrowbigdown.gif" align="middle"/>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </table>
                                 </td>
                                 <td valign="middle">
                                     <table border="0">
                                         <tr>
-                                            <td><img onclick="fnOrderUp(3)" alt="arrow up" src="../image/arrowbigup.gif" align="middle"/></td>
                                             <td>&nbsp;Pemilik / Pengelola&nbsp;</td>
-                                            <td><img onclick="fnOrderDown(3)" alt="arrow down" src="../image/arrowbigdown.gif" align="middle" /></td>
+                                            <td><button type="button" onclick="fnOrderUp(3)">
+                                                <img alt="arrow up" src="image/arrowbigup.gif" align="middle"/>
+                                                </button>
+                                            </td>
+                                            <td><button type="button" onclick="fnOrderDown(3)">
+                                                <img alt="arrow down" src="image/arrowbigdown.gif" align="middle"/>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </table>
                                 </td>
@@ -328,7 +398,7 @@
                                 <td align="left"><%= strJnsUsaha%></td>
                                 <td align="left"><%= strAlamat%></td>
 
-                                <td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strModal))%></td>
+                                <td align="right"><%= jvc.fnFormatNumberInd(strModal)%></td>
                                 <td align="center"><%= strNPWP%></td>
                                 <td align="center"><%= strMasaPajak%></td>
                                 <td align="center"></td>
@@ -341,6 +411,12 @@
                         </table>
                     </td>
                 </tr>
+                
+            </table>
+        </fieldset>
+    </td>
+</tr>                
+                
                 <tr>
                     <td colspan="3">&nbsp;</td>
                 </tr>
@@ -349,7 +425,7 @@
                         <table>
                             <tr>
                                 <td align="center">
-								Mengetahui<br>
+								                    Mengetahui<br>
                                     <label id="lblJabatanPejabat"></label><br>
                                     <%= jvc.fnUpperLower(strNamaPemda)%><br><br><br>
                                     <select name="slctPejabat" id="slctPejabat" onchange="fnChangePejabat()">

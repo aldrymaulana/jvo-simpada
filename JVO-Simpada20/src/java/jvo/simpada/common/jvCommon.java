@@ -6,9 +6,9 @@ package jvo.simpada.common;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
+//import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
+//import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -423,7 +423,7 @@ public class jvCommon {
         is = null;
         prop = new Properties();
         try {
-            is = new FileInputStream("/Simpada/simpada.properties");
+            is = new FileInputStream("/Simpada/Simpada20/simpada20.properties");
             prop.load(is);
         } catch (FileNotFoundException e) {
             fnWriteLog("UTIL_LOGGER(fnGetProperty) : ", (new StringBuilder("Exception: ")).append(e).toString());
@@ -453,7 +453,7 @@ public class jvCommon {
                 return;
             }
 
-            String lStrFileName = (new StringBuilder("Simpada_")).append(fnGetDate()).toString();
+            String lStrFileName = (new StringBuilder("Simpada20_")).append(fnGetDate()).toString();
 
             if (lStrFileName == null) {
                 return;
@@ -483,7 +483,7 @@ public class jvCommon {
     protected static void fnSetProperties(jvCommon lObjLog) {
         FileInputStream is = null;
         try {
-            is = new FileInputStream("/Simpada/simpada.properties");
+            is = new FileInputStream("/Simpada/Simpada20/simpada20.properties");
             Properties prop = new Properties();
             prop.load(is);
             lObjLog.lStrFilePath = prop.getProperty("DIRECTORY");

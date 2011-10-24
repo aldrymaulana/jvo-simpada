@@ -169,23 +169,28 @@
     
     <input type="hidden" name="hidNamaBendahara" id="hidNamaBendahara" value="<%= strNamaBendahara %>">
    	<input type="hidden" name="hidNIPBendahara" id="hidNIPBendahara" value="<%= strNIPBendahara %>">
-   		<table border="0" width="100%" cellpadding="1" cellspacing="1">
+   		<table border="0" width="98%" cellpadding="1" cellspacing="1">
 			<tr valign="top">
 	            <td colspan="3">&nbsp;</td>
 	        </tr>
 			    
 			<tr valign="top">
 	            <td colspan="3" align="center">
+	            <fieldset>
 	            	<font class="NmDinas">PEMERINTAH <%= strNamaPemda.toUpperCase() %></font><br>
 	            	<font class="NmPemda">LAPORAN PERTANGGUNGJAWABAN BENDAHARA PENERIMAAN SKPD<br>
 					(SPJ PENDAPATAN - FUNSIONAL)</font>
+					     </fieldset>
 	            </td>
 	        </tr>
 	        
 	        <tr valign="top">
 	            <td colspan="3">&nbsp;</td>
 	        </tr>
-        
+<tr>
+  <td colspan="3">
+      <fieldset>
+          <table border="0" width="100%">        
 			<tr>
 				<td>Unit Kerja</td>
 				<td>&nbsp;:&nbsp;</td>
@@ -215,34 +220,40 @@
 						<tr class="JUDUL2" align="center" valign="middle">
 							<td valign="middle" rowspan="2">Kode Rekening</td>
 							<td valign="middle" rowspan="2">Uraian</td>
-							<td valign="middle" rowspan="2">Jumlah Anggaran</td>
+							<td valign="middle" rowspan="2">Jumlah Anggaran<br>(Rp)</td>
 							<td colspan="3">Sampai Dengan Bulan Lalu</td>
 							<td colspan="3">Bulan Ini</td>
 							<td colspan="4">Sampai Dengan Bulan Ini</td>
 							<td valign="middle" rowspan="2">Persentase</td>
 						</tr>
 						<tr class="JUDUL2" align="center" valign="middle">
-							<td valign="middle">Penerimaan</td>
-							<td valign="middle">Penyetoran</td>
-							<td valign="middle">Sisa</td>
-							<td valign="middle">Penerimaan</td>
-							<td valign="middle">Penyetoran</td>
-							<td valign="middle">Sisa</td>
-							<td valign="middle">Realisasi</td>
-							<td valign="middle">Penyetoran</td>
-							<td valign="middle">Sisa</td>
-							<td valign="middle">Anggaran Belum<br>Terealisasi /<br>Pelampauan Anggaran</td>
+							<td valign="middle">Penerimaan<br>(Rp)</td>
+							<td valign="middle">Penyetoran<br>(Rp)</td>
+							<td valign="middle">Sisa<br>(Rp)</td>
+							<td valign="middle">Penerimaan<br>(Rp)</td>
+							<td valign="middle">Penyetoran<br>(Rp)</td>
+							<td valign="middle">Sisa<br>(Rp)</td>
+							<td valign="middle">Realisasi<br>(Rp)</td>
+							<td valign="middle">Penyetoran<br>(Rp)</td>
+							<td valign="middle">Sisa<br>(Rp)</td>
+							<td valign="middle">Anggaran Belum<br>Terealisasi /<br>Pelampauan Anggaran<br>(Rp)</td>
 						</tr>
 						<%
 							double dblTotalPajak = 0;
 							double dblTotalRetribusi = 0;
 							double dblTotalPADLain = 0;
+							String strFontWeight = "";
 							if (request.getSession().getAttribute("htFungsional") != null) {
 								Hashtable htFungsional = (Hashtable) request.getSession().getAttribute("htFungsional");
 								int inthtFungsional = htFungsional.size();
 								int rowNum = 1;
 								for (int a=1; a<=inthtFungsional; a++) {
 									String[] strhtFungsional = (String[]) htFungsional.get(String.valueOf(a));
+									if (strhtFungsional[0].trim().length() <= 5) {
+                      strFontWeight = "style=\"font-weight: bold;\"";
+                  } else {
+                      strFontWeight = "style=\"font-weight: normal;\"";
+                  }
 									int c = rowNum % 2;
 									String strNmClass;
 									if (c == 0) {
@@ -252,24 +263,24 @@
 									}
 									%>
 										<tr class="<%= strNmClass %>">
-											<td align="left"><%= strhtFungsional[0] %></td>
-											<td align="left"><%= strhtFungsional[1] %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[2])) %></td>
+											<td align="left" <%= strFontWeight%>><%= strhtFungsional[0] %></td>
+											<td align="left" <%= strFontWeight%>><%= strhtFungsional[1] %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[2]) %></td>
 											
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[3])) %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[4])) %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[5])) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[3]) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[4]) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[5]) %></td>
 											
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[6])) %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[7])) %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[8])) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[6]) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[7]) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[8]) %></td>
 											
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[9])) %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[10])) %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[11])) %></td>
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[12])) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[9]) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[10]) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[11]) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[12]) %></td>
 											
-											<td align="right"><%= new java.text.DecimalFormat("#,###,###,###,###.##").format(Double.parseDouble(strhtFungsional[13])) %></td>
+											<td align="right"><%= jvc.fnFormatNumberInd(strhtFungsional[13]) %></td>
 										</tr>
 									<%
 									dblTotalPajak = dblTotalPajak;
@@ -282,11 +293,19 @@
 					</table>
 				</td>
 			</tr>
+                  </table>
+        </fieldset>
+    </td>
+</tr>
+
 			<tr>
 				<td colspan="3">&nbsp;</td>
 			</tr>
 			<tr>
-				<td align="center">
+				<td align="left">
+				<table>
+            <tr>
+                <td align="center">
 					Mengetahui<br>Pengguna Anggaran<br><br><br>
 					<select name="slctPejabat" id="slctPejabat" onchange="fnChangePejabat()">
 						<option></option>
@@ -308,6 +327,9 @@
 					</select><br>
 					<label id="lblJabatanPejabat"></label><br>
 					<label id="lblNIPPejabat"></label>
+				        </td>
+              </tr>
+          </table>	
 				</td>
 				<td>&nbsp;&nbsp;&nbsp;</td>
 				<td align="right">

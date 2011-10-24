@@ -170,7 +170,7 @@
 
             <input type="hidden" name="hidNamaBendahara" id="hidNamaBendahara" value="<%= strNamaBendahara%>">
             <input type="hidden" name="hidNIPBendahara" id="hidNIPBendahara" value="<%= strNIPBendahara%>">
-            <table border="0" width="100%" cellpadding="1" cellspacing="1">
+            <table border="0" width="98%" cellpadding="1" cellspacing="1">
                 <tr valign="top">
                     <td colspan="3">&nbsp;</td>
                 </tr>

@@ -233,8 +233,12 @@
                     <td align="center">
                         <table border="0" cellpadding="2" cellspacing="2" width="75%">
                             <tr>
-                                <td valign="top" align="left" colspan="2">
-                                    <table border="0" cellpadding="0" cellspacing="0" topmargin="0" leftmargin="0">
+                                <td colspan="3">
+                                    <fieldset>
+                                    <table>
+                                        <tr>
+                                <td style="width: 90%" valign="top" align="left">
+                                    <table border="0" cellpadding="0" cellspacing="0">
                                         <tr>
                                             <td align="left">
                                                 <font class="NmPemda">PEMERINTAH&nbsp;<%= strNamaPemda%></font><br>
@@ -243,16 +247,15 @@
                                                 <font class="AlmDinas">Telp:&nbsp<%= strTelepon %>, Facs:&nbsp;<%= strFacsimile %></font>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td align="left">
-                                                <hr>
-                                            </td>
-                                        </tr>
                                     </table>
                                 </td>
                                 <td valign="top" align="left">
                                     Nomor Formulir<br>
                                     <input type="text" readonly size="20" name="txtNoForm" id="txtNoForm" tabindex="1" onfocus="fnLastElement(this.name)" value="<%= strNoForm %>">
+                                </td>
+                                        </tr>
+                                    </table>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
@@ -260,7 +263,9 @@
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">
-                                    FORMULIR PENETAPAN PAJAK / RETRIBUSI / PAD
+                                    <font class="NmDinas">
+                                      FORMULIR PENETAPAN PAJAK / RETRIBUSI / PAD
+                                    </font>
                                 </td>
                             </tr>
                             <tr>
@@ -268,6 +273,8 @@
                             </tr>
                             <tr>
                                 <td colspan="3" valign="top" align="left">
+                                    <fieldset>
+                                    <br>
                                     <table border="0" cellpadding="0" cellspacing="0">
                                         <tr align="left">
                                             <td>1.</td>
@@ -292,19 +299,26 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <br>
+                                    </fieldset>
                                 </td>
                             </tr>
+                            <!--
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">KETERANGAN BADAN USAHA</td>
                             </tr>
+                            -->
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" valign="top" align="left">
+                                <fieldset>
+                                    <legend>KETERANGAN BADAN USAHA</legend>
+                                    <br>
                                     <table border="0" cellpadding="0" cellspacing="0">
                                         <tr valign="top">
                                             <td>3.</td>
@@ -553,19 +567,25 @@
                                                 &nbsp;<input type="text" name="txtBidUsaha" id="txtBidUsaha"></td>
                                         </tr>
                                     </table>
+                                    </fieldset>
                                 </td>
                             </tr>
+                            <!--
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">KETERANGAN PEMILIK / PENGELOLA</td>
                             </tr>
+                            -->
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" valign="top" align="left">
+                                    <fieldset>
+                                    <legend>KETERANGAN PEMILIK / PENGELOLA</legend>
+                                    <br>
                                     <table border="0" cellpadding="0" cellspacing="0">
                                         <tr valign="top">
                                             <td>7.</td>
@@ -695,21 +715,26 @@
                                                 <input style="width:150px" type="text" value="<%= strKdPos %>" name="txtKdPos" id="txtKdPos" tabindex="26" onfocus="fnLastElement(this.name)" size="100">
                                             </td>
                                         </tr>
-
                                     </table>
+                                    </fieldset>
                                 </td>
                             </tr>
+                            <!--
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" align="center">KEWAJIBAN PAJAK / RETRIBUSI / PAD</td>
                             </tr>
+                            -->
                             <tr>
                                 <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td colspan="3" valign="top" align="left">
+                                    <fieldset>
+                                    <legend>KETERANGAN PEMILIK / PENGELOLA</legend>
+                                    <br>
                                     <table border="0" cellpadding="0" cellspacing="0">
 
                                         <tr valign="top">
@@ -833,8 +858,8 @@
                                                 </table>
                                             </td>
                                         </tr>
-                                        
                                     </table>
+                                    </fieldset>
                                 </td>
                             </tr>
                             <tr>
