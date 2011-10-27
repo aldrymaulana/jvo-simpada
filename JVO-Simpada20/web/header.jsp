@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <link href="css/simpada.css" rel="stylesheet">
-        <script type="text/javascript" src="../js/jsUtility.js"></script>
+        <script type="text/javascript" src="js/jsUtility.js"></script>
     </head>
     <body>
         <table width="100%" cellpadding="0" cellspacing="0">
