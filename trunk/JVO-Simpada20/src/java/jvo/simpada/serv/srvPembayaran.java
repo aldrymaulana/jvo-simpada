@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jvo.simpada.serv;
 
 import jvo.simpada.common.*;
@@ -21,11 +20,9 @@ import javax.servlet.http.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.JasperViewer;
 
-public class srvPembayaran extends HttpServlet
-{
+public class srvPembayaran extends HttpServlet {
 
-    public srvPembayaran()
-    {
+    public srvPembayaran() {
         jvg = new jvGeneral();
         jvc = new jvCommon();
         JRXML_LOCAL_PATH = jvCommon.fnGetProperty("JRXML_LOCAL_PATH").toString();
@@ -34,24 +31,21 @@ public class srvPembayaran extends HttpServlet
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String strMode = "0";
-        if(request.getParameter("mode") != null) {
+        if (request.getParameter("mode") != null) {
             strMode = request.getParameter("mode").toString();
         }
         String strIfFrame = "ifPembayaran";
@@ -61,8 +55,9 @@ public class srvPembayaran extends HttpServlet
         String strHeight = request.getParameter("hidHeight").toString();
         request.getSession().setAttribute("strHeight", strHeight);
         String strLastElement = "";
-        if(request.getParameter("hidLastElement") != null)
+        if (request.getParameter("hidLastElement") != null) {
             strLastElement = request.getParameter("hidLastElement").toString();
+        }
         request.getSession().setAttribute("strLastElement", strLastElement);
         Hashtable htBidUsaha = jvg.fnGetBidUsaha();
         request.getSession().setAttribute("htBidUsaha", htBidUsaha);
@@ -88,236 +83,381 @@ public class srvPembayaran extends HttpServlet
         String strNIPBendahara = "";
         Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
         int intHtInfoPejabat = htInfoPejabat1.size();
-        for(int a = 1; a <= intHtInfoPejabat; a++)
-        {
-            String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-            if(strArray[0].equals("31100"))
-            {
+        for (int a = 1; a <= intHtInfoPejabat; a++) {
+            String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+            if (strArray[0].equals("31100")) {
                 strNamaBendahara = strArray[1];
                 strNIPBendahara = strArray[2];
             }
         }
 
-        switch(Integer.parseInt(strMode))
-        {
-        case 2: // '\002'
-            try
-            {
-                jvc.fnPrint("Case 2, Cetak Report");
-                String strNoSKPD = jvc.fnGetValue(request.getParameter("hidNoSKPD"));
-                String strKdPemilik = jvc.fnGetValue(request.getParameter("hidKdPemilik"));
-                String strNoNPWPD = jvc.fnGetValue(request.getParameter("hidNoNPWPD"));
-                String strNoNPWRD = jvc.fnGetValue(request.getParameter("hidNoNPWRD"));
-                Hashtable htGetSKPD = jvg.fnGetSKPD(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
-                createReport2(request, response, htGetSKPD);
-                return;
-            }
-            catch(Exception exp)
-            {
-                jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
+        request.getSession().removeAttribute("saveCounter");
 
-        case 3: // '\003'
-            try
-            {
-                jvc.fnPrint("Case 3, Simpan");
-                String strKdCetak = jvc.fnGetValue(request.getParameter("hidKdCetak"));
-                String strDate1 = jvc.fnGetValue(request.getParameter("hidDate1"));
-                String strDate2 = jvc.fnGetValue(request.getParameter("hidDate2"));
-                String strTahun = jvc.fnGetValue(request.getParameter("hidTahun"));
-                String strKdPemilik = jvc.fnGetValue(request.getParameter("hidKdPemilik"));
-                String strNoRek = jvc.fnGetValue(request.getParameter("hidNoRek"));
-                String strUraian = jvc.fnGetValue(request.getParameter("hidUraian"));
-                String strJumlah = jvc.fnGetValue(request.getParameter("hidJml"));
-                String strBunga = jvc.fnGetValue(request.getParameter("hidBunga"));
-                String strKenaikan = jvc.fnGetValue(request.getParameter("hidKenaikan"));
-                String strTotal = jvc.fnGetValue(request.getParameter("hidTotal"));
-                String strTglSKPD = jvc.fnGetValue(request.getParameter("hidTglSKPD"));
-                String strNoNPWPD = jvc.fnGetValue(request.getParameter("hidNoNPWPD"));
-                String strJnsPekerjaan = jvc.fnGetValue(request.getParameter("hidJnsPekerjaan"));
-                String strKodeSimpan = "0";
-                if(strKdCetak.equalsIgnoreCase("L"))
-                    strKodeSimpan = "1";
-                String strCountSKPD = jvg.fnGetCounter("SKPD", strNoRek, strMonth, strYear, strKodeSimpan);
-                String strNoSKPD = (new StringBuilder(String.valueOf(strNoRek))).append(".").append(strMonth).append(strYear.substring(2, 4)).append(".").append(jvc.fnLRPad("LPAD", strCountSKPD, "0", 4)).toString();
-                ifcPenetapan ifcp = new ifcPenetapan();
-                ifcp.setStrBunga(strBunga);
-                ifcp.setStrDate1(strDate1);
-                ifcp.setStrDate2(strDate2);
-                ifcp.setStrJumlah(strJumlah);
-                ifcp.setStrKdPemilik(strKdPemilik);
-                ifcp.setStrKenaikan(strKenaikan);
-                ifcp.setStrNoNPWPD(strNoNPWPD);
-                ifcp.setStrNoRek(strNoRek);
-                ifcp.setStrNoSKPD(strNoSKPD);
-                ifcp.setStrTahun(strTahun);
-                ifcp.setStrTglSKPD(strTglSKPD);
-                ifcp.setStrTotal(strTotal);
-                ifcp.setStrUraian(strUraian);
-                ifcp.setStrJnsPekerjaan(strJnsPekerjaan);
-                String strDetilUraian = "";
-                String strRpUraian = "";
-                String strJmlUraian = "";
-                Hashtable htUraian = new Hashtable();
-                if(strNoRek.equalsIgnoreCase("4110606"))
-                {
-                    String strPajakC = request.getParameter("hidPajakC").toString();
-                    strJmlUraian = strPajakC;
-                } else
-                {
-                    strJmlUraian = request.getParameter("hidJmlUraian").toString();
-                }
-                int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
-                int b = 1;
-                if(strNoRek.equalsIgnoreCase("4110401"))
-                {
-                    for(int a = 1; a <= intJmlUraianAsli; a++)
-                    {
-                        String strArray[] = new String[2];
-                        strDetilUraian = request.getParameter((new StringBuilder("slctJnsReklame_")).append(a).toString()).toString();
-                        String strUraianReklame = "";
-                        if(strDetilUraian.equalsIgnoreCase("0"))
-                            strUraianReklame = "Papan / Billboard";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("1"))
-                            strUraianReklame = "Baliho";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("2"))
-                            strUraianReklame = "Kain / Spanduk";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("3"))
-                            strUraianReklame = "Bersinar";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("4"))
-                            strUraianReklame = "Melekat";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("5"))
-                            strUraianReklame = "Selebaran";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("6"))
-                            strUraianReklame = "Berjalan";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("7"))
-                            strUraianReklame = "Suara";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("8"))
-                            strUraianReklame = "Peragaan";
-                        else
-                        if(strDetilUraian.equalsIgnoreCase("9"))
-                            strUraianReklame = "Neon / Sign";
-                        strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
-                        if(!strRpUraian.equals("0"))
-                        {
-                            jvc.fnPrint((new StringBuilder("strUraianReklame: ")).append(strUraianReklame).toString());
-                            jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
-                            strArray[0] = strUraianReklame;
-                            strArray[1] = strRpUraian;
-                            htUraian.put(String.valueOf(b), strArray);
-                            b++;
-                        }
-                    }
-
-                } else
-                {
-                    for(int a = 1; a <= intJmlUraianAsli; a++)
-                    {
-                        String strArray[] = new String[2];
-                        strDetilUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
-                        strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
-                        if(!strRpUraian.equals("0"))
-                        {
-                            jvc.fnPrint((new StringBuilder("strDetilUraian: ")).append(strDetilUraian).toString());
-                            jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
-                            strArray[0] = strDetilUraian;
-                            strArray[1] = strRpUraian;
-                            htUraian.put(String.valueOf(b), strArray);
-                            b++;
-                        }
-                    }
-
-                }
-                int intSimpan = 0;
-                if(strKdCetak.equalsIgnoreCase("L"))
-                    intSimpan = jvg.fnSaveSKPD(ifcp);
-                else
-                    intSimpan = jvg.fnSaveSKPD0(ifcp);
-                if(strNoRek.equalsIgnoreCase("4110606"))
-                {
-                    jvc.fnPrint("Bahan Galian");
-                    if(intSimpan > 0)
-                    {
-                        int intDetil = 0;
-                        if(strKdCetak.equalsIgnoreCase("L"))
-                            intDetil = jvg.fnSaveDetilSKPD(strNoSKPD, strNoNPWPD, htUraian);
-                        else
-                            intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
-                    }
-                } else
-                {
-                    jvc.fnPrint("Bukan Bahan Galian");
-                    if(intSimpan > 0 && strDetilUraian.trim().length() > 0)
-                    {
-                        int intDetil = 0;
-                        if(strKdCetak.equalsIgnoreCase("L"))
-                            intDetil = jvg.fnSaveDetilSKPD(strNoSKPD, strNoNPWPD, htUraian);
-                        else
-                            intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
-                    }
-                }
-                if(strKdCetak.equalsIgnoreCase("L"))
-                {
+        switch (Integer.parseInt(strMode)) {
+            case 2: // '\002'
+                try {
+                    jvc.fnPrint("Case 2, Cetak Report");
+                    String strNoSKPD = jvc.fnGetValue(request.getParameter("hidNoSKPD"));
+                    String strKdPemilik = jvc.fnGetValue(request.getParameter("hidKdPemilik"));
+                    String strNoNPWPD = jvc.fnGetValue(request.getParameter("hidNoNPWPD"));
                     String strNoNPWRD = jvc.fnGetValue(request.getParameter("hidNoNPWRD"));
                     Hashtable htGetSKPD = jvg.fnGetSKPD(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
                     createReport2(request, response, htGetSKPD);
-                } else
-                {
-                    String strNoNPWRD = jvc.fnGetValue(request.getParameter("hidNoNPWRD"));
-                    Hashtable htGetSKPD = jvg.fnGetSKPD0(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
-                    createReport20(request, response, htGetSKPD);
+                    //return;
+                } catch (Exception exp) {
+                    jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
                 }
                 return;
-            }
-            catch(Exception exp)
-            {
-                jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
 
-        case 4: // '\004'
-            try
-            {
-                jvc.fnPrint("Case 4, Tambah Uraian");
-                String strJmlPajak = request.getParameter("jmlPajak").toString();
-                request.getSession().setAttribute("strJmlPajak", strJmlPajak);
-                String strNoRek = jvc.fnGetValue(request.getParameter("hidNoRek"));
-                Hashtable htUraian = new Hashtable();
-                String strJmlUraian = request.getParameter("hidJmlUraian").toString();
-                int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
-                if(strNoRek.equalsIgnoreCase("4110401"))
-                {
-                    for(int a = 1; a <= intJmlUraianAsli; a++)
-                    {
+            case 3: // '\003'
+                try {
+                    int intSaveCounter = 0;
+                    if (request.getSession().getAttribute("saveCounter") == null) {
+                        request.getSession().setAttribute("saveCounter", 1);
+                    } else {
+                        intSaveCounter = Integer.parseInt(request.getSession().getAttribute("saveCounter").toString());
+                    }
+                    intSaveCounter = intSaveCounter + 1;
+                    System.out.println("intSaveCounter: " + intSaveCounter);
+                    if (intSaveCounter < 2) {
+                        jvc.fnPrint("Case 3, Simpan");
+                        String strKdCetak = jvc.fnGetValue(request.getParameter("hidKdCetak"));
+                        String strDate1 = jvc.fnGetValue(request.getParameter("hidDate1"));
+                        String strDate2 = jvc.fnGetValue(request.getParameter("hidDate2"));
+                        String strTahun = jvc.fnGetValue(request.getParameter("hidTahun"));
+                        String strKdPemilik = jvc.fnGetValue(request.getParameter("hidKdPemilik"));
+                        String strNoRek = jvc.fnGetValue(request.getParameter("hidNoRek"));
+                        String strUraian = jvc.fnGetValue(request.getParameter("hidUraian"));
+                        String strJumlah = jvc.fnGetValue(request.getParameter("hidJml"));
+                        String strBunga = jvc.fnGetValue(request.getParameter("hidBunga"));
+                        String strKenaikan = jvc.fnGetValue(request.getParameter("hidKenaikan"));
+                        String strTotal = jvc.fnGetValue(request.getParameter("hidTotal"));
+                        String strTglSKPD = jvc.fnGetValue(request.getParameter("hidTglSKPD"));
+                        String strNoNPWPD = jvc.fnGetValue(request.getParameter("hidNoNPWPD"));
+                        String strJnsPekerjaan = jvc.fnGetValue(request.getParameter("hidJnsPekerjaan"));
+                        String strKodeSimpan = "0";
+                        if (strKdCetak.equalsIgnoreCase("L")) {
+                            strKodeSimpan = "1";
+                        }
+                        String strCountSKPD = jvg.fnGetCounter("SKPD", strNoRek, strMonth, strYear, strKodeSimpan);
+                        String strNoSKPD = (new StringBuilder(String.valueOf(strNoRek))).append(".").append(strMonth).append(strYear.substring(2, 4)).append(".").append(jvc.fnLRPad("LPAD", strCountSKPD, "0", 4)).toString();
+                        ifcPenetapan ifcp = new ifcPenetapan();
+                        ifcp.setStrBunga(strBunga);
+                        ifcp.setStrDate1(strDate1);
+                        ifcp.setStrDate2(strDate2);
+                        ifcp.setStrJumlah(strJumlah);
+                        ifcp.setStrKdPemilik(strKdPemilik);
+                        ifcp.setStrKenaikan(strKenaikan);
+                        ifcp.setStrNoNPWPD(strNoNPWPD);
+                        ifcp.setStrNoRek(strNoRek);
+                        ifcp.setStrNoSKPD(strNoSKPD);
+                        ifcp.setStrTahun(strTahun);
+                        ifcp.setStrTglSKPD(strTglSKPD);
+                        ifcp.setStrTotal(strTotal);
+                        ifcp.setStrUraian(strUraian);
+                        ifcp.setStrJnsPekerjaan(strJnsPekerjaan);
+                        String strDetilUraian = "";
+                        String strRpUraian = "";
+                        String strJmlUraian = "";
+                        Hashtable htUraian = new Hashtable();
+                        if (strNoRek.equalsIgnoreCase("4110606")) {
+                            String strPajakC = request.getParameter("hidPajakC").toString();
+                            strJmlUraian = strPajakC;
+                        } else {
+                            strJmlUraian = request.getParameter("hidJmlUraian").toString();
+                        }
+                        int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
+                        int b = 1;
+                        if (strNoRek.equalsIgnoreCase("4110401")) {
+                            for (int a = 1; a <= intJmlUraianAsli; a++) {
+                                String strArray[] = new String[2];
+                                strDetilUraian = request.getParameter((new StringBuilder("slctJnsReklame_")).append(a).toString()).toString();
+                                String strUraianReklame = "";
+                                if (strDetilUraian.equalsIgnoreCase("0")) {
+                                    strUraianReklame = "Papan / Billboard";
+                                } else if (strDetilUraian.equalsIgnoreCase("1")) {
+                                    strUraianReklame = "Baliho";
+                                } else if (strDetilUraian.equalsIgnoreCase("2")) {
+                                    strUraianReklame = "Kain / Spanduk";
+                                } else if (strDetilUraian.equalsIgnoreCase("3")) {
+                                    strUraianReklame = "Bersinar";
+                                } else if (strDetilUraian.equalsIgnoreCase("4")) {
+                                    strUraianReklame = "Melekat";
+                                } else if (strDetilUraian.equalsIgnoreCase("5")) {
+                                    strUraianReklame = "Selebaran";
+                                } else if (strDetilUraian.equalsIgnoreCase("6")) {
+                                    strUraianReklame = "Berjalan";
+                                } else if (strDetilUraian.equalsIgnoreCase("7")) {
+                                    strUraianReklame = "Suara";
+                                } else if (strDetilUraian.equalsIgnoreCase("8")) {
+                                    strUraianReklame = "Peragaan";
+                                } else if (strDetilUraian.equalsIgnoreCase("9")) {
+                                    strUraianReklame = "Neon / Sign";
+                                }
+                                strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
+                                if (!strRpUraian.equals("0")) {
+                                    jvc.fnPrint((new StringBuilder("strUraianReklame: ")).append(strUraianReklame).toString());
+                                    jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
+                                    strArray[0] = strUraianReklame;
+                                    strArray[1] = strRpUraian;
+                                    htUraian.put(String.valueOf(b), strArray);
+                                    b++;
+                                }
+                            }
+
+                        } else {
+                            for (int a = 1; a <= intJmlUraianAsli; a++) {
+                                String strArray[] = new String[2];
+                                strDetilUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
+                                strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
+                                if (!strRpUraian.equals("0")) {
+                                    jvc.fnPrint((new StringBuilder("strDetilUraian: ")).append(strDetilUraian).toString());
+                                    jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
+                                    strArray[0] = strDetilUraian;
+                                    strArray[1] = strRpUraian;
+                                    htUraian.put(String.valueOf(b), strArray);
+                                    b++;
+                                }
+                            }
+
+                        }
+                        int intSimpan = 0;
+                        if (strKdCetak.equalsIgnoreCase("L")) {
+                            intSimpan = jvg.fnSaveSKPD(ifcp);
+                        }
+//                        else {
+//                            intSimpan = jvg.fnSaveSKPD0(ifcp);
+//                        }
+                        if (strNoRek.equalsIgnoreCase("4110606")) {
+                            jvc.fnPrint("Bahan Galian");
+                            if (intSimpan > 0) {
+                                int intDetil = 0;
+                                if (strKdCetak.equalsIgnoreCase("L")) {
+                                    intDetil = jvg.fnSaveDetilSKPD(strNoSKPD, strNoNPWPD, htUraian);
+                                }
+//                                else {
+//                                    intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
+//                                }
+                            }
+                        } else {
+                            jvc.fnPrint("Bukan Bahan Galian");
+                            if (intSimpan > 0 && strDetilUraian.trim().length() > 0) {
+                                int intDetil = 0;
+                                if (strKdCetak.equalsIgnoreCase("L")) {
+                                    intDetil = jvg.fnSaveDetilSKPD(strNoSKPD, strNoNPWPD, htUraian);
+                                }
+//                                else {
+//                                    intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
+//                                }
+                            }
+                        }
+                        if (strKdCetak.equalsIgnoreCase("L")) {
+                            String strNoNPWRD = jvc.fnGetValue(request.getParameter("hidNoNPWRD"));
+                            Hashtable htGetSKPD = jvg.fnGetSKPD(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
+                            createReport2(request, response, htGetSKPD);
+                        }
+//                        else {
+//                            String strNoNPWRD = jvc.fnGetValue(request.getParameter("hidNoNPWRD"));
+//                            Hashtable htGetSKPD = jvg.fnGetSKPD0(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
+//                            createReport20(request, response, htGetSKPD);
+//                        }
+                    }
+                } catch (Exception exp) {
+                    jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
+                }
+                return;
+
+            case 4: // '\004'
+                try {
+                    jvc.fnPrint("Case 4, Tambah Uraian");
+                    String strJmlPajak = request.getParameter("jmlPajak").toString();
+                    request.getSession().setAttribute("strJmlPajak", strJmlPajak);
+                    String strNoRek = jvc.fnGetValue(request.getParameter("hidNoRek"));
+                    Hashtable htUraian = new Hashtable();
+                    String strJmlUraian = request.getParameter("hidJmlUraian").toString();
+                    int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
+                    if (strNoRek.equalsIgnoreCase("4110401")) {
+                        for (int a = 1; a <= intJmlUraianAsli; a++) {
+                            String strArray[] = new String[7];
+                            String strKdWilayah = request.getParameter((new StringBuilder("slctKdWilayah_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strKdWilayah: ")).append(strKdWilayah).toString());
+                            String strJnsReklame = request.getParameter((new StringBuilder("slctJnsReklame_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strJnsReklame: ")).append(strJnsReklame).toString());
+                            String strSatuan = "";
+                            if (strJnsReklame.equalsIgnoreCase("0") || strJnsReklame.equalsIgnoreCase("3") || strJnsReklame.equalsIgnoreCase("6") || strJnsReklame.equalsIgnoreCase("9")) {
+                                strSatuan = "4";
+                            } else if (strJnsReklame.equalsIgnoreCase("1") || strJnsReklame.equalsIgnoreCase("2")) {
+                                strSatuan = request.getParameter((new StringBuilder("slctSatuan_")).append(a).toString()).toString();
+                            } else if (strJnsReklame.equalsIgnoreCase("4")) {
+                                strSatuan = "0";
+                            } else if (strJnsReklame.equalsIgnoreCase("5")) {
+                                strSatuan = "3";
+                            } else if (strJnsReklame.equalsIgnoreCase("7") || strJnsReklame.equalsIgnoreCase("8")) {
+                                strSatuan = "1";
+                            }
+                            jvc.fnPrint((new StringBuilder("strSatuan: ")).append(strSatuan).toString());
+                            String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strUraian: ")).append(strUraian).toString());
+                            String strTempat = request.getParameter((new StringBuilder("slctTempat_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strTempat: ")).append(strTempat).toString());
+                            strArray[0] = strKdWilayah;
+                            strArray[1] = strJnsReklame;
+                            strArray[2] = strUraian;
+                            strArray[3] = strSatuan;
+                            strArray[4] = strTempat;
+                            String strSewaTabel = request.getParameter((new StringBuilder("rpSewaTabel_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strSewaTabel: ")).append(strSewaTabel).toString());
+                            String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
+                            strArray[5] = strSewaTabel;
+                            strArray[6] = strRpUraian;
+                            htUraian.put(String.valueOf(a), strArray);
+                        }
+
+                    } else {
+                        for (int a = 1; a <= intJmlUraianAsli; a++) {
+                            String strArray[] = new String[2];
+                            String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
+                            String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
+                            strArray[0] = strUraian;
+                            strArray[1] = strRpUraian;
+                            htUraian.put(String.valueOf(a), strArray);
+                        }
+
+                    }
+                    request.getSession().setAttribute("htUraian", htUraian);
+                    String strBunga = request.getParameter("txtBunga").toString();
+                    request.getSession().setAttribute("strBunga", strBunga);
+                    String strKenaikan = request.getParameter("txtKenaikan").toString();
+                    request.getSession().setAttribute("strKenaikan", strKenaikan);
+                    String strJmlTotal = request.getParameter("jmlTotal").toString();
+                    request.getSession().setAttribute("strJmlTotal", strJmlTotal);
+                    String strJmlSubTotal = request.getParameter("jmlSubTotal").toString();
+                    request.getSession().setAttribute("strJmlSubTotal", strJmlSubTotal);
+                    String strKodePajak = request.getParameter("hidKodePajak").toString();
+                    int intJmlUraian = Integer.parseInt(strJmlUraian) + 1;
+                    request.getSession().setAttribute("intJmlUraian", Integer.valueOf(intJmlUraian));
+                    response.sendRedirect((new StringBuilder("skpd1.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).append("&vKode=").append(strKodePajak).toString());
+                    //return;
+                } catch (Exception exp) {
+                    jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
+                }
+                return;
+
+            case 5: // '\005'
+                try {
+                    jvc.fnPrint("Case 5, Hapus Uraian");
+                    String strJmlPajak = request.getParameter("jmlPajak").toString();
+                    request.getSession().setAttribute("strJmlPajak", strJmlPajak);
+                    String strNoRek = jvc.fnGetValue(request.getParameter("hidNoRek"));
+                    Hashtable htUraian = new Hashtable();
+                    String strJmlUraian = request.getParameter("hidJmlUraian").toString();
+                    int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
+                    if (strNoRek.equalsIgnoreCase("4110401")) {
+                        for (int a = 1; a <= intJmlUraianAsli; a++) {
+                            String strArray[] = new String[7];
+                            String strKdWilayah = request.getParameter((new StringBuilder("slctKdWilayah_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strKdWilayah: ")).append(strKdWilayah).toString());
+                            String strJnsReklame = request.getParameter((new StringBuilder("slctJnsReklame_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strJnsReklame: ")).append(strJnsReklame).toString());
+                            String strSatuan = "";
+                            if (strJnsReklame.equalsIgnoreCase("0") || strJnsReklame.equalsIgnoreCase("3") || strJnsReklame.equalsIgnoreCase("6") || strJnsReklame.equalsIgnoreCase("9")) {
+                                strSatuan = "4";
+                            } else if (strJnsReklame.equalsIgnoreCase("1") || strJnsReklame.equalsIgnoreCase("2")) {
+                                strSatuan = request.getParameter((new StringBuilder("slctSatuan_")).append(a).toString()).toString();
+                            } else if (strJnsReklame.equalsIgnoreCase("4")) {
+                                strSatuan = "0";
+                            } else if (strJnsReklame.equalsIgnoreCase("5")) {
+                                strSatuan = "3";
+                            } else if (strJnsReklame.equalsIgnoreCase("7") || strJnsReklame.equalsIgnoreCase("8")) {
+                                strSatuan = "1";
+                            }
+                            jvc.fnPrint((new StringBuilder("strSatuan: ")).append(strSatuan).toString());
+                            String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strUraian: ")).append(strUraian).toString());
+                            String strTempat = request.getParameter((new StringBuilder("slctTempat_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strTempat: ")).append(strTempat).toString());
+                            strArray[0] = strKdWilayah;
+                            strArray[1] = strJnsReklame;
+                            strArray[2] = strUraian;
+                            strArray[3] = strSatuan;
+                            strArray[4] = strTempat;
+                            String strSewaTabel = request.getParameter((new StringBuilder("rpSewaTabel_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strSewaTabel: ")).append(strSewaTabel).toString());
+                            String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
+                            jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
+                            strArray[5] = strSewaTabel;
+                            strArray[6] = strRpUraian;
+                            htUraian.put(String.valueOf(a), strArray);
+                        }
+
+                    } else {
+                        for (int a = 1; a <= intJmlUraianAsli; a++) {
+                            String strArray[] = new String[2];
+                            String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
+                            String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
+                            strArray[0] = strUraian;
+                            strArray[1] = strRpUraian;
+                            htUraian.put(String.valueOf(a), strArray);
+                        }
+
+                    }
+                    request.getSession().setAttribute("htUraian", htUraian);
+                    String strBunga = request.getParameter("txtBunga").toString();
+                    request.getSession().setAttribute("strBunga", strBunga);
+                    String strKenaikan = request.getParameter("txtKenaikan").toString();
+                    request.getSession().setAttribute("strKenaikan", strKenaikan);
+                    String strJmlTotal = request.getParameter("jmlTotal").toString();
+                    request.getSession().setAttribute("strJmlTotal", strJmlTotal);
+                    String strJmlSubTotal = request.getParameter("jmlSubTotal").toString();
+                    request.getSession().setAttribute("strJmlSubTotal", strJmlSubTotal);
+                    String strKodePajak = request.getParameter("hidKodePajak").toString();
+                    int intJmlUraian = Integer.parseInt(strJmlUraian) - 1;
+                    request.getSession().setAttribute("intJmlUraian", Integer.valueOf(intJmlUraian));
+                    response.sendRedirect((new StringBuilder("skpd1.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).append("&vKode=").append(strKodePajak).toString());
+                    //return;
+                } catch (Exception exp) {
+                    jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
+                }
+                return;
+
+            case 6: // '\006'
+                try {
+                    jvc.fnPrint("Case 6, Hitung Reklame");
+                    String strJmlPajak = request.getParameter("jmlPajak").toString();
+                    request.getSession().setAttribute("strJmlPajak", strJmlPajak);
+                    String strBunga = request.getParameter("txtBunga").toString();
+                    request.getSession().setAttribute("strBunga", strBunga);
+                    String strKenaikan = request.getParameter("txtKenaikan").toString();
+                    request.getSession().setAttribute("strKenaikan", strKenaikan);
+                    String strJmlTotal = request.getParameter("jmlTotal").toString();
+                    request.getSession().setAttribute("strJmlTotal", strJmlTotal);
+                    String strJmlSubTotal = request.getParameter("jmlSubTotal").toString();
+                    request.getSession().setAttribute("strJmlSubTotal", strJmlSubTotal);
+                    String strKodePajak = request.getParameter("hidKodePajak").toString();
+                    String strJnsPekerjaan = request.getParameter("hidJnsPekerjaan");
+                    request.getSession().setAttribute("strJnsPekerjaan", strJnsPekerjaan);
+                    Hashtable htUraian = new Hashtable();
+                    String strJmlUraian = request.getParameter("hidJmlUraian").toString();
+                    int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
+                    for (int a = 1; a <= intJmlUraianAsli; a++) {
                         String strArray[] = new String[7];
                         String strKdWilayah = request.getParameter((new StringBuilder("slctKdWilayah_")).append(a).toString()).toString();
                         jvc.fnPrint((new StringBuilder("strKdWilayah: ")).append(strKdWilayah).toString());
                         String strJnsReklame = request.getParameter((new StringBuilder("slctJnsReklame_")).append(a).toString()).toString();
                         jvc.fnPrint((new StringBuilder("strJnsReklame: ")).append(strJnsReklame).toString());
                         String strSatuan = "";
-                        if(strJnsReklame.equalsIgnoreCase("0") || strJnsReklame.equalsIgnoreCase("3") || strJnsReklame.equalsIgnoreCase("6") || strJnsReklame.equalsIgnoreCase("9"))
+                        if (strJnsReklame.equalsIgnoreCase("0") || strJnsReklame.equalsIgnoreCase("3") || strJnsReklame.equalsIgnoreCase("6") || strJnsReklame.equalsIgnoreCase("9")) {
                             strSatuan = "4";
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("1") || strJnsReklame.equalsIgnoreCase("2"))
+                        } else if (strJnsReklame.equalsIgnoreCase("1") || strJnsReklame.equalsIgnoreCase("2")) {
                             strSatuan = request.getParameter((new StringBuilder("slctSatuan_")).append(a).toString()).toString();
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("4"))
+                        } else if (strJnsReklame.equalsIgnoreCase("4")) {
                             strSatuan = "0";
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("5"))
+                        } else if (strJnsReklame.equalsIgnoreCase("5")) {
                             strSatuan = "3";
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("7") || strJnsReklame.equalsIgnoreCase("8"))
+                        } else if (strJnsReklame.equalsIgnoreCase("7") || strJnsReklame.equalsIgnoreCase("8")) {
                             strSatuan = "1";
+                        }
                         jvc.fnPrint((new StringBuilder("strSatuan: ")).append(strSatuan).toString());
                         String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
                         jvc.fnPrint((new StringBuilder("strUraian: ")).append(strUraian).toString());
@@ -328,224 +468,36 @@ public class srvPembayaran extends HttpServlet
                         strArray[2] = strUraian;
                         strArray[3] = strSatuan;
                         strArray[4] = strTempat;
-                        String strSewaTabel = request.getParameter((new StringBuilder("rpSewaTabel_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strSewaTabel: ")).append(strSewaTabel).toString());
-                        String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
-                        strArray[5] = strSewaTabel;
-                        strArray[6] = strRpUraian;
+                        Hashtable htSewa = jvg.fnGetSewaReklame(strArray);
+                        String strSewa = ((String) htSewa.get("Sewa")).toString();
+                        String strFaktorKali = ((String) htSewa.get("FaktorKali")).toString();
+                        Double dblNilaiSewa = Double.valueOf((Double.parseDouble(strSewa) * Double.parseDouble(strFaktorKali)) / 100D);
+                        if (strJnsReklame.equalsIgnoreCase("0")) {
+                            strArray[5] = String.valueOf(jvCommon.fnDbl2IntUP(Double.parseDouble(strSewa)));
+                            strArray[6] = String.valueOf(jvCommon.fnDbl2IntUP(dblNilaiSewa.doubleValue()));
+                        } else {
+                            strArray[5] = String.valueOf(jvCommon.fnDbl2IntUP(dblNilaiSewa.doubleValue()));
+                            Double dbUraian = Double.valueOf(Double.parseDouble(strUraian));
+                            strArray[6] = String.valueOf(jvCommon.fnDbl2IntUP(dblNilaiSewa.doubleValue() * dbUraian.doubleValue()));
+                        }
                         htUraian.put(String.valueOf(a), strArray);
                     }
 
-                } else
-                {
-                    for(int a = 1; a <= intJmlUraianAsli; a++)
-                    {
-                        String strArray[] = new String[2];
-                        String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
-                        String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
-                        strArray[0] = strUraian;
-                        strArray[1] = strRpUraian;
-                        htUraian.put(String.valueOf(a), strArray);
-                    }
-
+                    request.getSession().setAttribute("htUraian", htUraian);
+                    int intJmlUraian = Integer.parseInt(strJmlUraian);
+                    request.getSession().setAttribute("intJmlUraian", Integer.valueOf(intJmlUraian));
+                    response.sendRedirect((new StringBuilder("skpd1.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).append("&vKode=").append(strKodePajak).toString());
+                    //return;
+                } catch (Exception exp) {
+                    jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
                 }
-                request.getSession().setAttribute("htUraian", htUraian);
-                String strBunga = request.getParameter("txtBunga").toString();
-                request.getSession().setAttribute("strBunga", strBunga);
-                String strKenaikan = request.getParameter("txtKenaikan").toString();
-                request.getSession().setAttribute("strKenaikan", strKenaikan);
-                String strJmlTotal = request.getParameter("jmlTotal").toString();
-                request.getSession().setAttribute("strJmlTotal", strJmlTotal);
-                String strJmlSubTotal = request.getParameter("jmlSubTotal").toString();
-                request.getSession().setAttribute("strJmlSubTotal", strJmlSubTotal);
-                String strKodePajak = request.getParameter("hidKodePajak").toString();
-                int intJmlUraian = Integer.parseInt(strJmlUraian) + 1;
-                request.getSession().setAttribute("intJmlUraian", Integer.valueOf(intJmlUraian));
-                response.sendRedirect((new StringBuilder("skpd1.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).append("&vKode=").append(strKodePajak).toString());
                 return;
-            }
-            catch(Exception exp)
-            {
-                jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
-
-        case 5: // '\005'
-            try
-            {
-                jvc.fnPrint("Case 5, Hapus Uraian");
-                String strJmlPajak = request.getParameter("jmlPajak").toString();
-                request.getSession().setAttribute("strJmlPajak", strJmlPajak);
-                String strNoRek = jvc.fnGetValue(request.getParameter("hidNoRek"));
-                Hashtable htUraian = new Hashtable();
-                String strJmlUraian = request.getParameter("hidJmlUraian").toString();
-                int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
-                if(strNoRek.equalsIgnoreCase("4110401"))
-                {
-                    for(int a = 1; a <= intJmlUraianAsli; a++)
-                    {
-                        String strArray[] = new String[7];
-                        String strKdWilayah = request.getParameter((new StringBuilder("slctKdWilayah_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strKdWilayah: ")).append(strKdWilayah).toString());
-                        String strJnsReklame = request.getParameter((new StringBuilder("slctJnsReklame_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strJnsReklame: ")).append(strJnsReklame).toString());
-                        String strSatuan = "";
-                        if(strJnsReklame.equalsIgnoreCase("0") || strJnsReklame.equalsIgnoreCase("3") || strJnsReklame.equalsIgnoreCase("6") || strJnsReklame.equalsIgnoreCase("9"))
-                            strSatuan = "4";
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("1") || strJnsReklame.equalsIgnoreCase("2"))
-                            strSatuan = request.getParameter((new StringBuilder("slctSatuan_")).append(a).toString()).toString();
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("4"))
-                            strSatuan = "0";
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("5"))
-                            strSatuan = "3";
-                        else
-                        if(strJnsReklame.equalsIgnoreCase("7") || strJnsReklame.equalsIgnoreCase("8"))
-                            strSatuan = "1";
-                        jvc.fnPrint((new StringBuilder("strSatuan: ")).append(strSatuan).toString());
-                        String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strUraian: ")).append(strUraian).toString());
-                        String strTempat = request.getParameter((new StringBuilder("slctTempat_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strTempat: ")).append(strTempat).toString());
-                        strArray[0] = strKdWilayah;
-                        strArray[1] = strJnsReklame;
-                        strArray[2] = strUraian;
-                        strArray[3] = strSatuan;
-                        strArray[4] = strTempat;
-                        String strSewaTabel = request.getParameter((new StringBuilder("rpSewaTabel_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strSewaTabel: ")).append(strSewaTabel).toString());
-                        String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
-                        jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
-                        strArray[5] = strSewaTabel;
-                        strArray[6] = strRpUraian;
-                        htUraian.put(String.valueOf(a), strArray);
-                    }
-
-                } else
-                {
-                    for(int a = 1; a <= intJmlUraianAsli; a++)
-                    {
-                        String strArray[] = new String[2];
-                        String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
-                        String strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
-                        strArray[0] = strUraian;
-                        strArray[1] = strRpUraian;
-                        htUraian.put(String.valueOf(a), strArray);
-                    }
-
-                }
-                request.getSession().setAttribute("htUraian", htUraian);
-                String strBunga = request.getParameter("txtBunga").toString();
-                request.getSession().setAttribute("strBunga", strBunga);
-                String strKenaikan = request.getParameter("txtKenaikan").toString();
-                request.getSession().setAttribute("strKenaikan", strKenaikan);
-                String strJmlTotal = request.getParameter("jmlTotal").toString();
-                request.getSession().setAttribute("strJmlTotal", strJmlTotal);
-                String strJmlSubTotal = request.getParameter("jmlSubTotal").toString();
-                request.getSession().setAttribute("strJmlSubTotal", strJmlSubTotal);
-                String strKodePajak = request.getParameter("hidKodePajak").toString();
-                int intJmlUraian = Integer.parseInt(strJmlUraian) - 1;
-                request.getSession().setAttribute("intJmlUraian", Integer.valueOf(intJmlUraian));
-                response.sendRedirect((new StringBuilder("skpd1.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).append("&vKode=").append(strKodePajak).toString());
-                return;
-            }
-            catch(Exception exp)
-            {
-                jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
-
-        case 6: // '\006'
-            try
-            {
-                jvc.fnPrint("Case 6, Hitung Reklame");
-                String strJmlPajak = request.getParameter("jmlPajak").toString();
-                request.getSession().setAttribute("strJmlPajak", strJmlPajak);
-                String strBunga = request.getParameter("txtBunga").toString();
-                request.getSession().setAttribute("strBunga", strBunga);
-                String strKenaikan = request.getParameter("txtKenaikan").toString();
-                request.getSession().setAttribute("strKenaikan", strKenaikan);
-                String strJmlTotal = request.getParameter("jmlTotal").toString();
-                request.getSession().setAttribute("strJmlTotal", strJmlTotal);
-                String strJmlSubTotal = request.getParameter("jmlSubTotal").toString();
-                request.getSession().setAttribute("strJmlSubTotal", strJmlSubTotal);
-                String strKodePajak = request.getParameter("hidKodePajak").toString();
-                String strJnsPekerjaan = request.getParameter("hidJnsPekerjaan");
-                request.getSession().setAttribute("strJnsPekerjaan", strJnsPekerjaan);
-                Hashtable htUraian = new Hashtable();
-                String strJmlUraian = request.getParameter("hidJmlUraian").toString();
-                int intJmlUraianAsli = Integer.parseInt(strJmlUraian);
-                for(int a = 1; a <= intJmlUraianAsli; a++)
-                {
-                    String strArray[] = new String[7];
-                    String strKdWilayah = request.getParameter((new StringBuilder("slctKdWilayah_")).append(a).toString()).toString();
-                    jvc.fnPrint((new StringBuilder("strKdWilayah: ")).append(strKdWilayah).toString());
-                    String strJnsReklame = request.getParameter((new StringBuilder("slctJnsReklame_")).append(a).toString()).toString();
-                    jvc.fnPrint((new StringBuilder("strJnsReklame: ")).append(strJnsReklame).toString());
-                    String strSatuan = "";
-                    if(strJnsReklame.equalsIgnoreCase("0") || strJnsReklame.equalsIgnoreCase("3") || strJnsReklame.equalsIgnoreCase("6") || strJnsReklame.equalsIgnoreCase("9"))
-                        strSatuan = "4";
-                    else
-                    if(strJnsReklame.equalsIgnoreCase("1") || strJnsReklame.equalsIgnoreCase("2"))
-                        strSatuan = request.getParameter((new StringBuilder("slctSatuan_")).append(a).toString()).toString();
-                    else
-                    if(strJnsReklame.equalsIgnoreCase("4"))
-                        strSatuan = "0";
-                    else
-                    if(strJnsReklame.equalsIgnoreCase("5"))
-                        strSatuan = "3";
-                    else
-                    if(strJnsReklame.equalsIgnoreCase("7") || strJnsReklame.equalsIgnoreCase("8"))
-                        strSatuan = "1";
-                    jvc.fnPrint((new StringBuilder("strSatuan: ")).append(strSatuan).toString());
-                    String strUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
-                    jvc.fnPrint((new StringBuilder("strUraian: ")).append(strUraian).toString());
-                    String strTempat = request.getParameter((new StringBuilder("slctTempat_")).append(a).toString()).toString();
-                    jvc.fnPrint((new StringBuilder("strTempat: ")).append(strTempat).toString());
-                    strArray[0] = strKdWilayah;
-                    strArray[1] = strJnsReklame;
-                    strArray[2] = strUraian;
-                    strArray[3] = strSatuan;
-                    strArray[4] = strTempat;
-                    Hashtable htSewa = jvg.fnGetSewaReklame(strArray);
-                    String strSewa = ((String)htSewa.get("Sewa")).toString();
-                    String strFaktorKali = ((String)htSewa.get("FaktorKali")).toString();
-                    Double dblNilaiSewa = Double.valueOf((Double.parseDouble(strSewa) * Double.parseDouble(strFaktorKali)) / 100D);
-                    if(strJnsReklame.equalsIgnoreCase("0"))
-                    {
-                        strArray[5] = String.valueOf(jvCommon.fnDbl2IntUP(Double.parseDouble(strSewa)));
-                        strArray[6] = String.valueOf(jvCommon.fnDbl2IntUP(dblNilaiSewa.doubleValue()));
-                    } else
-                    {
-                        strArray[5] = String.valueOf(jvCommon.fnDbl2IntUP(dblNilaiSewa.doubleValue()));
-                        Double dbUraian = Double.valueOf(Double.parseDouble(strUraian));
-                        strArray[6] = String.valueOf(jvCommon.fnDbl2IntUP(dblNilaiSewa.doubleValue() * dbUraian.doubleValue()));
-                    }
-                    htUraian.put(String.valueOf(a), strArray);
-                }
-
-                request.getSession().setAttribute("htUraian", htUraian);
-                int intJmlUraian = Integer.parseInt(strJmlUraian);
-                request.getSession().setAttribute("intJmlUraian", Integer.valueOf(intJmlUraian));
-                response.sendRedirect((new StringBuilder("skpd1.jsp?vWidth=")).append(strWidth).append("&vHeight=").append(strHeight).append("&vKode=").append(strKodePajak).toString());
-                return;
-            }
-            catch(Exception exp)
-            {
-                jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
-            }
-            return;
         }
     }
 
     protected void createReport2(HttpServletRequest req, HttpServletResponse resp, Hashtable htGetSKPD)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             String strDSN = jvCommon.fnGetProperty("DSN");
             java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
@@ -561,17 +513,17 @@ public class srvPembayaran extends HttpServlet
             String strTglAwal = jvc.fnGetValue(req.getParameter("hidDate1"));
             String strTglAkhir = jvc.fnGetValue(req.getParameter("hidDate2"));
             String strTahun = jvc.fnGetValue(req.getParameter("hidTahun"));
-            String strNama = ((String)htGetSKPD.get("Nama")).toString();
-            String strJalan = ((String)htGetSKPD.get("Jalan")).toString();
-            String strNo = ((String)htGetSKPD.get("No")).toString();
-            String strRT = ((String)htGetSKPD.get("RT")).toString();
-            String strRW = ((String)htGetSKPD.get("RW")).toString();
+            String strNama = ((String) htGetSKPD.get("Nama")).toString();
+            String strJalan = ((String) htGetSKPD.get("Jalan")).toString();
+            String strNo = ((String) htGetSKPD.get("No")).toString();
+            String strRT = ((String) htGetSKPD.get("RT")).toString();
+            String strRW = ((String) htGetSKPD.get("RW")).toString();
             String strRK = "";
-            String strKodePos = ((String)htGetSKPD.get("KodePos")).toString();
-            String strPemilik = ((String)htGetSKPD.get("Pemilik")).toString();
-            String strKabupaten = ((String)htGetSKPD.get("Kabupaten")).toString();
-            String strKecamatan = ((String)htGetSKPD.get("Kecamatan")).toString();
-            String strKelurahan = ((String)htGetSKPD.get("Kelurahan")).toString();
+            String strKodePos = ((String) htGetSKPD.get("KodePos")).toString();
+            String strPemilik = ((String) htGetSKPD.get("Pemilik")).toString();
+            String strKabupaten = ((String) htGetSKPD.get("Kabupaten")).toString();
+            String strKecamatan = ((String) htGetSKPD.get("Kecamatan")).toString();
+            String strKelurahan = ((String) htGetSKPD.get("Kelurahan")).toString();
             String strTotal = jvc.fnGetValue(req.getParameter("jmlTotal"));
             String strSubTotal = jvc.fnGetValue(req.getParameter("jmlSubTotal"));
             String strSubTerbilang = jvc.fnGetValue(req.getParameter("hidSubTerbilang"));
@@ -581,12 +533,9 @@ public class srvPembayaran extends HttpServlet
             String strTglJthTempo = jvc.fnGetValue(req.getParameter("hidTglJthTempo"));
             SimpleDateFormat sdfTglJthTempo = new SimpleDateFormat("dd/MM/yyyy");
             Date dtTglJthTempo = new Date();
-            try
-            {
+            try {
                 dtTglJthTempo = sdfTglJthTempo.parse(strTglJthTempo);
-            }
-            catch(Exception exp)
-            {
+            } catch (Exception exp) {
                 jvc.fnPrint((new StringBuilder("Exception: ")).append(exp.getMessage()).toString());
             }
             SimpleDateFormat sdfTglJthTempo1 = new SimpleDateFormat("dd MMMM yyyy");
@@ -624,11 +573,9 @@ public class srvPembayaran extends HttpServlet
             String strNIPBendahara = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
                 }
@@ -655,13 +602,11 @@ public class srvPembayaran extends HttpServlet
             String strKodePosPemda = "";
             String strTeleponPemda = "";
             String strFacsimilePemda = "";
-            if(req.getSession().getAttribute("htDataPemda") != null)
-            {
-                htDataPemda = (Hashtable)req.getSession().getAttribute("htDataPemda");
+            if (req.getSession().getAttribute("htDataPemda") != null) {
+                htDataPemda = (Hashtable) req.getSession().getAttribute("htDataPemda");
                 int intDataPemda = htDataPemda.size();
-                for(int a = 1; a <= intDataPemda; a++)
-                {
-                    String strArray[] = (String[])htDataPemda.get(String.valueOf(a));
+                for (int a = 1; a <= intDataPemda; a++) {
+                    String strArray[] = (String[]) htDataPemda.get(String.valueOf(a));
                     strNamaPemda = strArray[0].toUpperCase();
                     strNamaBidang = strArray[1].toUpperCase();
                     strAlamatPemda = (new StringBuilder(String.valueOf(strArray[2]))).append(" No ").append(strArray[3]).append(", RT/RW ").append(strArray[4]).append("/").append(strArray[5]).toString();
@@ -689,26 +634,18 @@ public class srvPembayaran extends HttpServlet
             JasperExportManager.exportReportToPdfFile(print, strOutput);
             String strPDFOutput = (new StringBuilder(String.valueOf(OUTPUT_LOCAL_PATH))).append(strFilePDF).toString();
             resp.sendRedirect(strPDFOutput);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
 
     protected void createReport20(HttpServletRequest req, HttpServletResponse resp, Hashtable htGetSKPD)
-        throws ServletException, IOException
-    {
-        try
-        {
+            throws ServletException, IOException {
+        try {
             Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
             String strDSN = jvCommon.fnGetProperty("DSN");
             java.sql.Connection con = DriverManager.getConnection("jdbc:odbc:" + strDSN);
@@ -724,17 +661,17 @@ public class srvPembayaran extends HttpServlet
             String strTglAwal = jvc.fnGetValue(req.getParameter("hidDate1"));
             String strTglAkhir = jvc.fnGetValue(req.getParameter("hidDate2"));
             String strTahun = jvc.fnGetValue(req.getParameter("hidTahun"));
-            String strNama = ((String)htGetSKPD.get("Nama")).toString();
-            String strJalan = ((String)htGetSKPD.get("Jalan")).toString();
-            String strNo = ((String)htGetSKPD.get("No")).toString();
-            String strRT = ((String)htGetSKPD.get("RT")).toString();
-            String strRW = ((String)htGetSKPD.get("RW")).toString();
+            String strNama = ((String) htGetSKPD.get("Nama")).toString();
+            String strJalan = ((String) htGetSKPD.get("Jalan")).toString();
+            String strNo = ((String) htGetSKPD.get("No")).toString();
+            String strRT = ((String) htGetSKPD.get("RT")).toString();
+            String strRW = ((String) htGetSKPD.get("RW")).toString();
             String strRK = "";
-            String strKodePos = ((String)htGetSKPD.get("KodePos")).toString();
-            String strPemilik = ((String)htGetSKPD.get("Pemilik")).toString();
-            String strKabupaten = ((String)htGetSKPD.get("Kabupaten")).toString();
-            String strKecamatan = ((String)htGetSKPD.get("Kecamatan")).toString();
-            String strKelurahan = ((String)htGetSKPD.get("Kelurahan")).toString();
+            String strKodePos = ((String) htGetSKPD.get("KodePos")).toString();
+            String strPemilik = ((String) htGetSKPD.get("Pemilik")).toString();
+            String strKabupaten = ((String) htGetSKPD.get("Kabupaten")).toString();
+            String strKecamatan = ((String) htGetSKPD.get("Kecamatan")).toString();
+            String strKelurahan = ((String) htGetSKPD.get("Kelurahan")).toString();
             String strTotal = jvc.fnGetValue(req.getParameter("jmlTotal"));
             String strSubTotal = jvc.fnGetValue(req.getParameter("jmlSubTotal"));
             String strSubTerbilang = jvc.fnGetValue(req.getParameter("hidSubTerbilang"));
@@ -744,12 +681,9 @@ public class srvPembayaran extends HttpServlet
             String strTglJthTempo = jvc.fnGetValue(req.getParameter("hidTglJthTempo"));
             SimpleDateFormat sdfTglJthTempo = new SimpleDateFormat("dd/MM/yyyy");
             Date dtTglJthTempo = new Date();
-            try
-            {
+            try {
                 dtTglJthTempo = sdfTglJthTempo.parse(strTglJthTempo);
-            }
-            catch(Exception exp)
-            {
+            } catch (Exception exp) {
                 jvc.fnPrint((new StringBuilder("Exception: ")).append(exp.getMessage()).toString());
             }
             SimpleDateFormat sdfTglJthTempo1 = new SimpleDateFormat("dd MMMM yyyy");
@@ -787,11 +721,9 @@ public class srvPembayaran extends HttpServlet
             String strNIPBendahara = "";
             Hashtable htInfoPejabat1 = jvg.fnGetInfoPejabat();
             int intHtInfoPejabat = htInfoPejabat1.size();
-            for(int a = 1; a <= intHtInfoPejabat; a++)
-            {
-                String strArray[] = (String[])htInfoPejabat1.get(String.valueOf(a));
-                if(strArray[0].equals("31100"))
-                {
+            for (int a = 1; a <= intHtInfoPejabat; a++) {
+                String strArray[] = (String[]) htInfoPejabat1.get(String.valueOf(a));
+                if (strArray[0].equals("31100")) {
                     strNamaBendahara = strArray[1];
                     strNIPBendahara = strArray[2];
                 }
@@ -818,13 +750,11 @@ public class srvPembayaran extends HttpServlet
             String strKodePosPemda = "";
             String strTeleponPemda = "";
             String strFacsimilePemda = "";
-            if(req.getSession().getAttribute("htDataPemda") != null)
-            {
-                htDataPemda = (Hashtable)req.getSession().getAttribute("htDataPemda");
+            if (req.getSession().getAttribute("htDataPemda") != null) {
+                htDataPemda = (Hashtable) req.getSession().getAttribute("htDataPemda");
                 int intDataPemda = htDataPemda.size();
-                for(int a = 1; a <= intDataPemda; a++)
-                {
-                    String strArray[] = (String[])htDataPemda.get(String.valueOf(a));
+                for (int a = 1; a <= intDataPemda; a++) {
+                    String strArray[] = (String[]) htDataPemda.get(String.valueOf(a));
                     strNamaPemda = strArray[0].toUpperCase();
                     strNamaBidang = strArray[1].toUpperCase();
                     strAlamatPemda = (new StringBuilder(String.valueOf(strArray[2]))).append(" No ").append(strArray[3]).append(", RT/RW ").append(strArray[4]).append("/").append(strArray[5]).toString();
@@ -848,21 +778,14 @@ public class srvPembayaran extends HttpServlet
             net.sf.jasperreports.engine.JasperReport jasperReport = JasperCompileManager.compileReport(strFileJasper);
             net.sf.jasperreports.engine.JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, con);
             JasperViewer.viewReport(print);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
-        }
-        catch(SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }
-        catch(JRException jre)
-        {
+        } catch (JRException jre) {
             jre.printStackTrace();
         }
     }
-
     private static final long serialVersionUID = 1L;
     jvGeneral jvg;
     jvCommon jvc;
