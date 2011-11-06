@@ -204,30 +204,30 @@
     </head>
     <body onload="fnGetAllElement();fnGotoLastElement();">
         <form name="main_form">
-        <input type="hidden" name="mode" id="mode">
-        <input type="hidden" name="hidJmlSI" id="hidJmlSI" value="<%= intJmlSI %>">
-        <input type="hidden" name="hidJmBidUsaha" id="hidJmBidUsaha" value="<%= intBidUsaha0 %>">
-        <input type="hidden" name="hidBidUsaha" id="hidBidUsaha" value="<%= strBidangUsaha %>">
-        <input type="hidden" name="hidJmPajak" id="hidJmPajak" value="<%= intPajak0 %>">
-        <input type="hidden" name="hidPajak" id="hidPajak" value="<%= strJnsPajak %>">
-        <input type="hidden" name="hidJmRetribusi" id="hidJmRetribusi" value="<%= intRetribusi0 %>">
-        <input type="hidden" name="hidRetribusi" id="hidRetribusi" value="<%= strJnsRetribusi %>">
-        <input type="hidden" name="hidWidth" id="hidWidth" value="<%= strWidth %>">
-        <input type="hidden" name="hidHeight" id="hidHeight" value="<%= strHeight %>">
-        <input type="hidden" name="hidLastElement" id="hidLastElement" value="<%= strLastElement %>">
-        <input type="hidden" name="hidKelurahanBU" id="hidKelurahanBU" value="<%= strKelurahanBU %>">
-        <input type="hidden" name="hidKecamatanBU" id="hidKecamatanBU" value="<%= strKecamatanBU %>">
-        <input type="hidden" name="hidKabupatenBU" id="hidKabupatenBU" value="<%= strKabupatenBU %>">
-        <input type="hidden" name="hidKelurahan" id="hidKelurahan" value="<%= strKelurahanPemilik %>">
-        <input type="hidden" name="hidKecamatan" id="hidKecamatan" value="<%= strKecamatanPemilik %>">
-        <input type="hidden" name="hidKabupaten" id="hidKabupaten" value="<%= strKabupatenPemilik %>">
-        <input type="hidden" name="hidKdPemilik" id="hidKdPemilik" value="<%= strKdPemilik %>">
-        <input type="hidden" name="hidKdNPWP" id="hidKdNPWP" value="<%= strKdNPWP %>">
-        <input type="hidden" name="hidNPWPD" id="hidNPWPD" value="<%= strNPWPD %>">
-        <input type="hidden" name="hidWilNPWP" id="hidWilNPWP" value="<%= strWilNPWP %>">
-        <input type="hidden" name="hidKdNPWR" id="hidKdNPWR" value="<%= strKdNPWP %>">
-        <input type="hidden" name="hidNPWRD" id="hidNPWRD" value="<%= strNPWRD %>">
-        <input type="hidden" name="hidWilNPWR" id="hidWilNPWR" value="<%= strWilNPWR %>">
+        <input type="hidden" name="mode" id="mode" />
+        <input type="hidden" name="hidJmlSI" id="hidJmlSI" value="<%= intJmlSI %>" />
+        <input type="hidden" name="hidJmBidUsaha" id="hidJmBidUsaha" value="<%= intBidUsaha0 %>" />
+        <input type="hidden" name="hidBidUsaha" id="hidBidUsaha" value="<%= strBidangUsaha %>" />
+        <input type="hidden" name="hidJmPajak" id="hidJmPajak" value="<%= intPajak0 %>" />
+        <input type="hidden" name="hidPajak" id="hidPajak" value="<%= strJnsPajak %>" />
+        <input type="hidden" name="hidJmRetribusi" id="hidJmRetribusi" value="<%= intRetribusi0 %>" />
+        <input type="hidden" name="hidRetribusi" id="hidRetribusi" value="<%= strJnsRetribusi %>" />
+        <input type="hidden" name="hidWidth" id="hidWidth" value="<%= strWidth %>" />
+        <input type="hidden" name="hidHeight" id="hidHeight" value="<%= strHeight %>" />
+        <input type="hidden" name="hidLastElement" id="hidLastElement" value="<%= strLastElement %>" />
+        <input type="hidden" name="hidKelurahanBU" id="hidKelurahanBU" value="<%= strKelurahanBU %>" />
+        <input type="hidden" name="hidKecamatanBU" id="hidKecamatanBU" value="<%= strKecamatanBU %>" />
+        <input type="hidden" name="hidKabupatenBU" id="hidKabupatenBU" value="<%= strKabupatenBU %>" />
+        <input type="hidden" name="hidKelurahan" id="hidKelurahan" value="<%= strKelurahanPemilik %>" />
+        <input type="hidden" name="hidKecamatan" id="hidKecamatan" value="<%= strKecamatanPemilik %>" />
+        <input type="hidden" name="hidKabupaten" id="hidKabupaten" value="<%= strKabupatenPemilik %>" />
+        <input type="hidden" name="hidKdPemilik" id="hidKdPemilik" value="<%= strKdPemilik %>" />
+        <input type="hidden" name="hidKdNPWP" id="hidKdNPWP" value="<%= strKdNPWP %>" />
+        <input type="hidden" name="hidNPWPD" id="hidNPWPD" value="<%= strNPWPD %>" />
+        <input type="hidden" name="hidWilNPWP" id="hidWilNPWP" value="<%= strWilNPWP %>" />
+        <input type="hidden" name="hidKdNPWR" id="hidKdNPWR" value="<%= strKdNPWP %>" />
+        <input type="hidden" name="hidNPWRD" id="hidNPWRD" value="<%= strNPWRD %>" />
+        <input type="hidden" name="hidWilNPWR" id="hidWilNPWR" value="<%= strWilNPWR %>" />
             <table border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr valign="top">
                     <td align="center">
@@ -251,7 +251,7 @@
                                 </td>
                                 <td valign="top" align="left">
                                     Nomor Formulir<br>
-                                    <input type="text" readonly size="20" name="txtNoForm" id="txtNoForm" tabindex="1" onfocus="fnLastElement(this.name)" value="<%= strNoForm %>">
+                                    <input type="text" readonly size="20" name="txtNoForm" id="txtNoForm" tabindex="1" onfocus="fnLastElement(this.name)" value="<%= strNoForm %>" />
                                 </td>
                                         </tr>
                                     </table>
@@ -282,9 +282,9 @@
                                             <td>NPWPD</td>
                                             <td>&nbsp;&nbsp;&nbsp;</td>
                                             <td>
-                                                <input type="text" readonly size="5" value="<%= strKdNPWP %>" name="txtKdNPWP" id="txtKdNPWP" onfocus="fnLastElement(this.name)">
-                                                <input type="text" size="10" value="<%= strNPWPD %>" name="txtNPWPD" id="txtNPWPD" tabindex="27" onfocus="fnLastElement(this.name)">
-                                                <input type="text" readonly size="5" value="<%= strWilNPWP %>" name="txtWilNPWP" id="txtWilNPWP" onfocus="fnLastElement(this.name)">
+                                                <input type="text" readonly size="5" value="<%= strKdNPWP %>" name="txtKdNPWP" id="txtKdNPWP" onfocus="fnLastElement(this.name)" />
+                                                <input type="text" size="10" value="<%= strNPWPD %>" name="txtNPWPD" id="txtNPWPD" tabindex="27" onfocus="fnLastElement(this.name)" />
+                                                <input type="text" readonly size="5" value="<%= strWilNPWP %>" name="txtWilNPWP" id="txtWilNPWP" onfocus="fnLastElement(this.name)" />
                                             </td>
                                         </tr>
                                         <tr align="left">
@@ -293,9 +293,9 @@
                                             <td>NPWRD</td>
                                             <td>&nbsp;&nbsp;&nbsp;</td>
                                             <td>
-                                                <input type="text" readonly size="5" value="<%= strKdNPWR %>" name="txtKdNPWR" id="txtKdNPWR" onfocus="fnLastElement(this.name)">
-                                                <input type="text" size="10" value="<%= strNPWRD %>" name="txtNPWRD" id="txtNPWRD" tabindex="28" onfocus="fnLastElement(this.name)">
-                                                <input type="text" readonly size="5" value="<%= strWilNPWR %>" name="txtWilNPWR" id="txtWilNPWR" onfocus="fnLastElement(this.name)">
+                                                <input type="text" readonly size="5" value="<%= strKdNPWR %>" name="txtKdNPWR" id="txtKdNPWR" onfocus="fnLastElement(this.name)" />
+                                                <input type="text" size="10" value="<%= strNPWRD %>" name="txtNPWRD" id="txtNPWRD" tabindex="28" onfocus="fnLastElement(this.name)" />
+                                                <input type="text" readonly size="5" value="<%= strWilNPWR %>" name="txtWilNPWR" id="txtWilNPWR" onfocus="fnLastElement(this.name)" />
                                             </td>
                                         </tr>
                                     </table>
@@ -325,7 +325,7 @@
                                             <td>&nbsp;&nbsp;&nbsp;</td>
                                             <td colspan="3">
                                             	Nama Badan / Merk Usaha<br>
-                                                <input type="text" value="<%= strNamaBU %>" name="txtNamaBU" id="txtNamaBU" tabindex="2" onfocus="fnLastElement(this.name)" size="100">
+                                                <input type="text" value="<%= strNamaBU %>" name="txtNamaBU" id="txtNamaBU" tabindex="2" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
@@ -340,17 +340,17 @@
                                             <td>&nbsp;</td>
                                             <td colspan="3">
                                             	Jalan&nbsp;
-                                            	<input type="text" value="<%= strJalanBU %>" name="txtJalanBU" id="txtJalanBU" tabindex="3" onfocus="fnLastElement(this.name)" size="100">
+                                            	<input type="text" value="<%= strJalanBU %>" name="txtJalanBU" id="txtJalanBU" tabindex="3" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td colspan="3">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;<input type="text" value="<%= strNoBU %>" name="txtNoBU" id="txtNoBU" tabindex="4" onfocus="fnLastElement(this.name)" size="10">&nbsp;
-                                                RT&nbsp;<input type="text" value="<%= strRTBU %>" name="txtRTBU" id="txtRTBU" tabindex="5" onfocus="fnLastElement(this.name)" size="10">&nbsp;
-                                                RW&nbsp;<input type="text" value="<%= strRWBU %>" name="txtRWBU" id="txtRWBU" tabindex="6" onfocus="fnLastElement(this.name)" size="10">&nbsp;
-                                                RK&nbsp;<input type="text" value="<%= strRKBU %>" name="txtRKBU" id="txtRKBU" tabindex="7" onfocus="fnLastElement(this.name)" size="10">&nbsp;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;<input type="text" value="<%= strNoBU %>" name="txtNoBU" id="txtNoBU" tabindex="4" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
+                                                RT&nbsp;<input type="text" value="<%= strRTBU %>" name="txtRTBU" id="txtRTBU" tabindex="5" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
+                                                RW&nbsp;<input type="text" value="<%= strRWBU %>" name="txtRWBU" id="txtRWBU" tabindex="6" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
+                                                RK&nbsp;<input type="text" value="<%= strRKBU %>" name="txtRKBU" id="txtRKBU" tabindex="7" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
                                             </td>
                                         </tr>
                                         <tr valign="top">
@@ -430,7 +430,7 @@
                                             <td>&nbsp;</td>
                                             <td>Nomor Telepon</td>
                                             <td colspan="2" align="left">
-                                                <input style="width:150px" type="text" value="<%= strTelpBU %>" name="txtTelpBU" id="txtTelpBU" tabindex="11" onfocus="fnLastElement(this.name)" size="100">
+                                                <input style="width:150px" type="text" value="<%= strTelpBU %>" name="txtTelpBU" id="txtTelpBU" tabindex="11" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
@@ -438,7 +438,7 @@
                                             <td>&nbsp;</td>
                                             <td>Kode Pos</td>
                                             <td colspan="2" align="left">
-                                                <input style="width:150px" type="text" value="<%= strKdPosBU %>" name="txtKdPosBU" id="txtKdPosBU" tabindex="12" onfocus="fnLastElement(this.name)" size="100">
+                                                <input style="width:150px" type="text" value="<%= strKdPosBU %>" name="txtKdPosBU" id="txtKdPosBU" tabindex="12" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
@@ -470,9 +470,9 @@
                                                     }
                                                     %>
                                                     <tr>
-                                                        <td><input type="text" value="Tempat Usaha" name="txtJnsIjin_1" id="txtJnsIjin_1" readonly></td>
-                                                        <td><input type="text" value="<%= strNoIjin %>" name="txtNoIjin_1" id="txtNoIjin_1"></td>
-                                                        <td><input type="text" value="<%= strTglIjin %>" name="txtTglIjin_1" id="txtTglIjin_1" maxlength="10" size="10">
+                                                        <td><input type="text" value="Tempat Usaha" name="txtJnsIjin_1" id="txtJnsIjin_1" readonly /></td>
+                                                        <td><input type="text" value="<%= strNoIjin %>" name="txtNoIjin_1" id="txtNoIjin_1" /></td>
+                                                        <td><input type="text" value="<%= strTglIjin %>" name="txtTglIjin_1" id="txtTglIjin_1" maxlength="10" size="10" />
                                                         &nbsp;<button type="reset" disabled id="btTglIjin_1">...</button></td>
                                                     </tr>
                                                         <script type="text/javascript">
@@ -550,7 +550,7 @@
                                         <tr valign="top">
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td colspan="3"><input type="radio" onclick="return false;" <%= (strBidangUsaha.equals(strArray[0])?"CHECKED":"DISABLED") %> name="chkBidUsaha" id="chkBidUsaha" value="<%= strArray[0] %>">
+                                            <td colspan="3"><input type="radio" onclick="return false;" <%= (strBidangUsaha.equals(strArray[0])?"CHECKED":"DISABLED") %> name="chkBidUsaha" id="chkBidUsaha" value="<%= strArray[0] %>" />
                                                 &nbsp;<%= strArray[1] %></td>
                                         </tr>
                                                     
@@ -562,9 +562,9 @@
                                         <tr style="display: none;" valign="top">
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
-                                            <td colspan="3"><input type="radio" onclick="return false;" <%= (strBidangUsaha.equals(jvc.fnLRPad("RPAD", String.valueOf(intBidUsaha0), "0", 5))?"CHECKED":"DISABLED") %> name="chkBidUsaha" id="chkBidUsaha" value="<%= jvc.fnLRPad("RPAD", String.valueOf(intBidUsaha0), "0", 5) %>">
+                                            <td colspan="3"><input type="radio" onclick="return false;" <%= (strBidangUsaha.equals(jvc.fnLRPad("RPAD", String.valueOf(intBidUsaha0), "0", 5))?"CHECKED":"DISABLED") %> name="chkBidUsaha" id="chkBidUsaha" value="<%= jvc.fnLRPad("RPAD", String.valueOf(intBidUsaha0), "0", 5) %>" />
                                                 &nbsp;Lainnya yang tidak termasuk bidang tersebut di atas, yaitu
-                                                &nbsp;<input type="text" name="txtBidUsaha" id="txtBidUsaha"></td>
+                                                &nbsp;<input type="text" name="txtBidUsaha" id="txtBidUsaha" /></td>
                                         </tr>
                                     </table>
                                     </fieldset>
@@ -592,14 +592,14 @@
                                             <td>&nbsp;&nbsp;&nbsp;</td>
                                             <td colspan="3">
                                             	Nama Pemilik / Pengelola<br>
-                                                <input type="text" value="<%= strNamaPemilik %>" name="txtNama" id="txtNama" tabindex="15" onfocus="fnLastElement(this.name)" size="100">
+                                                <input type="text" value="<%= strNamaPemilik %>" name="txtNama" id="txtNama" tabindex="15" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
                                             <td>8.</td>
                                             <td>&nbsp;&nbsp;&nbsp;</td>
                                             <td colspan="3">Jabatan<br>
-                                            	<input type="text" value="<%= strJabatanPemilik %>" name="txtJabatan" id="Jabatan" tabindex="16" onfocus="fnLastElement(this.name)" size="100">
+                                            	<input type="text" value="<%= strJabatanPemilik %>" name="txtJabatan" id="Jabatan" tabindex="16" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
@@ -614,17 +614,17 @@
                                             <td>&nbsp;</td>
                                             <td colspan="3">
                                             	Jalan&nbsp;
-                                            	<input type="text" value="<%= strJalan %>" name="txtJalan" id="txtJalan" tabindex="17" onfocus="fnLastElement(this.name)" size="100">
+                                            	<input type="text" value="<%= strJalan %>" name="txtJalan" id="txtJalan" tabindex="17" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td colspan="3">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;<input type="text" value="<%= strNo %>" name="txtNo" id="txtNo" tabindex="18" onfocus="fnLastElement(this.name)" size="10">&nbsp;
-                                                RT&nbsp;<input type="text" value="<%= strRT %>" name="txtRT" id="txtRT" tabindex="19" onfocus="fnLastElement(this.name)" size="10">&nbsp;
-                                                RW&nbsp;<input type="text" value="<%= strRW %>" name="txtRW" id="txtRW" tabindex="20" onfocus="fnLastElement(this.name)" size="10">&nbsp;
-                                                RK&nbsp;<input type="text" value="<%= strRK %>" name="txtRK" id="txtRK" tabindex="21" onfocus="fnLastElement(this.name)" size="10">&nbsp;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;<input type="text" value="<%= strNo %>" name="txtNo" id="txtNo" tabindex="18" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
+                                                RT&nbsp;<input type="text" value="<%= strRT %>" name="txtRT" id="txtRT" tabindex="19" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
+                                                RW&nbsp;<input type="text" value="<%= strRW %>" name="txtRW" id="txtRW" tabindex="20" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
+                                                RK&nbsp;<input type="text" value="<%= strRK %>" name="txtRK" id="txtRK" tabindex="21" onfocus="fnLastElement(this.name)" size="10" />&nbsp;
                                             </td>
                                         </tr>
                                         <tr valign="top">
@@ -704,7 +704,7 @@
                                             <td>&nbsp;</td>
                                             <td>Nomor Telepon</td>
                                             <td colspan="2" align="left">
-                                                <input style="width:150px" type="text" value="<%= strTelp %>" name="txtTelp" id="txtTelp" tabindex="25" onfocus="fnLastElement(this.name)" size="100">
+                                                <input style="width:150px" type="text" value="<%= strTelp %>" name="txtTelp" id="txtTelp" tabindex="25" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                         <tr valign="top">
@@ -712,7 +712,7 @@
                                             <td>&nbsp;</td>
                                             <td>Kode Pos</td>
                                             <td colspan="2" align="left">
-                                                <input style="width:150px" type="text" value="<%= strKdPos %>" name="txtKdPos" id="txtKdPos" tabindex="26" onfocus="fnLastElement(this.name)" size="100">
+                                                <input style="width:150px" type="text" value="<%= strKdPos %>" name="txtKdPos" id="txtKdPos" tabindex="26" onfocus="fnLastElement(this.name)" size="100" />
                                             </td>
                                         </tr>
                                     </table>
