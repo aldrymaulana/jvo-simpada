@@ -12,13 +12,24 @@ import java.util.*;
 //            jvCommon, ifcSetting, ifcPenetapan, ifcPendaftaran
 public class jvGeneral {
 
+//    static final String DSNname = "Simpada_v02";
+//    static final String USERname = "";
+//    static final String PASSword = "";
+    private String DBurl = "jdbc:odbc:" + jvCommon.fnGetProperty("DSN");
+    private Connection con;
+    private Statement stmt;
+    private ResultSet rs;
+    private ResultSetMetaData rsmd;
+    private jvCommon jvc = new jvCommon();
+
+
     public jvGeneral() {
-        DBurl = "jdbc:odbc:Simpada_v02";
-        con = null;
-        stmt = null;
-        rs = null;
-        rsmd = null;
-        jvc = new jvCommon();
+//        DBurl = "jdbc:odbc:" + jvc.fnGetProperty("DSN");
+//        con = null;
+//        stmt = null;
+//        rs = null;
+//        rsmd = null;
+//        jvc = new jvCommon();
     }
 
     public Hashtable fnGetDfPerusahaan(String strIdxKolom, String strOrder) {
@@ -2419,13 +2430,4 @@ public class jvGeneral {
             jvc.fnPrint((new StringBuilder("Exception: ")).append(ex).append("<br>").toString());
         }
     }
-    static final String DSNname = "Simpada_v02";
-    static final String USERname = "";
-    static final String PASSword = "";
-    String DBurl;
-    Connection con;
-    Statement stmt;
-    ResultSet rs;
-    ResultSetMetaData rsmd;
-    jvCommon jvc;
 }
