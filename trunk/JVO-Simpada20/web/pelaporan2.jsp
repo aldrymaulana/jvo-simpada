@@ -4,6 +4,8 @@
     Author     : Administrator
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.text.NumberFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, jvo.simpada.common.*"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -253,9 +255,11 @@
                                                                 String[] strArray = (String[]) htRincian.get(String.valueOf(a));
                                                                 if (strArray[3].trim().length() > 0) {
                                                                     strJumlahPenerimaan = strArray[3];
+                                                                    //jvc.fnPrint("strJumlahPenerimaan: " + strJumlahPenerimaan);
                                                                 }
                                                                 if (strArray[4].trim().length() > 0) {
                                                                     strJumlahPengeluaran = strArray[4];
+                                                                    //jvc.fnPrint("strJumlahPengeluaran " + strJumlahPengeluaran);
                                                                 }
                                                                 if (a == 1) {
                                                                     strNoBKU = String.valueOf(a);
@@ -298,10 +302,12 @@
 
                                             <%
                                                                 Double dblJumlahPenerimaan = Double.parseDouble(strJumlahPenerimaan);
+                                                                //jvc.fnPrint("dblJumlahPenerimaan: " + dblJumlahPenerimaan);
                                                                 dblTotalPenerimaan = dblTotalPenerimaan + dblJumlahPenerimaan;
                                                                 strJumlahPenerimaan = "0";
 
                                                                 Double dblJumlahPengeluaran = Double.parseDouble(strJumlahPengeluaran);
+                                                                //jvc.fnPrint("dblJumlahPengeluaran " + dblJumlahPengeluaran);
                                                                 dblTotalPengeluaran = dblTotalPengeluaran + dblJumlahPengeluaran;
                                                                 strJumlahPengeluaran = "0";
 
@@ -310,11 +316,17 @@
                                                                 rowNum = rowNum + 1;
                                                             }
                                                         }
+
+                                                        NumberFormat formatter = new DecimalFormat("#0.00");
+                                                        //.fnPrint("dblTotalPenerimaan: " + dblTotalPenerimaan);
+                                                        //jvc.fnPrint("dblTotalPengeluaran: " + dblTotalPengeluaran);
+                                                        //jvc.fnPrint("String.valueOf(dblTotalPenerimaan): " + String.valueOf(dblTotalPenerimaan));
+                                                        //jvc.fnPrint("String.valueOf(dblTotalPengeluaran): " + String.valueOf(dblTotalPengeluaran));
                                             %>
                                             <tr class="JUDUL2">
                                                 <td colspan="4">J U M L A H</td>
-                                                <td align="right"><%= jvc.fnFormatNumberInd(String.valueOf(dblTotalPenerimaan)) %></td>
-                                                <td align="right"><%= jvc.fnFormatNumberInd(String.valueOf(dblTotalPengeluaran)) %></td>
+                                                <td align="right"><%= jvc.fnFormatNumberInd(formatter.format(dblTotalPenerimaan)) %></td>
+                                                <td align="right"><%= jvc.fnFormatNumberInd(formatter.format(dblTotalPengeluaran)) %></td>
                                             </tr>
 
                                         </table>
