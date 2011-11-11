@@ -828,6 +828,8 @@
                                                        onblur="fnHitungPajakC(<%= qq%>,this.value,<%= strArray[2]%>,<%= strArray[3]%>);fnHitungTotalPajakC(<%= intPajakC%>);"
                                                        name="PajakC_<%= qq%>" id="PajakC_<%= qq%>" />&nbsp;
                                                 <%= strArray[1]%>&nbsp;*&nbsp;<%= Double.parseDouble(strArray[2])%>&nbsp;*&nbsp;<%= Double.parseDouble(strArray[3]) / 100%>
+                                                <input type="hidden" name="DetilPajakC_<%= qq%>" id="DetilPajakC_<%= qq%>"
+                                                       value="<%= strArray[1]%> * <%= Double.parseDouble(strArray[2])%> * <%= Double.parseDouble(strArray[3]) / 100%>" />
                                             </td>
                                         </tr>
                                     </table>

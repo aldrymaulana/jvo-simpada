@@ -111,15 +111,15 @@ public class srvPembayaran extends HttpServlet {
 
             case 3: // '\003'
                 try {
-                    int intSaveCounter = 0;
-                    if (request.getSession().getAttribute("saveCounter") == null) {
-                        request.getSession().setAttribute("saveCounter", 1);
-                    } else {
-                        intSaveCounter = Integer.parseInt(request.getSession().getAttribute("saveCounter").toString());
-                    }
-                    intSaveCounter = intSaveCounter + 1;
-                    System.out.println("intSaveCounter: " + intSaveCounter);
-                    if (intSaveCounter < 2) {
+//                    int intSaveCounter = 0;
+//                    if (request.getSession().getAttribute("saveCounter") == null) {
+//                        request.getSession().setAttribute("saveCounter", 1);
+//                    } else {
+//                        intSaveCounter = Integer.parseInt(request.getSession().getAttribute("saveCounter").toString());
+//                    }
+//                    intSaveCounter = intSaveCounter + 1;
+//                    System.out.println("intSaveCounter: " + intSaveCounter);
+//                    if (intSaveCounter < 2) {
                         jvc.fnPrint("Case 3, Simpan");
                         String strKdCetak = jvc.fnGetValue(request.getParameter("hidKdCetak"));
                         String strDate1 = jvc.fnGetValue(request.getParameter("hidDate1"));
@@ -205,6 +205,24 @@ public class srvPembayaran extends HttpServlet {
                                 }
                             }
 
+                        } else if (strNoRek.equalsIgnoreCase("4110606")) {
+                            for (int a = 1; a <= intJmlUraianAsli; a++) {
+                                String strArray[] = new String[2];
+                                strDetilUraian = request.getParameter((new StringBuilder("txtUraian_")).append(a).toString()).toString();
+                                String strJumlahC = request.getParameter((new StringBuilder("PajakC_")).append(a).toString()).toString();
+                                String strRumus = request.getParameter((new StringBuilder("DetilPajakC_")).append(a).toString()).toString();
+                                strRpUraian = request.getParameter((new StringBuilder("rpUraian_")).append(a).toString()).toString();
+                                if (!strRpUraian.equals("0")) {
+                                    jvc.fnPrint((new StringBuilder("strDetilUraian: ")).append(strDetilUraian).toString());
+                                    jvc.fnPrint((new StringBuilder("strJumlahC: ")).append(strJumlahC).toString());
+                                    jvc.fnPrint((new StringBuilder("strRumus: ")).append(strRumus).toString());
+                                    jvc.fnPrint((new StringBuilder("strRpUraian: ")).append(strRpUraian).toString());
+                                    strArray[0] = strDetilUraian + " : " + strJumlahC + " " + strRumus;
+                                    strArray[1] = strRpUraian;
+                                    htUraian.put(String.valueOf(b), strArray);
+                                    b++;
+                                }
+                            }
                         } else {
                             for (int a = 1; a <= intJmlUraianAsli; a++) {
                                 String strArray[] = new String[2];
@@ -219,15 +237,14 @@ public class srvPembayaran extends HttpServlet {
                                     b++;
                                 }
                             }
-
                         }
                         int intSimpan = 0;
                         if (strKdCetak.equalsIgnoreCase("L")) {
                             intSimpan = jvg.fnSaveSKPD(ifcp);
                         }
-//                        else {
-//                            intSimpan = jvg.fnSaveSKPD0(ifcp);
-//                        }
+                        else {
+                            intSimpan = jvg.fnSaveSKPD0(ifcp);
+                        }
                         if (strNoRek.equalsIgnoreCase("4110606")) {
                             jvc.fnPrint("Bahan Galian");
                             if (intSimpan > 0) {
@@ -235,9 +252,9 @@ public class srvPembayaran extends HttpServlet {
                                 if (strKdCetak.equalsIgnoreCase("L")) {
                                     intDetil = jvg.fnSaveDetilSKPD(strNoSKPD, strNoNPWPD, htUraian);
                                 }
-//                                else {
-//                                    intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
-//                                }
+                                else {
+                                    intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
+                                }
                             }
                         } else {
                             jvc.fnPrint("Bukan Bahan Galian");
@@ -246,9 +263,9 @@ public class srvPembayaran extends HttpServlet {
                                 if (strKdCetak.equalsIgnoreCase("L")) {
                                     intDetil = jvg.fnSaveDetilSKPD(strNoSKPD, strNoNPWPD, htUraian);
                                 }
-//                                else {
-//                                    intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
-//                                }
+                                else {
+                                    intDetil = jvg.fnSaveDetilSKPD0(strNoSKPD, strNoNPWPD, htUraian);
+                                }
                             }
                         }
                         if (strKdCetak.equalsIgnoreCase("L")) {
@@ -256,12 +273,12 @@ public class srvPembayaran extends HttpServlet {
                             Hashtable htGetSKPD = jvg.fnGetSKPD(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
                             createReport2(request, response, htGetSKPD);
                         }
-//                        else {
-//                            String strNoNPWRD = jvc.fnGetValue(request.getParameter("hidNoNPWRD"));
-//                            Hashtable htGetSKPD = jvg.fnGetSKPD0(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
-//                            createReport20(request, response, htGetSKPD);
-//                        }
-                    }
+                        else {
+                            String strNoNPWRD = jvc.fnGetValue(request.getParameter("hidNoNPWRD"));
+                            Hashtable htGetSKPD = jvg.fnGetSKPD0(strNoSKPD, strKdPemilik, strNoNPWPD, strNoNPWRD);
+                            createReport20(request, response, htGetSKPD);
+                        }
+//                    }
                 } catch (Exception exp) {
                     jvc.fnPrint((new StringBuilder("Exception: ")).append(exp).toString());
                 }
