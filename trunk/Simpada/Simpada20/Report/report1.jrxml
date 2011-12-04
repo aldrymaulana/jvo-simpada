@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="KdPemilik" class="java.lang.String"/>
+	<parameter name="NmPemda" class="java.lang.String"/>
+	<parameter name="NmDinas" class="java.lang.String"/>
+	<parameter name="AlamatPemda" class="java.lang.String"/>
+	<parameter name="KelurahanPemda" class="java.lang.String"/>
+	<parameter name="KotamadyaPemda" class="java.lang.String"/>
+	<parameter name="KecamatanPemda" class="java.lang.String"/>
+	<parameter name="KodePosPemda" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT dataBU.NoForm, dataBU.Nama, dataBU.Jalan, dataBU.[No], dataBU.RT, dataBU.RW, dataBU.RK, dataBU.KodePos, dataBU.KdNPWP & dataBU.NPWPD & dataBU.WilNPWP AS noNPWPD, dataBU.KdNPWR & dataBU.NPWRD & dataBU.WilNPWR AS noNPWRD
+, (select mKabupaten.Keterangan from mKabupaten where dataBU.Kabupaten=mKabupaten.Kode) AS Kabupaten
+, (select mKecamatan.Keterangan from mKecamatan where mKecamatan.KdKabupaten = dataBU.Kabupaten and mKecamatan.Kode = mid(dataBU.Kecamatan,4,2)) AS Kecamatan, (select mKelurahan.Keterangan from mKelurahan where mKelurahan.KdKabupaten = dataBU.Kabupaten and mKelurahan.KdKecamatan = mid(dataBU.Kecamatan,4,2)  and mKelurahan.Kode = mid(dataBU.Kelurahan,7,2)) AS Kelurahan
+, dataBU.Telepon
+,
+dataPemilik.Nama as NamaP, dataPemilik.Jalan as JalanP, dataPemilik.[No] as NoP, dataPemilik.RT as RTP, dataPemilik.RW as RWP, dataPemilik.RK as RKP, dataPemilik.KodePos as KodePosP
+, (select mKabupaten.Keterangan from mKabupaten where dataPemilik.Kabupaten=mKabupaten.Kode) AS KabupatenP
+, (select mKecamatan.Keterangan from mKecamatan where mKecamatan.KdKabupaten = dataPemilik.Kabupaten and mKecamatan.Kode = mid(dataPemilik.Kecamatan,4,2)) AS KecamatanP, (select mKelurahan.Keterangan from mKelurahan where mKelurahan.KdKabupaten = dataPemilik.Kabupaten and mKelurahan.KdKecamatan = mid(dataPemilik.Kecamatan,4,2)  and mKelurahan.Kode = mid(dataPemilik.Kelurahan,7,2)) AS KelurahanP
+, dataPemilik.Telepon as TeleponP, dataPemilik.Jabatan
+, dataSI.NoSI, dataSI.TglSI, dataSI.JenisSI
+, mBidUsaha.Keterangan as BidUsaha
+, mPajak.Keterangan as Pajak
+FROM dataPemilik, dataBU, mKabupaten, dataSI, mBidUsaha, mPajak
+WHERE 1=1
+And dataPemilik.KdPemilik = dataBU.KdPemilik
+and dataPemilik.KdPemilik = dataSI.KdPemilik
+and dataPemilik.KdPemilik = $P{KdPemilik}
+and dataBU.KdBidUsaha = mBidUsaha.Kode
+and dataPemilik.KdPajak = mPajak.Kode]]>
+	</queryString>
+	<field name="NoForm" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Nama" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Jalan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="No" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RW" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RK" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="KodePos" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="noNPWPD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="noNPWRD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Kabupaten" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Kecamatan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Kelurahan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Telepon" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NamaP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="JalanP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NoP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RTP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RWP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RKP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="KodePosP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="KabupatenP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="KecamatanP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="KelurahanP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TeleponP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Jabatan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NoSI" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TglSI" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="JenisSI" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="BidUsaha" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Pajak" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="120" splitType="Stretch">
+			<textField>
+				<reportElement x="351" y="0" width="204" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["No Form: " + $F{NoForm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="351" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["PEMERINTAH " + $P{NmPemda}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="351" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NmDinas}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="351" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{AlamatPemda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="60" width="351" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{KelurahanPemda} + ", " + $P{KecamatanPemda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="80" width="351" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{KotamadyaPemda} + " " + $P{KodePosPemda}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="491" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORMULIR PENDAFTARAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WAJIB PAJAK / RETRIBUSI BADAN *)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="58" width="144" height="20"/>
+				<textElement/>
+				<text><![CDATA[Kepada Yth:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="95" width="144" height="20"/>
+				<textElement/>
+				<text><![CDATA[di]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="134" width="555" height="20"/>
+				<textElement/>
+				<text><![CDATA[PERHATIAN:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="154" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[1.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="154" width="537" height="20"/>
+				<textElement/>
+				<text><![CDATA[Harap diisi dalam rangkap dua (2) ditulis dengan huruf CETAK
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="174" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="174" width="537" height="20"/>
+				<textElement/>
+				<text><![CDATA[Beri tanda V pada kotak yang tersedia untuk jawaban yang diberikan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="194" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[3.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="194" width="537" height="20"/>
+				<textElement/>
+				<text><![CDATA[Setelah Formulir Pendaftaran ini diisi dan ditandatangani, harap diserahkan kembali
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="214" width="537" height="20"/>
+				<textElement/>
+				<text><![CDATA[kepada Dinas Pendapatan Daerah Tingkat II Jl. ………………………………….
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="234" width="537" height="20"/>
+				<textElement/>
+				<text><![CDATA[langsung atau dikirm melalui Pos paling lambat tanggal ………………………..
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="271" width="555" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DIISI OLEH SELURUH WAJIBPAJAK BADAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="291" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama Badan / Merk Usaha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="291" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[1.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="291" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="311" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="311" width="290" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alamat (Photo Copy Surat Keterangan Domisili Dilampirkan)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="331" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="331" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Jalan / No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="351" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- RT / RW / RK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="351" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="371" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kelurahan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="371" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="391" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kecamatan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="391" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="411" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kabupaten / Kotamadya]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="411" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="431" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Telepon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="431" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="451" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kode Pos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="451" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="471" width="290" height="20"/>
+				<textElement/>
+				<text><![CDATA[Surat Ijin yang Dimiliki (Photo Copy Surat Ijin Dilampirkan)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="471" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[3.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="291" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Nama}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="331" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Jalan}.toUpperCase() + " No " + $F{No}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="351" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["RT " + $F{RT}.toUpperCase() + " RW " + $F{RW}.toUpperCase() + " RK " + $F{RK}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="371" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Kelurahan}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="391" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Kecamatan}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="411" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Kabupaten}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="451" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KodePos}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="431" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Telepon}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="18" y="0" width="249" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Surat Ijin " + $F{JenisSI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="267" y="0" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["No: " + $F{NoSI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="411" y="0" width="144" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Tgl: " + $F{TglSI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="792" splitType="Immediate">
+			<textField>
+				<reportElement x="167" y="200" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KecamatanP}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="149" y="220" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="240" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="260" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="180" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KelurahanP}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="149" y="200" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="140" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="180" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kelurahan]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="140" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{JalanP}.toUpperCase() + " No " + $F{NoP}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="149" y="160" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="160" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["RT " + $F{RTP}.toUpperCase() + " RW " + $F{RWP}.toUpperCase() + " RK " + $F{RKP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="149" y="180" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="240" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Telepon]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="240" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TeleponP}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="260" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KodePosP}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="120" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[7.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="200" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kecamatan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="120" width="290" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alamat Tempat Tinggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="220" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kabupaten / Kotamadya]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="140" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Jalan / No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="260" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- Kode Pos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="220" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KabupatenP}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="160" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[- RT / RW / RK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="280" width="290" height="20"/>
+				<textElement/>
+				<text><![CDATA[Kewajiban Pajak / Retribusi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="280" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[8.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="18" y="300" width="537" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["- " + $F{Pajak}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[4.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="0" width="290" height="20"/>
+				<textElement/>
+				<text><![CDATA[Bidang Usaha (Harap Diisi Sesuai Dengan Bidang Usahanya)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="555" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[KETERANGAN PEMILIK / PENGELOLA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="80" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[5.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="80" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama Pemilik / Pengelola]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="80" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="100" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[6.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="100" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="100" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[Jabatan]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="167" y="80" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NamaP}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="100" width="388" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Jabatan}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="18" y="20" width="537" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["- " + $F{BidUsaha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="324" y="340" width="76" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama Jelas]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="324" y="320" width="231" height="20"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["NANGA BULIK" + ", " + new java.text.SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="400" y="340" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="360" width="76" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tanda Tangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="360" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="380" width="171" height="20"/>
+				<textElement/>
+				<text><![CDATA[DIISI OLEH PETUGAS PENERIMA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="380" width="231" height="20"/>
+				<textElement/>
+				<text><![CDATA[DIISI OLEH PETUGAS PENCATATAN DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="400" width="82" height="20"/>
+				<textElement/>
+				<text><![CDATA[Diterima tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="420" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="440" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="420" width="82" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama Jelas / NIP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="440" width="82" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tanda Tangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="400" width="117" height="20"/>
+				<textElement/>
+				<text><![CDATA[NPWPD yang Diberikan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="400" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="400" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="324" y="420" width="231" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{noNPWPD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="324" y="440" width="117" height="20"/>
+				<textElement/>
+				<text><![CDATA[NPWRD yang Diberikan]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="324" y="460" width="231" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{noNPWRD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="441" y="440" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="406" y="480" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="500" width="82" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tanda Tangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="480" width="82" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama Jelas / NIP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="406" y="500" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="538" width="555" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="351" y="577" width="204" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["No Form: " + $F{NoForm}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="597" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TANDA TERIMA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="634" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="654" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alamat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="634" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="654" width="18" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="715" width="231" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Yang Menerima]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="769" width="231" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ ( .................................................... )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="634" width="437" height="20"/>
+				<textElement/>
+				<text><![CDATA[.................................................................................................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="654" width="437" height="20"/>
+				<textElement/>
+				<text><![CDATA[.................................................................................................................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="539" width="555" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Gunting di sini]]></text>
+			</staticText>
+			<break>
+				<reportElement x="0" y="50" width="100" height="1"/>
+			</break>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="324" y="695" width="231" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["NANGA BULIK" + ", " + new java.text.SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
