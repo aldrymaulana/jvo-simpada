@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Documents and Settings\\Administrator\\My Documents\\Proyek Panca\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NmDaerah" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NmUnitKerja" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NmPemimpin" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NmBendahara" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="BulanBuku" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NipBendahara" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="JabatanPemimpin" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NipPemimpin" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NmKelurahan" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pTglAwal" class="java.lang.String"/>
+	<parameter name="pTglAkhir" class="java.lang.String"/>
+	<parameter name="pTxtRp" class="java.lang.String"/>
+	<parameter name="pTxtTerbilang" class="java.lang.String"/>
+	<parameter name="pTxtTunai" class="java.lang.String"/>
+	<parameter name="pTxtSurat" class="java.lang.String"/>
+	<parameter name="pTxtSaldo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select mSKPD.TglSKPD, mSKPD.KdRekening, Uraian, sum(Penerimaan) as sPenerimaan, sum(Pengeluaran) as sPengeluaran from (
+SELECT mSKPD.TglSKPD, mSKPD.KdRekening, dataBU.Nama as Uraian, mSKPD.Total as Penerimaan, mSKPD.Total as Pengeluaran
+FROM (dataBU INNER JOIN mSKPD ON dataBU.KdPemilik = mSKPD.KdPemilik) INNER JOIN mPajak ON dataBU.KdNPWP = mPajak.KodeNPWP&'.'
+order by mSKPD.TglSKPD, mSKPD.KdRekening
+UNION ALL SELECT mSKPD.TglSKPD, mSKPD.KdRekening, mSKPD.Uraian,'0' as Penerimaan,'0' as Pengeluaran
+FROM mSKPD
+ORDER BY mSKPD.TglSKPD, mSKPD.KdRekening
+)
+WHERE mSKPD.TglSKPD BETWEEN $P{pTglAwal} AND $P{pTglAkhir}
+group by mSKPD.TglSKPD, mSKPD.KdRekening, Uraian
+order by mSKPD.TglSKPD, mSKPD.KdRekening, sum(Penerimaan), sum(Pengeluaran)]]>
+	</queryString>
+	<field name="TglSKPD" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="KdRekening" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Uraian" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sPenerimaan" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sPengeluaran" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="Total_Penerimaan" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{sPenerimaan}]]></variableExpression>
+	</variable>
+	<variable name="Total_Pengeluaran" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{sPengeluaran}]]></variableExpression>
+	</variable>
+	<variable name="Total_Group_Penerimaan" class="java.lang.Double" resetType="Group" resetGroup="grpDate" calculation="Sum">
+		<variableExpression><![CDATA[$F{sPenerimaan}]]></variableExpression>
+	</variable>
+	<variable name="Total_Group_Pengeluaran" class="java.lang.Double" resetType="Group" resetGroup="grpDate" calculation="Sum">
+		<variableExpression><![CDATA[$F{sPengeluaran}]]></variableExpression>
+	</variable>
+	<group name="grpDate">
+		<groupExpression><![CDATA[$F{TglSKPD}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<textField>
+					<reportElement x="355" y="1" width="90" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[new java.text.DecimalFormat("#,###,###,###,###.##").format($V{Total_Group_Penerimaan})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="455" y="1" width="90" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[new java.text.DecimalFormat("#,###,###,###,###.##").format($V{Total_Group_Pengeluaran})]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Transparent" x="0" y="0" width="355" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Transparent" x="355" y="0" width="100" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Transparent" x="455" y="0" width="100" height="20"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="255" y="0" width="100" height="20"/>
+					<textElement/>
+					<text><![CDATA[SUB TOTAL]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="160" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="80" width="127" height="20"/>
+				<textElement/>
+				<text><![CDATA[Pemimpin Unit Kerja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="127" height="20"/>
+				<textElement/>
+				<text><![CDATA[Unit Kerja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="100" width="127" height="20"/>
+				<textElement/>
+				<text><![CDATA[Bendahara Penerimaan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="120" width="127" height="20"/>
+				<textElement/>
+				<text><![CDATA[Bulan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="127" y="60" width="15" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="127" y="80" width="15" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="127" y="100" width="15" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="127" y="120" width="15" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="60" width="413" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NmUnitKerja}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="142" y="80" width="413" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NmPemimpin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="142" y="100" width="413" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NmBendahara}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="142" y="120" width="413" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{BulanBuku}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["PEMERINTAH " + $P{NmDaerah}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BUKU KAS UMUM]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode Rekening]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="155" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Uraian]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Penerimaan (Rp)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pengeluaran (Rp)]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="100" y="0" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="200" y="0" width="155" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="355" y="0" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="455" y="0" width="100" height="20"/>
+			</rectangle>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="100" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement x="355" y="0" width="90" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[(new java.text.DecimalFormat("#,###,###,###,###.##").format($F{sPenerimaan}).equals("0"))?"":new java.text.DecimalFormat("#,###,###,###,###.##").format($F{sPenerimaan})]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement isPrintRepeatedValues="false" x="10" y="0" width="90" height="20" printWhenGroupChanges="grpDate"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.SimpleDateFormat("dd MMM yyyy").format($F{TglSKPD})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="110" y="0" width="90" height="20" printWhenGroupChanges="grpDate"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{KdRekening}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="0" width="145" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Uraian}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="100" y="0" width="100" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="200" y="0" width="155" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="455" y="0" width="100" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement x="455" y="0" width="90" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[(new java.text.DecimalFormat("#,###,###,###,###.##").format($F{sPengeluaran}).equals("0"))?"":new java.text.DecimalFormat("#,###,###,###,###.##").format($F{sPengeluaran})]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="355" y="0" width="100" height="20"/>
+			</rectangle>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<textField>
+				<reportElement x="435" y="30" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="30" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="177">
+			<textField>
+				<reportElement x="0" y="116" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NmPemimpin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="17" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Mengetahui,]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="156" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NipPemimpin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="136" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{JabatanPemimpin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="136" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NipBendahara}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="116" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NmBendahara}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="355" y="17" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{NmKelurahan} + ", " + new java.text.SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="37" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Pengguna Anggaran]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="37" width="200" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Bendahara Penerimaan]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="178" splitType="Immediate">
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="355" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement x="355" y="0" width="90" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.DecimalFormat("#,###,###,###,###.##").format($V{Total_Penerimaan})]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="455" y="0" width="100" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement x="455" y="0" width="90" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[new java.text.DecimalFormat("#,###,###,###,###.##").format($V{Total_Pengeluaran})]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="355" y="0" width="100" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="255" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="0" y="37" width="355" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pada hari ini, tanggal: " + new java.text.SimpleDateFormat("dd MMMMM yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="57" width="355" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Oleh kami didapat dalam kas, Rp " + $P{pTxtRp} + ",-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="77" width="355" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["( " + $P{pTxtTerbilang} + " )"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="97" width="355" height="20"/>
+				<textElement/>
+				<text><![CDATA[Terdiri dari:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="117" width="355" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["a. Uang Tunai: Rp " + $P{pTxtTunai} + ",-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="137" width="355" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["b. Surat Berharga: Rp " + $P{pTxtSurat} + ",-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="157" width="355" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["c. Saldo Bank: Rp " + $P{pTxtSaldo} + ",-"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
